@@ -1,0 +1,160 @@
+1. https_request
+2. str_cut
+3. remove_xss
+4. safe_replace
+5. get_url
+6.getip
+7. get_address
+8. check_ip_matching
+9. random
+10. create_randomstr
+11. create_tradenum
+12. new_addslashes
+13. new_stripslashes
+14. new_html_special_chars
+15. new_json_encode
+16. trim_script
+17. string2array
+18. array2string
+19. lry_array_column
+20. is_email
+21. is_mobile
+22. is_badword
+23. is_username
+24. is_password
+25. fileext
+26. is_img
+27. is_ie
+28. is_utf8
+29. file_down
+30. format_time
+31. sizecount
+32. array_iconv
+33. string_auth
+34. match_img
+35. grab_image
+36. thumb
+37. watermark
+38. to_sqls
+39. new_session_start
+40. set_cookie
+41. get_cookie
+42. del_cookie
+43. config
+44. env
+45. M
+46. D
+47. U
+48. C
+49. L
+50. P
+51. debug
+52. set_module_theme
+53. setcache
+54. getcache
+55. delcache
+56. template
+57. dispatch
+58. showmsg
+59. return_message
+60. send_http_status
+61. make_auth_key
+62. return_json
+63. write_log
+64. write_error_log
+65. redirect
+66. input
+67. is_ssl
+68. is_post
+69. is_get
+70. is_put
+71. is_ajax
+72. creat_token
+73. check_token
+
+
+我来统计 `system.func.php` 文件中的所有函数：
+
+
+## 🎨 主题模板相关
+1. **`get_theme_list()`** - 获取模板主题列表
+
+## ⚙️ 配置管理相关
+2. **`get_config()`** - 获取系统配置信息
+3. **`get_seo_suffix()`** - 获取系统SEO后缀
+4. **`get_site_url()`** - 获取当前站点首页URL
+5. **`get_site_seo()`** - 获取当前站点SEO信息
+
+## 📄 内容管理相关
+6. **`get_content_url()`** - 获取内容页URL
+7. **`page_content()`** - 单页面标签，用于调取单页简介
+8. **`get_copyfrom()`** - 获取来源信息
+9. **`content_list_tag()`** - 获取内容列表页TAG标签
+10. **`content_total()`** - 获取内容总数
+11. **`get_content_keyword()`** - 获取内容关键字
+
+## ��️ 模型管理相关
+12. **`get_site_modelinfo()`** - 获取当前站点模型信息
+13. **`get_modelinfo()`** - 获取模型信息
+14. **`get_model()`** - 根据模型ID获取model信息
+15. **`get_default_model()`** - 获取当前站点默认模型
+16. **`get_field_val()`** - 获取自定义多选字段生成的value值
+
+## 📧 邮件相关
+17. **`sendmail()`** - 发送邮件
+
+## 📱 设备检测相关
+18. **`ismobile()`** - 判断是否为手机访问
+
+## �� 文件处理相关
+19. **`file_icon()`** - 返回附件类型图标
+20. **`get_thumb()`** - 获取内容缩略图
+21. **`down_remote_img()`** - 下载远程图片
+22. **`update_attachment()`** - 更新内容附件
+23. **`delete_attachment()`** - 删除内容附件
+24. **`handle_upload_types()`** - 处理上传文件类型
+
+## �� URL处理相关
+25. **`url_referer()`** - 会员登录/退出跳转url
+26. **`tag_url()`** - 生成Tag URL
+27. **`mobile_url()`** - 生成手机版内容URL
+
+## 📢 广告相关
+28. **`adver()`** - 广告调用
+
+## 🎨 显示相关
+29. **`title_color()`** - 渲染title颜色
+30. **`select_category()`** - 获取栏目的select下拉框
+
+## 🏢 站点管理相关
+31. **`get_siteid()`** - 获取当前的站点ID
+32. **`get_site()`** - 获取站点信息
+
+## 📂 栏目管理相关
+33. **`is_childid()`** - 是否存在子栏目
+34. **`get_category()`** - 获取栏目信息
+35. **`get_catname()`** - 根据栏目ID获取栏目名称
+36. **`get_childcat()`** - 根据栏目ID获取子栏目信息
+37. **`get_location()`** - 根据栏目ID获取当前位置
+
+## 👥 用户管理相关
+38. **`get_groupinfo()`** - 获取组别信息
+39. **`get_groupname()`** - 根据组别ID获取组别名称
+40. **`get_memberavatar()`** - 获取用户头像
+41. **`get_memberinfo()`** - 获取用户所有信息
+42. **`password()`** - 对用户的密码进行加密
+
+## 🔄 路由映射相关
+43. **`set_mapping()`** - 设置路由映射
+44. **`get_urlrule()`** - 获取自定义URL规则
+
+## 💬 评论相关
+45. **`get_comment_total()`** - 获取内容评论数
+
+## 🔧 工具函数
+46. **`field_order()`** - 字段排序
+47. **`get_thumb()`** - 获取内容缩略图
+
+**总计：47个函数**
+
+这些函数主要服务于CMS系统的核心功能，包括内容管理、栏目管理、用户管理、站点管理、模板主题、文件处理、SEO优化等方面，是系统功能的重要组成部分。
