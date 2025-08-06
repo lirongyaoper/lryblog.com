@@ -59,7 +59,20 @@ class debug{
                 break;
             case 1:
                 self::$sqls[] = htmlspecialchars($msg, ENT_QUOTES,  'UTF-8').';[ RunTime:'.number_format(microtime(true)-$start_time , 6).'s ]';
+                break;
+            case 2:
+                self::$request[] = $msg;
+                break;
         }
+    }
+
+    public static function get_debug(){
+        return array(
+            'info' => self::$info,
+            'sqls' => self::$sqls,
+            'request' => self::$request,
+            'spent' => self::spent(),
+        );
     }
     public static function catcher($errno, $errstr, $errfile, $errline){
         if (!(error_reporting() & $errno)) {
