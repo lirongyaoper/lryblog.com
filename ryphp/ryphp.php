@@ -82,7 +82,7 @@ class ryphp {
 	/**
 	 * 初始化应用程序
 	 */
-    public static function create_app(){
+    public static function app_init(){
         return self::load_sys_class('application');
     }
 	

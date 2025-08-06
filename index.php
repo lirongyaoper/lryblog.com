@@ -15,4 +15,4 @@ define('RYPHP_ROOT',dirname(__FILE__).DIRECTORY_SEPARATOR);
 require(RYPHP_ROOT . 'ryphp' . DIRECTORY_SEPARATOR . 'ryphp.php');
 
 
-echo  PHP_FILE;
+ryphp::app_init();
