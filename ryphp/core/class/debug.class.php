@@ -51,6 +51,16 @@ class debug{
         }
     }
 
+
+    public static function addmsg($msg, $type = 0, $start_time =0){
+        switch($type){
+            case 0:
+                self::$info[] = $msg;
+                break;
+            case 1:
+                self::$sqls[] = htmlspecialchars($msg, ENT_QUOTES,  'UTF-8').';[ RunTime:'.number_format(microtime(true)-$start_time , 6).'s ]';
+        }
+    }
     public static function catcher($errno, $errstr, $errfile, $errline){
         if (!(error_reporting() & $errno)) {
             return;
