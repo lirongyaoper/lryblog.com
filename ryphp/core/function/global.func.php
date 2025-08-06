@@ -233,3 +233,25 @@ function send_http_status($code){
     }
 }	
 
+
+/**
+ *  提示信息页面跳转
+ *
+ * @param     string  $msg      消息提示信息
+ * @param     string  $gourl    跳转地址,stop为停止
+ * @param     int     $limittime  限制时间
+ * @return    void
+ */
+
+function showmsg($msg, $gourl = '', $limittime  =3){
+    application::showmsg($msg, $gourl, $limittime);
+    if(RY_DEBUG){
+        debug::stop();
+        debug::message();
+    }
+    exit;
+}
+
+function write_error_log(){
+    
+}

@@ -21,11 +21,28 @@ class debug{
     public function __construct(){
         
     }
+
+	
+
+	/**
+	 * 在脚本结束处调用获取脚本结束时间的微秒值
+	 */
+    public static function stop(){
+        // Placeholder for stopping debug
+        self::$stoptime = microtime(true);
+    }
+	
+	/**
+	 * 返回同一脚本中两次获取时间的差值
+	 */
     public static function spent(){
         if(!self::$stoptime) self::stop();
         return round((self::$stoptime- SYS_START_TIME ),4);
     }
 
+	/**
+	 * 致命错误 fatalerror
+	 */
     public static function fatalerror(){
         if($e = error_get_last()){
             switch ($e['type']){
@@ -51,6 +68,50 @@ class debug{
         }
     }
 
+	
+	/**
+	 * 错误 handler
+	 */
+	public static function catcher($errno, $errstr, $errfile, $errline){
+		if(RY_DEBUG && !defined('DEBUG_HIDDEN')){
+			if(!isset(self::$msg[$errno])) 
+				$errno = 'Unknown';
+
+			if($errno==E_NOTICE || $errno==E_USER_NOTICE)
+				$color = "#151515";
+			else
+				$color = "#b90202";
+
+			$mess = '<span style="color:'.$color.'">';
+			$mess .= self::$msg[$errno].' [文件 '.$errfile.' 中,第 '.$errline.' 行] ：';
+			$mess .= $errstr;
+			$mess .= '</span>'; 	
+			self::addmsg($mess);			
+		}else{
+			if($errno == E_NOTICE) return '';
+			write_error_log(array('Error', $errno, $errstr, $errfile, $errline));
+		}
+	}
+	
+	
+	/**
+	 * 捕获异常
+	 * @param	object	$exception
+	 */ 
+	public static function exception($exception){
+		if(RY_DEBUG && !defined('DEBUG_HIDDEN')){
+			$mess = '<span style="color:#b90202">';
+			$mess .= '系统异常 [文件 '.$exception->getFile().' 中,第 '.$exception->getLine().' 行] ：';
+			$mess .= $exception->getMessage();
+			$mess .= '</span>'; 		
+			self::addmsg($mess);
+		}else{
+			write_error_log(array('ExceptionError', $exception->getMessage(), $exception->getFile(), $exception->getLine()));
+		}
+		showmsg($exception->getMessage(), 'stop');
+	}
+
+	
 
     public static function addmsg($msg, $type = 0, $start_time =0){
         switch($type){
@@ -74,23 +135,13 @@ class debug{
             'spent' => self::spent(),
         );
     }
-    public static function catcher($errno, $errstr, $errfile, $errline){
-        if (!(error_reporting() & $errno)) {
-            return;
-        }
-        self::halt("Error: [$errno] $errstr in $errfile on line $errline");
-    }
-
-    public static function exception($exception){
-        self::halt("Exception: " . $exception->getMessage());
-    }
-
-    public static function stop(){
-        // Placeholder for stopping debug
-        self::$stoptime = microtime(true);
-    }
 
     public static function message(){
         // Placeholder for displaying debug messages
+        $parameter = $_GET;
+        unset($parameter['m'],$parameter['c'],$paramater['a']);
+        $parameter = $parameter ? http_build_query($parameter) : 'No parameters';
+        include (RYPHP_PATH . 'core' . DIRECTORY_SEPARATOR . 'message' . DIRECTORY_SEPARATOR.'debug.tpl' );
+
     }
 }

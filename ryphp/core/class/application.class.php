@@ -39,24 +39,6 @@ class application{
         }
     }
 
-	
-	/**
-	 *  输出错误提示
-	 *
-	 * @param     string  $msg      提示信息
-	 * @param     int     $code     状态码
-	 * @return    void
-	 */
-
-    public static function halt($msg,$code =404){
-        if(ob_get_length() !== false) @ob_end_clean();
-        if(!RY_DEBUG) send_http_status($code);
-        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RY_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
-        include $tpl;
-        exit();
-
-    }
-
 	/**
 	 * 加载控制器
 	 * @param string $filename
@@ -113,6 +95,24 @@ class application{
 		include(RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'message'.DIRECTORY_SEPARATOR.'error.tpl');
 		exit();
 	}
+
+	
+	/**
+	 *  输出错误提示
+	 *
+	 * @param     string  $msg      提示信息
+	 * @param     int     $code     状态码
+	 * @return    void
+	 */
+
+    public static function halt($msg,$code =404){
+        if(ob_get_length() !== false) @ob_end_clean();
+        if(!RY_DEBUG) send_http_status($code);
+        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RY_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
+        include $tpl;
+        exit();
+
+    }
 
 
 }
