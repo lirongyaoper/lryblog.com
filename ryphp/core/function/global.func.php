@@ -25,6 +25,38 @@ function C($key = '', $default = ''){
     }
 }
 
+/**
+ * 获取配置文件中的配置项
+ * 
+ * @param string $key 配置键名,格式为 "文件名.配置项" 或 "文件名"
+ *                    例如: "database.host" 或 "database"
+ * @param mixed $default 默认返回值,当配置项不存在时返回该值
+ * @return mixed 返回配置项的值,如果配置项不存在则返回默认值
+ * 
+ * 使用说明:
+ * 1. 配置文件必须放在 common/config 目录下
+ * 2. 配置文件名必须为 .php 后缀
+ * 3. 配置文件必须返回一个数组
+ * 4. 静态变量 $config 用于缓存已加载的配置,避免重复加载文件
+ * 
+ * 示例:
+ * config('database.host') - 获取 database.php 中的 host 配置项
+ * config('database') - 获取 database.php 中的所有配置
+ */
+function config($key = '',$default = ''){
+    $k = explode('.',$key);
+    static $config = array();
+    if(!isset($config[$k[0]])){
+        $pathfile = RYPHP_ROOT . 'common'. DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . $k[0] . '.php';
+        if(is_file($pathfile)){
+            $config[$k[0]] = include $pathfile;
+        }else{
+            return $default;
+        }
+    }
+    return count($k) ==1 ? $config[$k[0]] : (isset($config[$k[0]][$k[1]])? $config[$k[0]][$k[1]] : $default);
+}
+
 
 /**
  * Get the client's IP address
