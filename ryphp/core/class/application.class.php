@@ -11,7 +11,7 @@ class application{
         register_shutdown_function(array('debug','fatalerror'));
         set_error_handler(array('debug','catcher'));
         set_exception_handler(array('debug','exception'));
-        $param = ryphp:: load_sys_class('param');
+        $param = ryphp::load_sys_class('param');
         define('ROUTE_M',$param -> route_m());
         define('ROUTE_C',$param -> route_c());
         define('ROUTE_A',$param -> route_a());

@@ -26,6 +26,82 @@ function C($key = '', $default = ''){
 }
 
 
+/**
+ * Get the client's IP address
+ * 
+ * This function attempts to get the client's IP address through various methods:
+ * 1. HTTP_CLIENT_IP
+ * 2. HTTP_X_FORWARDED_FOR
+ * 3. REMOTE_ADDR
+ * 4. $_SERVER['REMOTE_ADDR']
+ *
+ * @return string Returns the client's IP address if valid, otherwise returns '127.0.0.1'
+ *                The returned IP will be in IPv4 format (e.g. 192.168.1.1)
+ */
+function getip(){
+	if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown')) {
+		$ip = getenv('HTTP_CLIENT_IP');
+	} elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown')) {
+		$ip = getenv('HTTP_X_FORWARDED_FOR');
+	} elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown')) {
+		$ip = getenv('REMOTE_ADDR');
+	} elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown')) {
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
+	return preg_match ( '/[\d\.]{7,15}/', $ip, $matches ) ? $matches [0] : '127.0.0.1';
+}
+
+/**
+ * 获取当前完整的URL地址
+ * 
+ * 该函数返回包含协议、域名和请求路径的完整URL
+ * 
+ * @return string 返回完整的URL地址
+ *                例如: https://example.com/path/to/page?param=value
+ * 
+ * @uses is_ssl()        判断当前是否为HTTPS协议
+ * @uses safe_replace()  过滤URL中的特殊字符
+ * @uses HTTP_HOST      服务器域名常量
+ * 
+ * @access public
+ */
+function get_url(){
+    $sys_protocal = is_ssl()?  'https://' : 'http://';
+    $php_self = $_SERVER['PHP_SELF'] ? safe_replace($_SERVER['PHP_SELF']) : safe_replace($_SERVER['SCRIPT_NAME']);
+    $path_info = isset($_SERVER['PATH_INFO']) ? safe_replace($_SERVER['PATH_INFO']) : '';
+    $relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) :  $php_self.(isset($_SERVER['QUERY_STRING']) ? '?' . safe_replace($_SERVER['QUERY_STRING']): $path_info);
+    return $sys_protocal .HTTP_HOST . $relate_url;
+}
+
+
+/**
+ * 发送HTTPS请求
+ * 
+ * 该函数用于发送HTTP/HTTPS请求，支持GET和POST方法，可以自定义请求头
+ * 
+ * @param string $url     请求的URL地址
+ * @param mixed  $data    POST请求的数据，可以是数组或字符串。如果为空则为GET请求
+ * @param bool   $array   返回数据是否转换为数组，true则将json转为数组，false则返回原始数据
+ * @param int    $timeout 请求超时时间，单位毫秒，默认2000ms
+ * @param array  $header  自定义HTTP请求头，数组格式
+ * 
+ * @return mixed 如果$array为true，则返回解析后的数组：
+ *               - 请求成功时返回解析后的JSON数据
+ *               - 请求失败时返回 array('status' => 0, 'message' => 错误信息)
+ *               如果$array为false：
+ *               - 请求成功时返回原始响应数据
+ *               - 请求失败时返回错误信息字符串
+ * 
+ * @example
+ * // GET请求示例
+ * https_request('https://api.example.com/data');
+ * 
+ * // POST请求示例
+ * https_request('https://api.example.com/data', ['name' => 'test']);
+ * 
+ * // 自定义请求头示例
+ * https_request('https://api.example.com/data', '', true, 2000, ['Authorization: Bearer token']);
+ */
 function https_request($url,$data = '',$array = true,$timeout = 2000,$header = array()){
     $curl = curl_init($url);
     curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,false);
@@ -154,6 +230,25 @@ function L($language = '', $module = ''){
 	return $language;
 }
 
+
+
+/**
+ * 兼容PHP低版本的json_encode
+ * @param  array   $array
+ * @param  integer $options
+ * @param  integer $depth 
+ * @return string|false  //是 PHP 中用于将 PHP 变量（如数组、对象）
+ * 转换为 JSON 格式字符串的函数。它是 PHP 与前端（JavaScript）或其他系统进行数据交换的重要工具。
+ */
+function new_json_encode($array, $options = 0, $depth = 0){
+	if(version_compare(PHP_VERSION,'5.4.0','<')) {
+	    $jsonstr = json_encode($array);
+	}else{
+	    $jsonstr = $depth ? json_encode($array, $options, $depth) : json_encode($array, $options);
+	}   
+	return $jsonstr;
+}
+
 /**
  * 打印各种类型的数据，调试程序时使用。
  * @param mixed $var 变量，支持传入多个
@@ -252,6 +347,84 @@ function showmsg($msg, $gourl = '', $limittime  =3){
     exit;
 }
 
-function write_error_log(){
-    
+
+
+
+/**
+ * 对字符串进行安全过滤处理
+ * 
+ * 此函数用于清理字符串中的潜在危险字符，防止XSS攻击和SQL注入等安全问题。
+ * 主要进行以下处理：
+ * - 移除URL编码字符（%20, %27, %2527）
+ * - 移除特殊字符（*, ", ', ;, \）
+ * - HTML转义尖括号（< 转换为 &lt;, > 转换为 &gt;）
+ * - 移除花括号（{, }）
+ * 
+ * @param mixed $string 需要处理的字符串
+ * @return mixed 如果输入是字符串则返回处理后的安全字符串，否则原样返回
+ */
+function safe_replace($string) {
+	if(!is_string($string)) return $string;
+	$string = trim($string);
+	$string = str_replace('%20','',$string);
+	$string = str_replace('%27','',$string);
+	$string = str_replace('%2527','',$string);
+	$string = str_replace('*','',$string);
+	$string = str_replace('"','',$string);
+	$string = str_replace("'",'',$string);
+	$string = str_replace(';','',$string);
+	$string = str_replace('<','&lt;',$string);
+	$string = str_replace('>','&gt;',$string);
+	$string = str_replace("{",'',$string);
+	$string = str_replace('}','',$string);
+	$string = str_replace('\\','',$string);
+	return $string;
+}	
+
+
+/**
+ * 写入错误日志到文件
+ * 
+ * @param mixed $err_array 错误信息数组或字符串
+ * @param string $path 日志文件保存路径,默认为空(使用系统cache目录)
+ * @return bool 写入成功返回true,失败返回false
+ * 
+ * 功能说明:
+ * 1. 检查是否开启错误日志保存功能
+ * 2. 记录错误发生的时间、URL、IP地址
+ * 3. 如果有POST数据,将POST数据也记录到日志
+ * 4. 将所有信息以"|"分隔符连接
+ * 5. 自动创建日志目录
+ * 6. 当日志文件超过20M时自动备份
+ * 7. 日志文件首行包含PHP退出语句防止直接访问
+ * 
+ * 使用示例:
+ * write_error_log('发生错误');
+ * write_error_log(['错误1','错误2']);
+ * write_error_log($error, '/custom/path');
+ */
+
+function write_error_log($err_array, $path = ''){
+    if(!C('error_log_save') || defined('CLOSE_WRITE_LOG')) return false;
+    $err_array = is_array($err_array) ? $err_array : array($err_array);
+    $message[] = date('Y-m-d H:i:s');
+    $message[] = get_url();
+    $message[] = getip();
+    if(isset($_POST) && !empty($_POST)) {
+        $message[] = new_json_encode($_POST, JSON_UNESCAPED_UNICODE);
+    }
+    $message = array_merge($message, $err_array);
+    $message = join(' | ',$message).'\r\n';
+    if(!$path) $path = RYPHP_ROOT . 'cache';
+    if(!is_dir($path)) @mkdir($path, 0777, true);
+    $file = $path . DIRECTORY_SEPARATOR . 'error_log.php';
+    if(is_file($file) && filesize($file) > 20971520){
+        @rename($file, $path . DIRECTORY_SEPARATOR . 'error_log' . date('YmdHis') .rand(100,999). '.php');
+
+    }
+    if(!is_writeable($file)) return false;
+    if(!is_file($file)){
+        error_log("<?php exit('Access Denied'); ?>\r\n", 3, $file);
+    }
+    return error_log($message , 3, $file);
 }
