@@ -60,6 +60,18 @@ class param {
 	}
 
 
+	private function pathinfo_url(){
+		if(!isset($_GET['s'])) return false;
+		if(is_string($_GET['s'])) $_SERVER['PATH_INFO'] = $_GET['s'];
+		unset($_GET['s']);
+		if(isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO'])){
+			$_SERVER['PATH_INFO'] = str_ireplace(array(C('url_html_suffix'),'index.php'),'',$_SERVER['PATH_INFO']);
+			if(C('route_mapping')) $this ->mapping(set_mapping($this->route_config['m']));
+			
+		}
+			 
+
+	}
 
 
 

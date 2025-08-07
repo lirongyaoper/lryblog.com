@@ -58,6 +58,23 @@ function config($key = '',$default = ''){
 }
 
 
+function D($tablename){
+    static $_tables = array();
+    if(isset($_tables[$tablename])) return $_tables[$tablename];
+    ryphp::load_sys_class('db_factory','', 0 );
+    $db_object = db_factory::get_instance() -> connect($tablename);
+    $_tables[$tablename] = $db_object;
+    return $db_object;
+
+}
+
+
+function getcache($name){
+    ryphp::load_sys_class('cache_factory','',0);
+    $cache = cache_factory:: get_instance()->get_cache_instances();
+    return $cache->get($name);
+}
+
 /**
  * Get the client's IP address
  * 
@@ -460,3 +477,5 @@ function write_error_log($err_array, $path = ''){
     }
     return error_log($message , 3, $file);
 }
+
+
