@@ -312,7 +312,13 @@ function P($var){
 	return null;
 }
 
-
+function return_json($arr = array(),$show_debug = false){
+    header("X-Powered-By:RYPHP/RYCMS");
+    header('Content-Type:application/json;charset = utf-8');
+    if(!$arr) $arr = array('status'=>0,'message'=>L('data_not_modified'));
+    if(RY_DEBUG || $show_debug) $arr = array_merge($arr,debug::get_debug());
+    exit(new_json_encode($arr,JSON_UNESCAPED_UNICODE));
+}
 
 /**
  * 发送HTTP状态

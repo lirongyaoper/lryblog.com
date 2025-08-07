@@ -16,12 +16,13 @@ class db_factory{
                     ryphp::load_sys_class('db_mysql','',0);
                     self::$class = 'db_mysql';
                     break;
-				case 'mysqli' : 
+				case 'mysqli' :
 					ryphp::load_sys_class('db_mysqli','',0);
 					self::$class = 'db_mysqli';
 					break;
-				case 'pdo' : 
-					ryphp::load_sys_class('db_pdo','',0);
+				case 'pdo' :
+					// 加载优化版本的PDO数据库类
+					ryphp::load_sys_class('db_pdo_optimized','',0);
 					self::$class = 'db_pdo';
 					break;
 				default :
