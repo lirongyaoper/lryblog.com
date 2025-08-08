@@ -1,0 +1,219 @@
+/*
+===================
+RYCMS 安装程序
+http://www.rycms.com
+
+CSS初始化
+===================*/
+body{font-family:Tahoma,Arial,sans-serif;font-size:13px}
+html,body,div, dl, dt, dd, ul, p, th, td,h1, h2, h3, h4, h5, h6,pre, code, form,fieldset, legend{margin: 0;padding: 0;}
+cite,em,strong,th{font-style: normal;}
+td,th,div{word-break:break-all;word-wrap:break-word;}
+form{display:inline;}
+table{border-collapse: collapse;border-spacing:0;}
+th{text-align: left;font-weight:100;}
+ol li{list-style: decimal outside;}
+ol{padding:0 0 0 18px;margin:0;}
+li{list-style:none;}
+img{border: 0;}
+html{-webkit-text-size-adjust:none;overflow-y:scroll;}
+/*
+===================
+html5标签
+===================*/
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display: block;}
+/*
+===================
+清除浮动【请勿修改】
+>>cc作用于父模型
+>>c作用于浮动模型后，父模型区域里
+===================*/
+.cc{zoom:1;}
+.cc:after{content:'\20';display:block;height:0;clear:both;visibility: hidden;}
+.c{clear:both;height:0;font:0/0 Arial;overflow:hidden;width:0;}
+.c-red{color:red;}
+/*
+===================
+基础样式
+>>b加粗
+>>u下划线
+>>i斜体
+>>w文本不换行
+>>tal文本靠左显示
+>>tac文本居中显示
+>>tar文本靠右显示
+>>fl左浮动
+>>fr右浮动
+>>pr相对定位
+>>cp鼠标点击手势
+>>vt表格内容靠上显示
+===================*/
+.b{font-weight:700 !important;}
+.u{text-decoration:underline !important;}
+.i{font-style:italic !important;}
+.w{white-space:nowrap;}
+.tal{text-align:left !important;}
+.tac{text-align:center !important;}
+.tar{text-align:right !important;}
+.fl{float:left !important;}
+.fr{float:right !important;}
+.pr{position:relative;}
+.cp{cursor:pointer;}
+.vt{vertical-align:top;}
+.dn{display:none;}
+/*
+===================
+字体
+>>f10小字体
+>>f12正常字
+>>f14大字
+>>f16更大
+>>f24标题类
+>>fn文本去粗
+===================*/
+.f10{font-size:10px;}
+.f12{font-size:12px !important;}
+.f14{font-size:14px;}
+.f16{font-size:16px;}
+.f24{font-size:24px;}
+.fn{font-weight:normal !important;}
+.s1{color:#ff0000;}
+
+body{font:12px/1.5;color:#333;background:url(../images/bg.png);}
+a{color:#1890ff;text-decoration:none;}
+a:hover{text-decoration:underline;}
+.wrap{margin:50px auto 100px;box-shadow:0 0 10px #ccc;width:1100px;background:#fff;overflow: hidden;border-radius: 4px;}
+/*.header{background:#246fa6 url(../images/header.png) 0 0 repeat-x;}*/
+.header{height:80px;box-shadow:0 3px 3px #ddd;position:relative;color:#fff;background:#282b33}
+.main{padding-top:35px;}
+.footer{text-align:center;padding:15px 0;color:#fff;background: #333;position: fixed;bottom:0;width: 100%}
+.footer a{color:#77bbfa}
+.bottom{margin:25px 0 25px 0;}
+/*
+===================
+协议
+===================
+*/
+.pact{box-shadow:5px 5px 5px #f7f7f7 inset;border:1px solid #bdbcbc;width:90%;height:500px;padding:10px;overflow:hidden;display:block;overflow-y:scroll;margin:0 auto;font-size:12px;line-height:1.5;margin-bottom:22px;outline:none;border-radius:3px}
+pre{white-space: pre-wrap;white-space: -moz-pre-wrap;white-space: -pre-wrap;white-space: -o-pre-wrap;word-wrap: break-word;word-break : normal;}
+.version{float:right;margin:50px 45px 0 0;}
+.logo{float:left;width:400px;height:80px;line-height: 80px;font-family:Tahoma,Arial,sans-serif;padding-left: 40px;font-weight: normal;/*background:url(../images/logo.png) no-repeat;overflow:hidden;text-indent:-2000em;*/}
+/*
+===================
+安装类型文案
+===================
+*/
+.icon_install,
+.icon_update{float:left;margin-top:35px;width:90px;height:30px;overflow:hidden;text-indent:-2000em;}
+.icon_install{background:url(../images/icon_install.png) no-repeat;}
+.icon_update{background:url(../images/icon_update.png) no-repeat;}
+.btn,
+.btn_old{display:inline-block;width:130px;height:35px;line-height:35px;background: #1890ff;text-decoration:none;color:#fff !important;margin:0 50px;border:0 none;cursor:pointer;vertical-align:top;border-radius: 3px;outline:none;transition:all 0.3s;}
+.btn:hover,
+.btn_old:hover{background:#5d9eff;text-decoration: none}
+.btn_submit{line-height: 32px}
+/*
+===================
+步骤
+===================
+*/
+/*.step,.step li em,.step li{background:url(../images/step.png) repeat-x;}*/
+.step{height:70px;background-color:#fff;}
+.step li{float:left;height:50px;line-height:50px;width:30%;margin:0 1%;text-align:center;font-size:14px;color:#6f7885;border-bottom:4px solid #ebe9e9;}
+.step li em{width:32px;height:32px;text-align:center;line-height:32px;display:inline-block;background-position:0 -70px;font-size:20px;color:#fff;margin-right:10px;vertical-align:0;}
+.step li.current{color:#1890ff;border-bottom:4px solid #1890ff;}
+.step li.first{margin-left: 3%;}
+/*
+===================
+服务器检测/信息输入
+===================
+*/
+.server{width:90%;margin:20px auto;font-size:13px;color:#555;padding-left:130px}
+.server2{padding-left:200px}
+.server table{margin-bottom:20px;}
+.server td{padding:7px 5px;}
+.server .td1{color:#000;}
+.server .input,.server .select,.server .select2{border:1px solid #e3e9ef;padding:3px 5px;width:250px;font-size: 12px;height: 23px;line-height: 23px;background-color: #fff;border-radius: 3px;outline:none;}
+.server .input:hover, .server .select:hover, .server .select2:hover{border:1px solid #75a1f0; }
+.server .input:focus{border:1px solid #75a1f0; box-shadow:0 0 0 3px rgba(117,161,240,0.3)}
+.server .select{width: 261px;height: 30px;cursor: pointer}
+.server .select2{width: 126px;height: 30px;cursor: pointer}
+.gray{color:#bbb;}
+.server tr:hover .gray{color:#333;}
+/*
+===================
+正确错误
+===================
+*/
+.correct_span,
+.error_span{display:block;float:left;width:20px;height:16px;text-indent:-2000em;overflow:hidden;background:url(../images/icon.png) no-repeat;margin-right:5px;}
+.error_span{background-position:0 -23px;}
+/*
+===================
+数据表写入
+===================
+*/
+.install{box-shadow:5px 5px 5px #f7f7f7 inset;border:1px solid #bdbcbc;width:86%;height:550px;padding:10px;overflow:hidden;display:block;overflow-y:scroll;margin:25px auto;font-size:12px;margin-bottom:22px;outline:none;}
+.install ul{line-height:1.8;}
+/*
+===================
+成功提示
+===================
+*/
+.success_tip{background:#fff url(../images/complete.png) 250px center no-repeat;padding:50px 80px 50px 400px;margin:100px 0;line-height:30px;}
+.success_tip p{font-size:13px}
+.success_tip a,.s4{color:#1890ff;text-decoration:none;}
+.success_tip a:hover{text-decoration:underline;}
+.success_tip .yzm_doadmin{background: #1890ff;color: #fff;padding:2px 30px;border-radius: 3px;font-weight: normal;margin-bottom: 20px;display: inline-block;transition: all 0.3s;}
+.success_tip .yzm_doadmin:hover{text-decoration: none;background: #5d9eff;}
+.error_tip{background:url(../images/ignore.png) 130px 45px no-repeat;padding:50px 80px 60px 230px;}
+.login{border:1px solid #e0e9f0;background:#fff;margin:30px 120px 130px;}
+/*
+===================
+操作提示
+>>tips普通
+>>tips_error错误
+>>tips_success正确
+>>tips_loading加载中
+使用方法 可独立样式使用，亦可与tips组装，例： <div class="tips"><span class="tips_error">错误内容</span></div> 可在外出包裹 tips_block 对错误提示进行块级效果展示
+===================
+*/
+.tips,.tips_block span{line-height:25px;padding:0 6px;}
+.tips{border:1px solid #faebd2;background:#ffffe9;color:#666;}
+.tips_error,.tips_success{color:#cc3333;padding-left:16px;background:url(../images/tips_system.png) -20px 2px no-repeat;display:inline-block;line-height:18px;}
+.tips_success{color:#008800;background-position:0 -19px;}
+.tips_loading{color:#cc3333;color:#333333;display:inline-block;line-height:20px;}
+/*
+===================
+loading
+===================
+*/
+.loading{border-radius: 16px;width: 100px;height: 30px;line-height: 30px;text-align: center;background:#000;background-color: rgba(0, 0, 0, 0.5);color: white;position: fixed;_position:absolute;left: 50%;margin-left: -50px;top: 50%;margin-top:-15px;}
+.loading span{background:url(../images/pop_loading.gif) 0 center no-repeat;padding-left:24px;}
+.yzm-loading{height: 18px}
+/*
+===================
+升级类型选择
+===================
+*/
+.updata_type{padding:20px 30px 40px;}
+.updata_type .hd{font-size:16px;}
+
+/*切换选择*/
+.updata_type .tab{padding-top:10px;}
+.updata_type .tab li{float:left;width:50%;display:inline;}
+.updata_type .tab li a{display:block;text-decoration:none;border:1px solid #ccc;text-align:center;height:60px;line-height:60px;background:#fff url(../images/tab.png);color:#246EA5;font-size:22px;font-weight:100;}
+.updata_type .tab li a.fen{line-height:50px;border-right:0;}
+.updata_type .tab li a span{display:block;font-size:12px;color:#999;line-height:18px;margin-top:-12px;font-weight:100;}
+.updata_type .tab li.current a{background:#fdfdfd;color:#6F7885;border-bottom:1px solid #fdfdfd;}
+.updata_type .tab_cont{border:1px solid #ccc;border-top:0 none;padding:30px;background:#fdfdfd;box-shadow:1px 1px 1px #fff inset,-1px -1px 1px #fff inset;}
+.updata_type .tab_cont h3{font-size:16px;margin-bottom:15px;}
+.updata_type .tab_cont h3 span{font-size:12px;font-weight:100;color:#666;}
+.updata_type .tab_cont h4{font-size:14px;}
+.updata_type .tab_cont h4 span{padding-left:10px;font-size:12px;font-weight:100;color:#f60;}
+.updata_type .tab_cont ol li{margin-bottom:10px;}
+.updata_type .tab_cont div{color:#666;padding-left:20px;}
+.updata_type .tab_cont ul li{margin:0;padding-left:50px;list-style:none;color:#666;}
+/*立即升级*/
+.once_updata{text-align:center;padding:100px 0;}
+.once_updata button{font-size:32px;background:#186196 url(../images/header.png) repeat-x;color:#fff;padding:30px 80px;font-weight:100;border:1px solid #186196;cursor:pointer;letter-spacing:2px;}

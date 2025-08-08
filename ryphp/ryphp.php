@@ -17,6 +17,7 @@ defined('RYPHP_ROOT') or exit('Access Denied!');
 define('IN_RYPHP',true);
 
 define('RYPHP_PATH', RYPHP_ROOT . 'ryphp' . DIRECTORY_SEPARATOR);
+
 define('RYPHP_VERSION', '1.0.0');
 define('RYPHP_RELEASE', '20250707');
 //define time of system start
@@ -27,6 +28,7 @@ define('SYS_TIME', time());
 
 //define dirctory of application
 define('RYPHP_APP',RYPHP_ROOT.'application'.DIRECTORY_SEPARATOR);
+
 
 ryphp::load_sys_func('global');
 
@@ -75,7 +77,7 @@ if(version_compare(PHP_VERSION,'5.4.0','<') && function_exists('get_magic_quotes
 ryphp::load_common('function/system.func.php');
 ryphp::load_common('function/extention.func.php');
 ryphp::load_common('data/version.php'); 
-defined('RYCMS_SOFTNAME') or define('RYCMS_SOFTNAME', 'RyPHP内容管理系统');
+defined('RYCMS_SOFTNAME') or define('RYCMS_SOFTNAME', 'RYCMS内容管理系统');
 
 class ryphp {
 		

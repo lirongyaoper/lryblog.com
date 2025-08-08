@@ -1,13 +1,13 @@
 <?php
 /**
- * db_pdo.class.php	 PDO数据库类
- * 
+ * db_mysql.class.php	 MYSQL数据库类
+ *  
  * @author           李荣耀  
- * @license          http://www.lryper.com
+ * @license          https:/lryper.com
  * @lastmodify       2024-03-10
  */
-
-class db_pdo{
+	
+class db_mysql{
 	
 	private static $link = null;       		 //数据库连接资源句柄
 	private static $db_link = array();  	 //数据库连接资源池
@@ -15,47 +15,69 @@ class db_pdo{
 	private $tablename;                      //数据库表名,不包含表前缀
 	private $key = array();           		 //存放条件语句
 	private $lastsql = '';            		 //存放sql语句
-	private static $params = array(
-		PDO::ATTR_CASE              => PDO::CASE_NATURAL,
-        PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
-        PDO::ATTR_STRINGIFY_FETCHES => false,
-        PDO::ATTR_EMULATE_PREPARES  => false,
-	);
 		
-	public function __construct($config,$tablename)
-    {
-        $this ->config = $config;
-        $this->tablename= $tablename;
-        if(is_null(self::$link)) $this ->db(0,$config);
-    }	
-	public function connect(){
-		try{
-			$dns = 'mysql:host='.$this->config['db_host'].';dbname='.$this->config['db_name'].';port='.intval($this->config['db_port']).';charset='.$this->config['db_charset']; 
-			self::$link = new PDO($dns,$this->config['db_user'],$this->config['db_pwd'],self::$params);
-			return self::$link;
-		}catch(PDOException $e){
-			self::$link = null;
-			$mysql_error = RY_DEBUG ? $e -> getMessage() : 'Can not connect to MySQL server!';
-			application::halt($mysql_error,550); 
-		}
+		
+	/**
+	 * 初始化链接数据库
+	 */
+	public function __construct($config, $tablename){
+		$this->config = $config;
+		$this->tablename = $tablename;
+
+		if(is_null(self::$link)) $this->db(0, $config);	
 	}
+	
 
+	/**
+	 * 真正开启数据库连接
+	 * 			
+	 * @return resource mysql
+	 */	
+	public function connect(){ 
+		self::$link = @mysql_connect($this->config['db_host'] .($this->config['db_port'] ? ':'.intval($this->config['db_port']) : ''), $this->config['db_user'], $this->config['db_pwd']);  	
+		if(self::$link == false) {
+			$mysql_error = RY_DEBUG ? mysql_error() : 'Can not connect to MySQL server!';
+			application::halt($mysql_error, 550);
+		}        
+		$db = mysql_select_db($this->config['db_name'], self::$link);            	         	
+		if($db == false)  {
+			$mysql_error = RY_DEBUG ? mysql_error() : 'Database selection failed!';
+			application::halt($mysql_error, 550);    
+		}                                      
+		mysql_query("SET names ".$this->config['db_charset'].", sql_mode=''"); 	
+		return self::$link;				
+	}	
+	
 
+	/**
+	 * 切换当前的数据库连接
+	 *
+	 * @param $linknum 	数据库编号	
+	 * @param $config 	array	
+	 * @参数说明		array('db_host'=>'127.0.0.1', 'db_user'=>'root', 'db_pwd'=>'', 'db_name'=>'lrycms', 'db_port'=>3306, 'db_prefix'=>'lry_')
+	 *					[服务器地址, 数据库用户名, 数据库密码, 数据库名, 服务器端口, 数据表前缀]
+	 * 						
+	 * 使用方法(添加一个编号为1的数据库连接，并自动切换到当前的数据库连接):  
+	 * D('tablename')->db(1, array('db_host'=>'127.0.0.1', 'db_user'=>'root', 'db_pwd'=>'', 'db_name'=>'test', 'db_port'=>3306, 'db_prefix'=>'lry_'))->select();
+	 * 
+	 * 当第二次切换到相同的数据库的时候，就不需要传入数据库连接信息了，可以直接使用：D('tablename')->db(1)->select();
+	 * 如果需要切换到默认的数据库连接，只需要调用：D('tablename')->db(0)->select();
+	 * @return object
+	 */		
 	public function db($linknum = 0, $config = array()){
 		if(isset(self::$db_link[$linknum])){
 			self::$link = self::$db_link[$linknum]['db'];
-			$this ->config = self::$db_link[$linknum]['config'];
+			$this->config = self::$db_link[$linknum]['config'];
 		}else{
-			if(empty($config)) $this->geterr('Database number to'.$linknum.' Not existent!');
+			if(empty($config)) $this->geterr('Database number to '.$linknum.' Not existent!'); 
 			$this->config = $config;
 			self::$db_link[$linknum]['db'] = self::$link = self::connect();
 			self::$db_link[$linknum]['config'] = $config;
 		}
 		return $this;
 	}
-
-
+	
+	
 
     /**
      * 获取当前的数据表
@@ -64,8 +86,9 @@ class db_pdo{
     private function get_tablename() {
         $alias = isset($this->key['alias']) ? ' '.$this->key['alias'].' ' : '';
         return '`'.$this->config['db_name'].'` . `'.$this->config['db_prefix'].$this->tablename.'`' .$alias;
-    }
-		
+    }	
+	
+	
 	/**
 	 * 内部方法：过滤函数
 	 * @param $value
@@ -73,7 +96,6 @@ class db_pdo{
 	 * @return string
 	 */	
 	private function safe_data($value, $chars = false){
-		
 		if(is_string($value)){
 			if(!MAGIC_QUOTES_GPC) $value = addslashes($value);
 			if($chars) $value = htmlspecialchars($value);
@@ -81,50 +103,54 @@ class db_pdo{
 
 		return $value;
 	}
-
-	private function filter_field($arr,$primary = true,$field = true){
+	
+	
+	/**
+	 * 内部方法：过滤非表字段
+	 * @param $arr
+	 * @param $primary 是否过滤主键
+	 * @param $field   是否过滤非表字段
+	 * @return array
+	 */
+	private function filter_field($arr, $primary = true, $field = true){
 		if($field){
-			$fields = $this ->get_fields();
+			$fields = $this->get_fields();	
 			foreach($arr as $k => $v){
-				if(!in_array($k,$fields,true)) unset($arr[$k]);
+				if(!in_array($k, $fields, true)) unset($arr[$k]);
 			}
 		}
 		if($primary){
-			$p = $this ->get_primary();
-			if(isset($arr[$p]))   unset($arr[$p]);
+			$p = $this->get_primary();
+			if(isset($arr[$p])) unset($arr[$p]);
 		}
 		return $arr;
 	}
-	
 
-	private function execute($sql,$is_private = false){
+	
+	/**
+	 * 内部方法：数据库查询执行方法
+	 * @param $sql 要执行的sql语句
+	 * @param $is_private 是否私有查询
+	 * @return object
+	 */
+	private function execute($sql, $is_private = false) {
 		try{
-			if($is_private) return self::$link->query($sql);
-			$statement = self::$link->prepare($sql);
-			if(isset($this->key['where']['bind'])) { 
-				foreach($this->key['where']['bind'] as $key => $val){
-					$statement->bindValue($key+1, $val);
-					//组装预处理SQL，便于调试
-					$sql = substr_replace($sql, '\''.$val.'\'', strpos($sql, '?'), 1);
-				}
-			}
+			if($is_private) return mysql_query($sql);
 			$sql_start_time = microtime(true);
-			$statement ->execute();
 			$this->lastsql = $sql;
-			RY_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
+			$res = mysql_query($sql) or $this->geterr($sql);
 			$this->key = array();
-			return $statement;
-		}catch (PDOException $e){
+			RY_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
+			return $res;
+		}catch (Exception $e){
 			if (strpos($e->getMessage(), 'server has gone away') !== false) {
 		        self::$db_link[0]['db'] = self::$link = self::connect();
 		        return $this->execute($sql, $is_private);
 		    }
 			$this->geterr('Execute SQL error, message : '.$e->getMessage(), $sql);
 		}
-	}
-
+	}	
 	
-
 
 	/**
 	 * 组装where条件，将数组转换为SQL语句
@@ -132,7 +158,7 @@ class db_pdo{
 	 * return object
 	 */
 	public function where($arr = ''){
-		if(empty($arr) || isset($this->key['wheres']))  return $this;		
+		if(empty($arr) || isset($this->key['wheres']))  return $this;	
 		if(is_array($arr)) {
 			$args = func_get_args();
 			$str = '(';
@@ -140,24 +166,22 @@ class db_pdo{
 				foreach($value as $kk => $vv){
 					if(is_array($vv)) $vv = 'array';
 
-					$vv = !is_null($vv) ? $vv : '';
+					$vv = !is_null($vv) ? $this->safe_data($vv) : '';
 					if(!strpos($kk,'>') && !strpos($kk,'<') && !strpos($kk,'=') && substr($vv, 0, 1) != '%' && substr($vv, -1) != '%'){   
-						$str .= $kk.' = ? AND ';
+						$str .= $kk." = '".$vv."' AND ";
 					}else if(substr($vv, 0, 1) == '%' || substr($vv, -1) == '%'){
-						$str .= $kk.' LIKE ? AND '; 
-					}else{
-						$str .= $kk.' ? AND ';     
+						$str .= $kk." LIKE '".$vv."' AND "; 
+					}else{ 
+						$str .= $kk."'".$vv."' AND ";   
 					}
-					
-					$this->key['where']['bind'][] = $this->safe_data($vv);
 				}
 				$str = rtrim($str,' AND ').')';
 				$str .= ' OR (';
 			}
 			$str = rtrim($str,' OR (');
-			$this->key['where']['str'] = $str;
+			$this->key['where'] = $str;
 		}else{
-			$this->key['where']['str'] = str_replace('lrycms_', $this->config['db_prefix'], $arr);	
+			$this->key['where'] = str_replace('lrycms_', $this->config['db_prefix'], $arr);	
 		}
 		return $this;
 	}
@@ -171,9 +195,8 @@ class db_pdo{
 	 * return object
 	 */
 	public function wheres($arr = ''){
-		if(empty($arr))  return $this;		
+		if(empty($arr))  return $this;
 		if(is_array($arr)) {
-			$this->key['where']['bind'] = array();
 			$args = func_get_args();
 			$str = '(';
 			foreach ($args as $value){
@@ -202,8 +225,7 @@ class db_pdo{
 						if($fun) $rule = array_map($fun, $rule);
 						$rule = strpos($exp, 'BETWEEN') === false ? "('".join("','", $rule)."')" : "'".join("' AND '", $rule)."'";
 					}else{
-						$this->key['where']['bind'][] = $fun ? $fun($rule) : $this->safe_data($rule);
-						$rule = '?';
+						$rule = $fun ? "'".$fun($rule)."'" : "'".$this->safe_data($rule)."'";
 					}
 					$str .= $kk.' '.$exp.' '.$rule.' AND ';
 				}
@@ -211,16 +233,16 @@ class db_pdo{
 				$str .= ' OR (';
 			}
 			$str = rtrim($str,' OR (');
-			$this->key['where']['str'] = $str;
+			$this->key['where'] = $str;
 		}else{
-			$this->key['where']['str'] = str_replace('lrycms_', $this->config['db_prefix'], $arr);	
+			$this->key['where'] = str_replace('lrycms_', $this->config['db_prefix'], $arr);	
 		}
 
 		$this->key['wheres'] = true;
 		return $this;
 	}
 	
-	
+		
 	/**
 	 * 内部方法：查询部分，开始组装SQL
 	 * @param $name
@@ -228,7 +250,7 @@ class db_pdo{
 	 * @return object
 	 */
 	public function __call($name, $value){
-		if(in_array($name, array('alias', 'field', 'order', 'limit', 'group', 'having'))){
+		if(in_array($name, array('alias','field','order','limit','group','having'))){
 			if(isset($value[0])) $this->key[$name] = $value[0];
 			return $this;
 		}else{
@@ -261,8 +283,7 @@ class db_pdo{
 		if(empty($fields)) return false;
 		$sql = ($replace ? 'REPLACE' : 'INSERT').' INTO '.$this->get_tablename().' ('. implode(', ', $fields) .') VALUES ('. implode(', ', $values) .')';
 		$this->execute($sql);
-		$id = self::$link->lastInsertId();
-		return is_numeric($id) ? (int) $id : $id;
+		return mysql_insert_id();
 	}
 
 
@@ -291,10 +312,9 @@ class db_pdo{
 		if(empty($fields)) return false;
 		$sql = ($replace ? 'REPLACE' : 'INSERT').' INTO '.$this->get_tablename().' ('. implode(', ', $fields) .') VALUES '. implode(', ', $values);
 		$this->execute($sql);
-		$id = self::$link->lastInsertId();
-		return is_numeric($id) ? (int) $id : $id;
+		return mysql_insert_id();
 	}
-	
+
 	
 	/**
 	 * 执行删除记录操作
@@ -312,17 +332,17 @@ class db_pdo{
 				}else{
 					$where = array_map('intval', $where);
 					$sql = implode(', ', $where);
-					$this->key['where']['str'] = $this->get_primary().' IN ('.$sql.')';
+					$this->key['where'] = $this->get_primary().' IN ('.$sql.')';
 				}			
 			}else{
 				$this->geterr('delete function First parameter Must be array Or cant be empty!'); 
 				return false;
 			}
-		}
+		}	
 
-		$sql = 'DELETE FROM '.$this->get_tablename().' WHERE '.$this->key['where']['str'];
-		$statement = $this->execute($sql);
-		return $statement->rowCount();
+		$sql = 'DELETE FROM '.$this->get_tablename().' WHERE '.$this->key['where'];
+		$this->execute($sql);
+		return mysql_affected_rows();
 	}
 
 	
@@ -337,7 +357,7 @@ class db_pdo{
 	 * @param $primary 		是否过滤主键
 	 * @param $field 		是否过滤非表字段
 	 * @return int          返回影响行数
-	 */	
+	 */		
 	public function update($data, $where = array(), $filter = false, $primary = true, $field = true){	
 		if(!isset($this->key['wheres'])) $this->where($where);
 		if(is_array($data)){
@@ -346,15 +366,15 @@ class db_pdo{
 			foreach ($data AS $key => $val){
 				$sets[] = '`'. $key .'` = \''. $this->safe_data($val, $filter) .'\'';
 			}
-			$value = implode(', ', $sets);
+			$value = implode(', ', $sets);				
 		}else{
 			$value = $data;		
 		}	
 
 		if(empty($value)) return false;
-		$sql = 'UPDATE '.$this->get_tablename().' SET '.$value.' WHERE '.$this->key['where']['str'];
-		$statement = $this->execute($sql);
-		return $statement->rowCount();
+		$sql = 'UPDATE '.$this->get_tablename().' SET '.$value.' WHERE '.$this->key['where'];
+		$this->execute($sql);
+		return mysql_affected_rows();	
 	}
 
 	
@@ -362,10 +382,11 @@ class db_pdo{
 	 * 获取查询多条结果，返回二维数组
 	 * @return array
 	 */	
-	public function select(){	
+	public function select(){
+		$rs = array();		
 		$field = isset($this->key['field']) ? str_replace('lrycms_', $this->config['db_prefix'], $this->key['field']) : ' * ';
 		$join = isset($this->key['join']) ? ' '.implode(' ', $this->key['join']) : '';
-		$where = isset($this->key['where']['str']) ? ' WHERE '.$this->key['where']['str'] : '';
+		$where = isset($this->key['where']) ? ' WHERE '.$this->key['where'] : '';
 		$group = isset($this->key['group']) ? ' GROUP BY '.$this->key['group'] : '';
 		$having = isset($this->key['having']) ? ' HAVING '.$this->key['having'] : '';
 		$order = isset($this->key['order']) ? ' ORDER BY '.$this->key['order'] : '';
@@ -373,18 +394,21 @@ class db_pdo{
 		
 		$sql = 'SELECT '.$field.' FROM '.$this->get_tablename().$join.$where.$group.$having.$order.$limit;
 		$selectquery = $this->execute($sql);
-	    return $selectquery->fetchAll(PDO::FETCH_ASSOC);
+		while($data = mysql_fetch_assoc($selectquery)){
+	      $rs[] = $data;
+	    }
+	    return $rs;
 	}
 	
 	
 	/**
 	 * 获取查询一条结果，返回一维数组
-	 * @return array|false
+	 * @return array
 	 */	
 	public function find(){
 		$field = isset($this->key['field']) ? str_replace('lrycms_', $this->config['db_prefix'], $this->key['field']) : ' * ';
 		$join = isset($this->key['join']) ? ' '.implode(' ', $this->key['join']) : '';
-		$where = isset($this->key['where']['str']) ? ' WHERE '.$this->key['where']['str'] : '';
+		$where = isset($this->key['where']) ? ' WHERE '.$this->key['where'] : '';
 		$group = isset($this->key['group']) ? ' GROUP BY '.$this->key['group'] : '';
 		$having = isset($this->key['having']) ? ' HAVING '.$this->key['having'] : '';
 		$order = isset($this->key['order']) ? ' ORDER BY '.$this->key['order'] : '';
@@ -392,7 +416,7 @@ class db_pdo{
 		
 		$sql = 'SELECT '.$field.' FROM '.$this->get_tablename().$join.$where.$group.$having.$order.$limit;
 		$findquery = $this->execute($sql);
-	    return $findquery->fetch(PDO::FETCH_ASSOC);
+	    return mysql_fetch_assoc($findquery);
 	}
 	
 	
@@ -404,7 +428,7 @@ class db_pdo{
 	public function one(){
 		$field = isset($this->key['field']) ? str_replace('lrycms_', $this->config['db_prefix'], $this->key['field']) : ' * ';
 		$join = isset($this->key['join']) ? ' '.implode(' ', $this->key['join']) : '';
-		$where = isset($this->key['where']['str']) ? ' WHERE '.$this->key['where']['str'] : '';
+		$where = isset($this->key['where']) ? ' WHERE '.$this->key['where'] : '';
 		$group = isset($this->key['group']) ? ' GROUP BY '.$this->key['group'] : '';
 		$having = isset($this->key['having']) ? ' HAVING '.$this->key['having'] : '';
 		$order = isset($this->key['order']) ? ' ORDER BY '.$this->key['order'] : '';
@@ -412,12 +436,11 @@ class db_pdo{
 		
 		$sql = 'SELECT '.$field.' FROM '.$this->get_tablename().$join.$where.$group.$having.$order.$limit;
 		$findquery = $this->execute($sql);
-		$data = $findquery->fetch(PDO::FETCH_NUM);
-	    return $data ? $data[0] : '';
+	    $data = mysql_fetch_row($findquery);
+	    return $data&&$data[0] ? $data[0] : '';
 	}	
 	
-		
-		
+	
 	/**
 	 * 连接查询
 	 * @param $join 	string SQL语句，如lrycms_admin ON lrycms_admintype.id=lrycms_admin.id
@@ -425,10 +448,10 @@ class db_pdo{
 	 * @return object
 	 */	
 	public function join($join, $type = 'INNER'){
-		$join = str_replace('lrycms_', $this->config['db_prefix'], $join);   
+		$join = str_replace('lrycms_', $this->config['db_prefix'], $join);    
         $this->key['join'][] = stripos($join,'JOIN') !== false ? $join : $type.' JOIN '.$join;
 	    return $this;
-	}	
+	}		
 	
 	
 	/**
@@ -442,8 +465,8 @@ class db_pdo{
 		}
 		echo '<div style="font-size:14px;text-align:left;border:1px solid #9cc9e0;line-height:25px;padding:5px 10px;color:#000;font-family:Arial,Helvetica,sans-serif;"><p><b>SQL：</b>'.$this->lastsql.'</p></div>';		
 	}
-	
 
+	
 	/**
 	 * 自定义SQL语句
 	 * @param  $sql sql语句
@@ -451,7 +474,7 @@ class db_pdo{
 	 * @return mixed
 	 */		
 	public function query($sql = '', $fetch_all = true){
-		$sql = str_replace('lrycms_', $this->config['db_prefix'], $sql);  
+		$sql = str_replace('lrycms_', $this->config['db_prefix'], $sql);
 		if(preg_match("/^(?:UPDATE|DELETE|TRUNCATE|ALTER|DROP|FLUSH|INSERT|REPLACE|SET|CREATE)\\s+/i", $sql)){
 			return $this->execute($sql);	 
 		} 
@@ -461,61 +484,59 @@ class db_pdo{
 
 	/**
 	 * 返回一维数组，与query方法结合使用
-	 * @param  object
+	 * @param  resource
 	 * @return array
 	 */		
-    public function fetch_array($query, $result_type = PDO::FETCH_ASSOC) {
-		if(!is_object($query))   return $query;
-		return $query->fetch($result_type);
+    public function fetch_array($query, $result_type = MYSQL_ASSOC) {
+    	if(!is_resource($query))   return $query;
+		return mysql_fetch_array($query, $result_type);
 	}	
-	
 
+	
 	/**
 	 * 返回二维数组，与query方法结合使用
-	 * @param  object
+	 * @param  resource
 	 * @return array
 	 */		
-    public function fetch_all($query, $result_type = PDO::FETCH_ASSOC) {
-		if(!is_object($query))   return $query;
-		return $query->fetchAll($result_type);
+    public function fetch_all($query, $result_type = MYSQL_ASSOC) {
+    	if(!is_resource($query))   return $query;
+		$arr = array();
+		while($data = mysql_fetch_array($query, $result_type)) {
+			$arr[] = $data;
+		}
+		return $arr;
 	}
 	
-
-
-
-
-
 	
 	/**
 	 * 获取错误提示
 	 */		
 	private function geterr($msg, $sql=''){
-	    if(PHP_SAPI == 'cli'){
-	    	throw new Exception('MySQL Error: '.$msg.' | '.$sql);
-	    }
+		if(PHP_SAPI == 'cli'){
+			throw new Exception('MySQL Error: '.mysql_error().' | '.$msg);
+		}
 		
 		if(RY_DEBUG){
-			if(is_ajax()) return_json(array('status'=>0, 'message'=>'MySQL Error: '.$msg.' | '.$sql));
-			application::fatalerror($msg, $sql, 2);	
+			if(is_ajax()) return_json(array('status'=>0, 'message'=>'MySQL Error: '.mysql_error().' | '.$msg));
+			application::fatalerror($msg, mysql_error(), 2);	
 		}else{
-			write_error_log(array('MySQL Error', $msg, $sql));
+			write_error_log(array('MySQL Error', mysql_errno(), mysql_error(), $msg));
 			if(is_ajax()) return_json(array('status'=>0, 'message'=>'MySQL Error!'));
 			application::halt('MySQL Error!', 500);
 		}
 	}
-
-
-
+	
+	
 	/**
 	 * 返回记录行数。
 	 * @return int 
 	 */	
 	public function total(){
 		$join = isset($this->key['join']) ? ' '.implode(' ', $this->key['join']) : '';
-		$where = isset($this->key['where']['str']) ? ' WHERE '.$this->key['where']['str'] : '';		
+		$where = isset($this->key['where']) ? ' WHERE '.$this->key['where'] : '';		
 		$sql = 'SELECT COUNT(*) AS total FROM '.$this->get_tablename().$join.$where;
 		$totquery = $this->execute($sql);
-		$total = $totquery->fetch(PDO::FETCH_ASSOC);
+		$total = mysql_fetch_assoc($totquery);   
         return $total['total'];		
 	}
 
@@ -525,7 +546,9 @@ class db_pdo{
      * @return boolean
      */
     public function start_transaction() {
-        return self::$link->beginTransaction();
+		
+        $this->execute('start transaction');
+        return $this->execute('SET AUTOCOMMIT=0');
     }
 
 	
@@ -534,7 +557,9 @@ class db_pdo{
      * @return boolean
      */
     public function commit() {
-        self::$link->commit();
+        
+		$this->execute('commit');
+		return $this->execute('SET AUTOCOMMIT=1');
     }
 
 	
@@ -543,12 +568,13 @@ class db_pdo{
      * @return boolean
      */
     public function rollback() {
-		return self::$link->rollback();
+		
+		$this->execute('rollback');
+		return $this->execute('SET AUTOCOMMIT=1');
     }
-
-		
-
-		
+	
+	
+	
 	/**
 	 * 获取数据表主键
 	 * @param $table 		数据表 可选
@@ -557,14 +583,11 @@ class db_pdo{
 	public function get_primary($table = '') {
 		$table = empty($table) ? $this->get_tablename() : $table;
 		$sql = "SHOW COLUMNS FROM $table";
-		$listqeury = $this->execute($sql, true);
-	    $data = $listqeury->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($data as $value) {
-			if($value['Key'] == 'PRI') { 
-				return $value['Field'];
-			}
+		$r = $this->execute($sql, true);
+		while($data = mysql_fetch_assoc($r)){
+			if($data['Key'] == 'PRI') break;
 		}
-		return $data[0]['Field'];
+		return $data['Field'];
 	}
 	
 
@@ -575,9 +598,8 @@ class db_pdo{
 	public function list_tables() {
 		$tables = array();
 		$listqeury = $this->execute('SHOW TABLES', true);
-		$data = $listqeury->fetchAll(PDO::FETCH_NUM);	
-		foreach ($data as $value) {
-			$tables[] = $value[0];
+		while($r = $this->fetch_array($listqeury, MYSQL_NUM)) {
+			$tables[] = $r[0];
 		}
 		return $tables;
 	}	
@@ -592,11 +614,10 @@ class db_pdo{
 		$table = empty($table) ? $this->get_tablename() : $table;
 		$fields = array();
 		$sql = "SHOW COLUMNS FROM $table";
-		$listqeury = $this->execute($sql, true);
-	    $data = $listqeury->fetchAll(PDO::FETCH_ASSOC);
-		foreach ($data as $value) {
-			$fields[] = $value['Field'];
-		}
+		$r = $this->execute($sql, true);
+		while($data = mysql_fetch_assoc($r)){
+			$fields[] = $data['Field'];
+		}		
 		return $fields;
 	}
 
@@ -623,24 +644,23 @@ class db_pdo{
 		$fields = $this->get_fields($table);
 		return in_array($field, $fields);
 	}
-	
+		
 	
 	/**
 	 * 返回 MySQL 服务器版本信息
 	 * @return string 
 	 */	
 	public function version(){
-	    return self::$link->getAttribute(PDO::ATTR_SERVER_VERSION);	
+	    return mysql_get_server_info();	
 	}
 	
-
+	
 	/**
 	 * 关闭数据库连接
-	 * @return boolean 
+	 * @return boolean
 	 */	
 	public function close(){
-		self::$link = null;
-	    return true;
+	    return @mysql_close(self::$link);
 	}
 	
 }

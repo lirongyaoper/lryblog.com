@@ -7,7 +7,7 @@ class application{
      * Initializes the debug class and sets up error handling
      */
     public function __construct(){
-        ryphp:: load_sys_class('debug','',0);
+        ryphp::load_sys_class('debug','',0);
         register_shutdown_function(array('debug','fatalerror'));
         set_error_handler(array('debug','catcher'));
         set_exception_handler(array('debug','exception'));

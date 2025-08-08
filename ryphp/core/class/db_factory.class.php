@@ -22,7 +22,7 @@ class db_factory{
 					break;
 				case 'pdo' :
 					// 加载优化版本的PDO数据库类
-					ryphp::load_sys_class('db_pdo_optimized','',0);
+					ryphp::load_sys_class('db_pdo','',0);
 					self::$class = 'db_pdo';
 					break;
 				default :

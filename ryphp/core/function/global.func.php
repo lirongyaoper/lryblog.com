@@ -320,6 +320,42 @@ function return_json($arr = array(),$show_debug = false){
     exit(new_json_encode($arr,JSON_UNESCAPED_UNICODE));
 }
 
+
+
+/**
+ * 对字符串进行安全过滤处理
+ * 
+ * 此函数用于清理字符串中的潜在危险字符，防止XSS攻击和SQL注入等安全问题。
+ * 主要进行以下处理：
+ * - 移除URL编码字符（%20, %27, %2527）
+ * - 移除特殊字符（*, ", ', ;, \）
+ * - HTML转义尖括号（< 转换为 &lt;, > 转换为 &gt;）
+ * - 移除花括号（{, }）
+ * 
+ * @param mixed $string 需要处理的字符串
+ * @return mixed 如果输入是字符串则返回处理后的安全字符串，否则原样返回
+ */
+function safe_replace($string) {
+	if(!is_string($string)) return $string;
+	$string = trim($string);
+	$string = str_replace('%20','',$string);
+	$string = str_replace('%27','',$string);
+	$string = str_replace('%2527','',$string);
+	$string = str_replace('*','',$string);
+	$string = str_replace('"','',$string);
+	$string = str_replace("'",'',$string);
+	$string = str_replace(';','',$string);
+	$string = str_replace('<','&lt;',$string);
+	$string = str_replace('>','&gt;',$string);
+	$string = str_replace("{",'',$string);
+	$string = str_replace('}','',$string);
+	$string = str_replace('\\','',$string);
+	return $string;
+}	
+
+
+
+
 /**
  * 发送HTTP状态
  * @param integer $code 状态码
@@ -383,6 +419,13 @@ function send_http_status($code){
     }
 }	
 
+function setcache($name,$data,$timeout = 0){
+    ryphp::load_sys_class('cache_factory','',0);
+    $cache = cache_factory :: get_instance()->get_cache_instances();
+    return $cache ->set($name,$data,$timeout);
+}
+
+
 
 /**
  *  提示信息页面跳转
@@ -405,36 +448,8 @@ function showmsg($msg, $gourl = '', $limittime  =3){
 
 
 
-/**
- * 对字符串进行安全过滤处理
- * 
- * 此函数用于清理字符串中的潜在危险字符，防止XSS攻击和SQL注入等安全问题。
- * 主要进行以下处理：
- * - 移除URL编码字符（%20, %27, %2527）
- * - 移除特殊字符（*, ", ', ;, \）
- * - HTML转义尖括号（< 转换为 &lt;, > 转换为 &gt;）
- * - 移除花括号（{, }）
- * 
- * @param mixed $string 需要处理的字符串
- * @return mixed 如果输入是字符串则返回处理后的安全字符串，否则原样返回
- */
-function safe_replace($string) {
-	if(!is_string($string)) return $string;
-	$string = trim($string);
-	$string = str_replace('%20','',$string);
-	$string = str_replace('%27','',$string);
-	$string = str_replace('%2527','',$string);
-	$string = str_replace('*','',$string);
-	$string = str_replace('"','',$string);
-	$string = str_replace("'",'',$string);
-	$string = str_replace(';','',$string);
-	$string = str_replace('<','&lt;',$string);
-	$string = str_replace('>','&gt;',$string);
-	$string = str_replace("{",'',$string);
-	$string = str_replace('}','',$string);
-	$string = str_replace('\\','',$string);
-	return $string;
-}	
+
+
 
 
 /**
