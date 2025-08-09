@@ -36,18 +36,18 @@ class page{
         $this ->url = $this ->geturl();
      }
 
-     protected function geturl(){
-        unset($this ->parameter['m'],$this ->parameter['c'], $this ->parameter['a']);
-        $this -> parameter['page'] = 'PAGE';
+	protected function geturl(){
+		unset($this ->parameter['m'],$this ->parameter['c'], $this ->parameter['a']);
+		$this -> parameter['page'] = 'PAGE';
 
-        if($this ->url_rule) return $this -> _list_url();
-        return U(ROUTE_A,$this ->parameter);
-     }
+		if($this ->url_rule) return $this -> _list_url();
+		return U(ROUTE_A,$this ->parameter);
+	}
 
-     private function make_url($page){
-         if($page == 1 && $this ->url_rule && !strpos($this->url, '?')) return strstr($this->url,$this ->page_prefix . 'PAGE',true);
-         return str_replace('PAGE',$page, $this->url);
-     }
+	private function make_url($page){
+		if($page == 1 && $this ->url_rule && !strpos($this->url, '?')) return strstr($this->url,$this ->page_prefix . 'PAGE',true);
+		return str_replace('PAGE',$page, $this->url);
+	}
 
    public function get_totalpage() {
       return $this->total_page;
@@ -103,38 +103,100 @@ class page{
    }
 
 
-   public function page_size($sizes = array(10,20,30,40,50,100)){
-      if(!is_array($sizes)) return '';
-      $string = '<select name ="page_size" class="select" data-url="' .$this->url .  '" onchange ="lry_page_size(this)">';
-      foreach($sizes as $val){
-         $select = $this ->list_rows == $val ? 'selected' : '';
-         $string .= '<option value ="' . $val. '" '. $select. '>'. $val. L('article_page').'</option>';
-      }
-      $string .= '</select>';
-      return $string;
-   }
+	public function page_size($sizes = array(10, 20, 30, 40, 50, 100)){
+		if(!is_array($sizes)) return '';
+		$string = '<select name="page_size" class="select" data-url="'.$this->url.'" onchange="lry_page_size(this)">';
+		foreach ($sizes as $val) {
+			$select = $this->list_rows==$val ? 'selected' : '';
+			$string .= '<option value="'.$val.'" '.$select.'>'.$val.L('article_page').'</option>';
+		}
+		$string .= '</select>';
+		return $string;
+	}
 
-   public function getlist(){
-      $str = '';
-      if($this->total_page <=5){
-         
-         for($i = 1;$i<= $this->total_page; $i++){
-            $class = $this->now_page ==$i ? ' curpage' : '';
-            $str.= '<a href="'. $this->make_url($i).'" class="listpage'. $class.'">' . $i . '</a>';
-         
-         }
-      }else{
-         if($this->now_page <=3){
-            $p =5;
-         }else{
-            $p = ($this->now_page+2) >= $this->total_page ? $this->total_page : $this->now_page + 2;
-         }
-      }
-   }
+	public function getlist(){
+		$str = '';
+		if($this->total_page<=5){
+			for($i=1; $i<=$this->total_page; $i++){
+				$class = $this->now_page==$i ? ' curpage' : '';
+				$str.='<a href="'.$this->make_url($i).'" class="listpage'.$class.'">'.$i.'</a>';
+			}
+		}else{	
+			if($this->now_page <= 3){
+				$p =5;
+			}else{
+				$p = ($this->now_page+2)>=$this->total_page ? $this->total_page : $this->now_page+2;
+			} 
+			for($i=$p-4; $i<=$p; $i++){
+				$class = $this->now_page==$i ? ' curpage' : '';
+				$str.='<a href="'.$this->make_url($i).'" class="listpage'.$class.'">'.$i.'</a>';
+			}
+		}
+		return $str;
+	}
+
+	/**
+	 * 跳转到指定页
+	 */
+	public function getjump(){
+		return '<span class="jumpbox">'.L('jump_to').'<input type="text" name="page" placeholder="'.L('page_number').'" onkeypress="return lry_page_jump(this)" class="input-text jumppage" data-url="'.$this->url.'">'.L('page').'</span>';
+	}	
+
+	
+	/**
+	 * 获取全部列表---首页上页[1][2][3][4][5]下页尾页
+	 */
+	public function getfull($show_jump = true){
+		if($this->total_rows == 0) return '';
+	    return $this->gethome().$this->getpre().$this->getlist().$this->getnext().$this->getend().($show_jump ? $this->getjump() : '');
+	}
 
 
+	/**
+	 * 获取每页展示条数
+	 */
+	private function _get_page_size(){
+		$page_size_c = intval(get_cookie('page_size'));
+		$page_size = isset($_GET['page_size']) ? intval($_GET['page_size']) : $page_size_c;
+
+		if($page_size>0 && $page_size!=$page_size_c) {
+			set_cookie('page_size', $page_size);
+		}
+		return $page_size>0 ? $page_size : 10;
+	}
 
 
+	/**
+	 * 获取前端列表分页URL
+	 */
+	private function _list_url(){
+		
+		// 如果为后台批量生成栏目
+		if(defined('ADMIN_CREATE_HTML')){
+			if(!defined('TOTAL_PAGE')) define('TOTAL_PAGE', $this->total_page);
+			$catdir = getcache('update_html_catdir_'.$_SESSION['adminid']);
+			return SITE_URL.$catdir.'/'.$this->page_prefix.'PAGE.html'; 
+		}		
 
+		$parameter = '';
+		$request_url = trim(str_replace(array(C('url_html_suffix'),$this->page_prefix.$this->now_page), '', $_SERVER['REQUEST_URI']), '/');
+
+		// 支持传入自定义参数  ?aa=1&bb=2
+		$pos = strpos($request_url, '?');
+		if($pos !== false){
+			list($request_url, $parameter) = explode('?', $request_url);
+			if($parameter){
+				parse_str($parameter, $vars);  
+				$parameter = '?'.http_build_query($vars);
+			}
+			$request_url = trim($request_url, '/');
+		}
+
+		if($request_url) $request_url .= '/';
+		if(SITE_PATH == '/'){
+			return SITE_URL.$request_url.$this->page_prefix.'PAGE'.C('url_html_suffix').$parameter; 
+		}
+		return SERVER_PORT.HTTP_HOST.'/'.$request_url.$this->page_prefix.'PAGE'.C('url_html_suffix').$parameter; 
+	}
 
 }
