@@ -18,7 +18,7 @@ return array(
     'db_pwd' => '3.3.',       		// 密码
     'db_port' => 3306,              // 端口
     'db_charset'         => 'utf8',      // 字符集
-    'db_prefix' => 'lry_',         // 数据库表前缀
+    'db_prefix' => 'rycms_',         // 数据库表前缀
     
     //路由配置
     'route_config'       => array (
