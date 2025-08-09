@@ -1,7 +1,7 @@
 <?php
 defined('IN_RYPHP') or exit('Access Denied');
-
-class index {
+ryphp::load_controller('common',ROUTE_M,0);
+class index extends common{
 
     public function init(){
         

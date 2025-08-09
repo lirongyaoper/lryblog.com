@@ -68,3 +68,36 @@ CREATE TABLE `rycms_urlrule` (
   `listorder` tinyint(3) unsigned NOT NULL DEFAULT '50' COMMENT '优先级排序',
   PRIMARY KEY (`urlruleid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
+DROP TABLE IF EXISTS `rycms_admin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rycms_admin` (
+  `adminid` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `adminname` varchar(30) NOT NULL DEFAULT '',
+  `password` varchar(32) NOT NULL DEFAULT '',
+  `roleid` tinyint unsigned NOT NULL DEFAULT '1',
+  `rolename` varchar(30) NOT NULL DEFAULT '',
+  `realname` varchar(30) NOT NULL DEFAULT '',
+  `nickname` varchar(30) NOT NULL DEFAULT '',
+  `email` varchar(30) NOT NULL DEFAULT '',
+  `logintime` int unsigned NOT NULL DEFAULT '0',
+  `loginip` varchar(15) NOT NULL DEFAULT '',
+  `addtime` int unsigned NOT NULL DEFAULT '0',
+  `errnum` tinyint unsigned NOT NULL DEFAULT '0',
+  `addpeople` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`adminid`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rycms_admin`
+--
+
+LOCK TABLES `rycms_admin` WRITE;
+/*!40000 ALTER TABLE `rycms_admin` DISABLE KEYS */;
+INSERT INTO `rycms_admin` VALUES (1,'lirongyaoper','e6398f4dc35c4f37acb2f7f3abe0012d',1,'超级管理员','','轩鸿青','',1754740961,'42.227.0.186',1557731527,0,'系统');
+/*!40000 ALTER TABLE `rycms_admin` ENABLE KEYS */;
+UNLOCK TABLES;
