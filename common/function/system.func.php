@@ -7,6 +7,24 @@ function get_siteid(){
 }
 
 
+function get_config($key = ''){
+    if(!$configs = getcache('configs')){
+        $data = D('config') -> where(array('status' => 1)) ->select();
+        $configs = array();
+        foreach($data as $val){
+            $configs[$val['name']] = $val['value'];
+        }
+        setcache('configs',$configs);
+    }
+    if(!$key){
+        return $configs;
+    }else{
+        return array_key_exists($key,$configs) ? $configs[$key] : '';
+    }
+}
+
+
+
 function get_urlrule(){
     if(!$urlrule = getcache('urlrule')){
         $data = D('urlrule') ->order('listorder ASC, urlruleid ASC') ->limit(300)->select();

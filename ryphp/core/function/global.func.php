@@ -447,8 +447,72 @@ function showmsg($msg, $gourl = '', $limittime  =3){
 
 
 
+function sizecount($size, $prec = 2) {
+    // Use static array to avoid recreating it on each function call
+    static $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB'];
+    
+    // Force numeric value and handle negative sizes
+    $size = abs(floatval($size));
+    
+    // Early return for 0 size
+    if ($size === 0) {
+        return "0 B";
+    }
+    
+    // Calculate power of 1024 using log to avoid loop
+    $pow = floor(log($size, 1024));
+    // Constrain to available units
+    $pow = min($pow, count($units) - 1);
+    
+    // Calculate final size
+    $size /= pow(1024, $pow);
+    
+    return round($size, $prec) . ' ' . $units[$pow];
+}
 
 
+function U($url = '',$vars = '',$domain = null, $suffix = true){
+    $url = trim($url, '/');
+    $arr = explode('/',$url);
+    $num = count($arr);
+    $string = SITE_PATH;
+    if(URL_MODEL==0){
+        $string .='index.php?';
+        if($num ==3){
+            $string .= 'm=' . $arr[0] . '&c=' . $arr[1] .'&a=' . $arr[2];
+        }elseif($num ==2){
+            $string .= 'm=' . ROUTE_M . '&c=' . $arr[1] .'&a=' . $arr[1];
+        }else{
+            $string .= 'm=' . ROUTE_M . '&c=' . ROUTE_C . '&a=' .$arr[0];
+        }
+        if($vars){
+            if(is_array($vars))  $vars = http_build_query($vars);
+            $string .= '&'.$vars;
+        }
+    }else{
+        if(URL_MODEL == 1) $string .= 'index.php?s=';
+        if(URL_MODEL == 4) $string .= 'index.php/';
+        if($num ==3){
+            $string .= $url;
+        }elseif($num ==2){
+            $string .= ROUTE_M . '/' .$url;
+        }else{
+            $string .= ROUTE_M . '/' . ROUTE_C . '/' . $url;
+        }
+        if($vars){
+            if(!is_array($vars))  parse_str($vars, $vars);
+            foreach($vars as $var => $val){
+                if(!is_array($val)  && trim($val) !==''){
+                    $val = str_replace('/','{LRYPHP_PATH}',$val);
+                    $string .= '/'.urlencode($var) .'/'. urlencode($val);
+                }
+            }
+        }
+        $string .= $suffix == true ? C('url_html_suffix') : $suffix;
+    }
+    $string = $domain === null  && URL_MODEL ==3 ? SERVER_PORT.HTTP_HOST.$string : ($domain ? SERVER_PORT. HTTP_HOST. $string : $string);
+    return $string;
+}
 
 
 
