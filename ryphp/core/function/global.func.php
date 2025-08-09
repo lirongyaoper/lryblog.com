@@ -126,6 +126,23 @@ function get_address($ip, $is_array = false){
 	}
 }
 
+/**
+* 将数组转换为字符串
+*
+* @param	array	$data		数组
+* @param	bool	$isformdata	如果为0，则不使用new_stripslashes处理，可选参数，默认为1
+* @return	string	返回字符串，如果，data为空，则返回空
+*/
+function array2string($data, $isformdata = 1) {
+	if(empty($data)) return '';
+	
+	if($isformdata) $data = new_stripslashes($data);
+	if(version_compare(PHP_VERSION,'5.4.0','<')){
+		return addslashes(json_encode($data));
+	}else{
+		return json_encode($data, JSON_UNESCAPED_UNICODE|JSON_FORCE_OBJECT);
+	}
+}
 
 function getcache($name){
     ryphp::load_sys_class('cache_factory','',0);
@@ -209,32 +226,31 @@ function get_url(){
  * // 自定义请求头示例
  * https_request('https://api.example.com/data', '', true, 2000, ['Authorization: Bearer token']);
  */
-function https_request($url,$data = '',$array = true,$timeout = 2000,$header = array()){
+function https_request($url, $data = '', $array = true, $timeout = 2000, $header = array()){
     $curl = curl_init($url);
-    curl_setopt($curl,CURLOPT_SSL_VERIFYPEER,false);
-    curl_setopt($curl,CURLOPT_SSL_VERIFYHOST,false);
-    curl_setopt($curl,CURLOPT_NOSIGNAL, true);
-    curl_setopt($curl,CURLOPT_TIMEOUT_MS,$timeout);
-    curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+    curl_setopt($curl, CURLOPT_NOSIGNAL, true); 
+    curl_setopt($curl, CURLOPT_TIMEOUT_MS, $timeout); 
 
     if($data){
-        curl_setopt($curl,CURLOPT_POST,true); // 设置为POST请求
-        curl_setopt($curl,CURLOPT_POSTFIELDS,$data);// 设置POST数据
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
     }
-	if($header){
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);// 设置HTTP头部信息
-	}
-    curl_setopt($curl,CURLOPT_RETURNTRANSFER,true);// 返回响应而不是输出
-    $output = curl_exec($curl);
-    debug::addmsg(array('url' => $url, 'data' => $data ),2);
-    if($output === false){
-        $curl_error  = curl_error($curl);
-        return $array ? array('status' => 0,'message' => $curl_error) : $curl_error;
-    }
-    curl_close($curl);
-    return $array ? json_decode($output,true) : $output;
-}
 
+	if($header){
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+	}
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($curl);
+    debug::addmsg(array('url'=>$url, 'data'=>$data), 2);
+	if($output === false) {
+		$curl_error = curl_error($curl);
+		return $array ? array('status'=>0, 'message'=>$curl_error) : $curl_error;
+	}
+    curl_close($curl);
+    return $array ? json_decode($output, true) : $output;
+}
 
 
 /**
@@ -700,6 +716,51 @@ function trim_script($str) {
 	return $str;
 }
 
+
+
+/**
+ * 
+ * I'll quickly check where `SERVER_PORT` and `URL_MODEL` are defined to ensure the explanation of their roles is accurate, then break down the ternary logic.
+ * Ran tool
+ *
+ *	Ran tool
+ *
+ *	- 含义
+ *	- 这是一段三元表达式，用来决定是否给 `$string` 前面加上协议与域名，生成绝对 URL。
+ *	- `.` 是 PHP 的字符串拼接。
+ *	- `SERVER_PORT` 是 `http://` 或 `https://`，`HTTP_HOST` 是当前域名（含端口），`URL_MODEL` 是 URL 模式常量。
+ *
+ *	- 逻辑拆解
+ *	- 条件1：`$domain === null && URL_MODEL == 3`
+ *		- 为真时：`$string = SERVER_PORT . HTTP_HOST . $string`（强制加前缀，输出绝对 URL）
+ *		- 否则进入条件2
+ *	- 条件2：`$domain ? SERVER_PORT . HTTP_HOST . $string : $string`
+ *		- `$domain` 为真（非空/非0）：同样加前缀为绝对 URL
+ *		- `$domain` 为假（空串/0/false）：保持 `$string` 原样（相对 URL）
+ *
+ *	- 等价判断
+ *	- 只要满足以下任一条件，就会加协议+域名前缀：
+ *		- `$domain === null` 且 `URL_MODEL == 3`
+ *		- `$domain` 为真值
+ *	- 否则保持相对路径。
+ *
+ *	- 示例
+ *	- `$domain === null, URL_MODEL=3` → `https://example.com/path`
+ *	- `$domain = true` → `https://example.com/path`
+ *	- `$domain = '' (或 false), URL_MODEL!=3` → `/path`（原样）
+ *
+ *	- 可读性写法
+ *	$shouldPrefix = ($domain === null && URL_MODEL == 3) || (bool) $domain;
+ *	if ($shouldPrefix) {
+ *		$string = SERVER_PORT . HTTP_HOST . $string;
+ *	}
+ *
+ *	- 小提示
+ *	- 表达式里的空格（如 `SERVER_PORT. HTTP_HOST`）在 PHP 中无影响。
+ * 
+ * 
+ */
+
 function U($url = '',$vars = '',$domain = null, $suffix = true){
     $url = trim($url, '/');
     $arr = explode('/',$url);
@@ -729,7 +790,7 @@ function U($url = '',$vars = '',$domain = null, $suffix = true){
             $string .= ROUTE_M . '/' . ROUTE_C . '/' . $url;
         }
         if($vars){
-            if(!is_array($vars))  parse_str($vars, $vars);
+            if(!is_array($vars))  parse_str($vars, $vars);//如果是字符串则转换为数组		
             foreach($vars as $var => $val){
                 if(!is_array($val)  && trim($val) !==''){
                     $val = str_replace('/','{LRYPHP_PATH}',$val);
@@ -740,7 +801,11 @@ function U($url = '',$vars = '',$domain = null, $suffix = true){
         $string .= $suffix == true ? C('url_html_suffix') : $suffix;
     }
     $string = $domain === null  && URL_MODEL ==3 ? SERVER_PORT.HTTP_HOST.$string : ($domain ? SERVER_PORT. HTTP_HOST. $string : $string);
-    return $string;
+    // $shouldPrefix = ($domain === null && URL_MODEL == 3) || (bool) $domain;
+	// if ($shouldPrefix) {
+	// 	$string = SERVER_PORT . HTTP_HOST . $string;
+	// }
+	return $string;
 }
 
 
@@ -1599,6 +1664,22 @@ function input($key = '', $default = '', $function = ''){
 		return false;
 	}
 }
+
+/**
+ * 以httponly方式开启SESSION
+ * @return bool
+ */
+function new_session_start(){
+	if(ini_get('session.auto_start')) return true;
+	// session_save_path(RYPHP_PATH.'cache/sessions');
+	ini_set('session.cookie_httponly', true);
+	$session_name = session_name();
+	if (isset($_COOKIE[$session_name]) && !preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[$session_name])) {
+        unset($_COOKIE[$session_name]);
+    } 
+	return session_start();
+}
+
 
 /**
  * 创建TOKEN，确保已经开启SESSION
