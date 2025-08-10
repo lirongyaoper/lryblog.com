@@ -17,4 +17,12 @@ class common {
             exit('Access Denied,buyaoyisi-ryphp');
         }
     }
+
+
+    final public static function admin_tpl($file,$m = ''){
+        if(empty($file)) return false;
+        $m = empty($m)? ROUTE_M : $m;
+        if(empty($m)) return false;
+        return RYPHP_APP.$m.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$file.'.html';
+    }
 }

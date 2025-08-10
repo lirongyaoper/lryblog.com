@@ -40,7 +40,7 @@ class cache_file{
          }
          $file = $this->_file($id);
          $data = $this -> _filegetcontents($file);
-         if($data['expire'] == 0 || SYS_TIME <$data['expire']){
+         if($data['expire'] == 0 || SYS_TIME < $data['expire']){
             return $data['contents'];
          }
          return false;
@@ -65,6 +65,7 @@ class cache_file{
 
         if($this->config['mode'] == 1){
             $handle = @fopen($file, 'r');
+            fgets($handle);
             return unserialize(fgets($handle));
         }else{
             return @require $file;

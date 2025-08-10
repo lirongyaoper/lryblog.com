@@ -1,0 +1,162 @@
+/**
+ *  RyPHP-荣耀小科技
+ *  lryper.com
+ */
+body{font-size:14px;font-family:"Arial","微软雅黑";line-height:22px;padding:0px;margin:0px;}
+html,body{overflow-x: hidden;}
+html{background-color: #f2f2f2;}
+i{font-style: normal;}
+a:hover{color:#009688}
+
+.layui-logo{position: absolute;left: 15px;top: 11px;}
+.layui-logo img{width:135px}
+.lry_menu{margin-top:15px;position:relative;min-height:640px;}
+.lry_menu>.layui-nav .layui-icon {position: relative;top: 2px;font-size: 20px;margin-right: 10px;}
+.lry_menu>.layui-nav {position: absolute;left: 0;top: 0;z-index: 1000;height: 100%;padding: 10px 0;}
+.lry_explain{padding:7px 10px;margin-bottom:10px;}
+.change{display:inline-block;}
+input.input_del{margin-top:5px;}
+
+.lry-body{border-radius: 2px; background-color: #fff; box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);padding:5px 20px;min-height:640px; margin: 0 0 10px 215px;}
+.layui-tab-content{padding:20px 0;}
+#sel{margin-left:10px;}
+.layui-table td, .layui-table th{padding: 9px 0;text-align:center;}
+.layui-table, .layui-table-view{margin:0;}
+.page{text-align:center;margin-top:10px;}
+.edit a:hover{color:#009688;}
+ input.dele{display:block;}
+ footer{margin: 50px 0 0;padding: 20px 0 30px;text-align: center;color: #737573;border-top: 1px solid #e2e2e2;}
+ footer a:hover{color:#009688;}
+
+ /*个人中心首页*/
+ .lry-box{border: 1px solid #e6e6e6;color: #333;margin-top: 20px}
+ .lry-mb-20{margin-bottom:20px}
+ .lry-member-title{height:50px;line-height: 50px;border-bottom: 1px solid #e6e6e6;padding:0 20px;}
+ .lry-member-main{padding:10px 20px;}
+ .lry-member-main p{line-height: 33px}
+ .lry-member-main .lry-vip{margin-right:10px;}
+ .lry-member-main label{width:70px;display:inline-block;}
+ .lry-member-main .lry-amount{color: #FF5722;}
+ .lry-member-main .lry-amount-add{color:#fff;background:#FFB800;font-size:12px;padding:4px 10px;border-radius:2px;margin-left:10px;transition:all 0.3s}
+ .lry-member-main .lry-amount-add:hover{background:#F4C549}
+ .lry-member-quick{padding:10px 0;}
+ .lry-member-quick li{padding:0px 20px;text-align:center;margin-top:10px}
+ .lry-member-quick li cite{display: block;color: #666;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;font-size: 14px;margin: 10px 0}
+.lry-member-quick .layui-icon{background-color: #2F9688;display: inline-block;width: 100%;height: 60px;line-height: 60px;text-align: center;color: #fff;border-radius: 2px;font-size: 30px;transition: all .3s}
+.lry-member-quick .layui-icon:hover{background-color:#3CBBA9}
+
+ /*账号设置*/
+.lry_upload {width:375px;height:375px;background-color: #F2F2F5;text-align:center;}
+.lry_upload img {display:block;border-radius:50%;width:150px;height:150px;padding:30px;margin:0 auto;}
+.lry_upload p {padding:10px 20px 0 20px;font-size: 12px;text-align: center;color: #999;}
+ #user_pic{width:185px;}
+ .save{margin-top:25px;}
+
+/*财务中心*/
+.pay img {height: 30px;vertical-align: middle;}
+.pay .layui-form-radio{margin:5px 0 0 10px;padding-right:0;}
+.int span{font-size:22px;padding-left:10px;color:#FF5722}
+.int i{font-size:16px;color:#FF5722}
+.lry-take .layui-form-pane .layui-form-label{width:145px;text-align:left}
+
+/*个人信息*/
+.user{padding:30px 0;background:#fff;text-align:center;}
+.user .userimg img {width: 120px;height: 120px;border-radius: 100%;display:block;margin:0 auto;}
+.user .userimg h1 {font-size: 26px;line-height: 30px;margin-top: 10px;display:inline-block;	}
+.user .userimg .fans{color: #5FB878;display:inline-block;padding-left:10px;}
+.vip {height: 16px;line-height: 16px;padding: 0 3px;background-color: #FF5722;color: #fff; border-radius: 2px;}
+.user .usertext{display:inline-block;text-align:left;padding-top:15px;}
+.user .usertext{color:#999;line-height:25px;}
+.user .usertext a{color:#FF7200}
+.user .usertext .check{color:#5FB878}
+.lry-panel{margin-bottom: 15px;border-radius: 2px;background-color: #fff;box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);}
+.lry-panel-title{height: 50px;line-height: 50px;padding: 0 15px;border-bottom: 1px dotted #E9E9E9;color: #333;border-radius: 2px 2px 0 0;font-size: 14px;}
+.list{margin-top:20px;}
+.ques,.answer{padding:10px 20px;min-height:400px;}
+.ques li{margin-bottom: 10px;padding-bottom: 10px;border-bottom: 1px dotted #E9E9E9;}
+.ques li:last-child{border-bottom:none;}
+.ques li a{padding-right: 15px;font-size: 14px;}
+.ques li>i{font-size: 12px;color:#999;}
+.ques li>span{float:right;font-size: 12px;color:#999;}
+.answer li {margin-bottom: 20px;line-height: 24px;}
+.answer li a{padding: 0 5px;color: #009688;}
+.lry-answer-content{margin-top: 10px;padding: 10px 15px;background-color: #F2F2F5;border-radius: 5px;word-wrap: break-word;}
+
+/*我的关注*/
+.layui-row .item{overflow:hidden;margin-bottom:20px;}
+.layui-row .item img{border:solid 1px #eee;width:95px;height:95px;float:left;border-radius:5px;}
+.layui-row .item .user a:hover{color:#009688}
+.layui-table[lay-skin=line]{border:none;}
+.lry_table .layui-table tbody tr:hover{background:none;}
+.lry_table .layui-table td, .lry_table .layui-table th{padding: 9px 20px;text-align:left;}
+.lry_table .layui-table{margin-bottom:30px;}
+
+/*回复*/
+.layui-card-header{background:rgba(240,240,240,0.35);border-bottom:none;}
+.panel-content{box-shadow:0px 5px 15px rgba(0, 0, 0,0.1);}
+.layui-card-footer{height: 42px;line-height: 42px;padding: 0 15px;background:rgba(240,240,240,0.35)}
+.layui-card-footer span{padding-right:20px;}
+.panel-btn{margin-top:25px;}
+
+/*分页*/
+.lry_page {margin:20px 0 10px 0;height:30px;line-height:30px;text-align:center}
+.lry_page .pageinfo{margin-right:3px;color:#808080;font-size:14px;padding:4px 10px;border:1px solid #aaa;background: #fff}
+.lry_page .pageinfo strong{font-weight:normal;margin:0 3px}
+.lry_page a{border:1px solid #aaa;background:#fff;color:#808080;padding:4px 10px;margin-left:5px;transition:all 0.2s}
+.lry_page a:hover,.lry_page .curpage{background:#333;color:#fff;text-decoration:none;border:1px solid #000;}
+.lry_page .nopage{cursor:not-allowed;}
+.lry_page .nopage:hover{background:#fff;color:#808080;border:1px solid #aaa;}
+
+/*稿件字段*/
+select{ background: #fff none repeat scroll 0 0;border-color: #666666 #cccccc #cccccc #666666;border-image: none;border-style: solid;border-width: 1px;height: 28px;line-height: 28px;margin-right:2px;min-width:120px}
+textarea{width:615px;height:80px;padding:2px 3px;border-radius:2px;border:1px solid #e6e6e6;outline:none;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;font-size:12px;}
+.input,.lry-input-text{height:38px;line-height:38px;width:100%;padding:1px 5px;border-radius:2px;border:1px solid #e6e6e6;outline:none;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;box-sizing: border-box;}
+.select optgroup {background:#f0f0f0}
+.date{height:38px !important;line-height: 38px;padding: 0 5px !important;border-radius: 2px !important;width:100% !important;box-sizing: border-box;}
+.w550{width:100%;box-sizing: border-box;}
+.fieldset_list{border:1px solid #d8d8d8;margin-bottom:5px}
+.fieldset_list legend{font-size:14px;color:#666;background-color:#f9f9f9;border:1px solid #d8d8d8;padding:0 15px;height:38px;line-height:38px;width:56px;font-weight:bold;margin-bottom:0px;}
+.fieldset_tip{text-align:center;font-size:13px;margin-top:5px;margin-bottom:10px;}
+.file_ul li{margin-bottom:5px;margin-left:10px}
+.file_ul li input{margin-right:10px;height:23px;line-height:23px;width:255px;padding:3px 5px;border:1px solid #ddd;margin-bottom:8px;}
+.file_ul li a{color:#06c}
+.textarea{width:100%;height:80px;padding:2px 3px;border-radius:2px;border:1px solid #e6e6e6;outline:none;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;font-size:12px;box-sizing: border-box;}
+.input:focus,.textarea:focus{border-color:#D2D2D2;outline:medium none;transition:all 0.218s ease 0s;}
+.radio{margin-right:3px;}
+.option_label{margin-right:10px;}
+.red{color:red;margin-left:5px}
+.uploadfile{height:38px;line-height:38px;width:100%;padding:1px 3px;border-radius:2px;border:1px solid #dadada;outline:none;box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;box-sizing: border-box;}
+.upload-btn{background:#5a98de;color:#fff;display: inline-block;text-align: center;cursor: pointer;padding:3px 10px;border-radius:3px;transition:all 0.3s;height:30px;line-height:30px}
+.upload-btn:hover{background:#0a6999;color:#fff;text-decoration:none}
+.explain{background:#fffced;border:1px solid #ffbe7a;padding:8px 10px 0px;margin-bottom:20px;}
+.explain p{margin-bottom:8px;}
+.layui-form-radio{margin:0;padding:0}
+.layui-form-checkbox i{border:1px solid #d2d2d2}
+
+
+@media screen and (max-width: 768px) {
+	html{background-color: #fff;}
+   .lry_h600{margin-top:15px;position:relative;min-height:600px;} 
+   .lry-body{width:auto;height:100%; margin-left: 0;transition: all .3s;-webkit-transition: all .3s;padding: 0 10px;box-shadow:none;}
+   .change{display:block;height:0;}   
+   .layui-tab-content{padding:20px 0;} 
+   .layui-container  {padding:0;}
+   footer{margin-top:0;border-top: none;background-color: #f2f2f2;padding:10px 20px;/* position: fixed;bottom: 0; */}
+   .lry_upload { width: 100%;}
+   .edit a{display:block;}
+   .pay img {height: 20px;margin-left: 5px;vertical-align: middle;cursor: pointer;}
+   .user{padding:20px 0;}
+   .list{margin-top:0;}  
+   .info{margin-bottom:20px;}   
+   .layui-col-space15>*{padding:0 7.5px;}
+   .ques,.answer{padding:10px 20px;min-height:auto;}  
+   .layui-card-footer{height:65px;line-height:65px;padding:10px 15px;}
+   .layui-card-footer span{display:block;line-height:23px;}
+   .panel-content{margin:0 5px;}
+   .panel-btn{margin:25px 5px 0 5px} 
+   .lry_table .layui-table td, .lry_table .layui-table th {padding:2%;text-align:left;}
+   .layui-table td,.layui-table td>a{font-size:13px;}
+   .pageinfo,.homepage,.endpage{display: none}
+   .lry-take .layui-input, .layui-textarea{width: auto;}
+}
+/* SITE: lryper.com 

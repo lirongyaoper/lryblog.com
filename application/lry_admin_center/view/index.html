@@ -1,0 +1,112 @@
+<?php include $this->admin_tpl('meta');?>
+<title>管理中心 - RyPHP内容管理中心</title>
+<meta name="keywords" content="RyPHP,RyPHP内容管理中心">
+<meta name="description" content="RyPHP内容管理中心。">
+</head>
+<body>
+<?php include $this->admin_tpl('header');?>
+<?php include $this->admin_tpl('menu');?>
+<div class="lock-desktop" id="lock_desktop" style="<?php if(!isset($_SESSION['lry_lock_screen']) || $_SESSION['lry_lock_screen']==0) echo 'display:none';?>">
+    <form action="" class="lock-box" onsubmit="return lry_unlock_screen()">
+    	<div class="lockuser"><img src="<?php echo STATIC_URL;?>admin/lry_admin/images/lockuser.png" alt="管理员"></div>
+    	<!-- <h5><i class="lry-iconfont lry-iconlock-line"></i> 锁屏状态，请输入密码解锁</h5> -->
+    	<p class="lock-user"><?php echo $_SESSION['adminname'];?></p>
+    	<div class="input-box">
+    	    <input type="password" name="password" id="lock_password" class="lock-text" placeholder="锁屏状态，请输入密码">
+    	    <button class="lock-submit" type="button" onclick="lry_unlock_screen()" title="提交"><i class="lry-iconfont lry-iconyaoshi"></i></button>
+    	</div>
+    </form>
+</div>
+<section class="Hui-article-box">
+	<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
+		<div class="Hui-tabNav-wp">
+			<ul id="min_title_list" class="acrossTab cl">
+				<li class="active"><span title="我的桌面" data-href="<?php echo U('public_home');?>">我的桌面</span><em></em></li>
+			</ul>
+		</div>
+		<div class="Hui-tabNav-more btn-group"><a id="js-tabNav-prev" class="btn radius btn-default size-S" href="javascript:;"><i class="lry-iconfont lry-iconxiangzuo"></i></a><a id="js-tabNav-next" class="btn radius btn-default size-S" href="javascript:;"><i class="lry-iconfont lry-iconxiangyou"></i></a></div>
+	</div>
+	<div id="iframe_box" class="Hui-article">
+		<div class="show_iframe">
+			<div style="display:none" class="loading"></div>
+			<iframe scrolling="yes" frameborder="0" src="<?php echo U('public_home');?>"></iframe>
+		</div>
+	</div>
+</section>
+<div class="contextMenu" id="Huiadminmenu">
+	<ul>
+		<li id="closethis">关闭当前 </li>
+		<li id="closeall">关闭全部 </li>
+	</ul>
+</div>
+<?php include $this->admin_tpl('footer');?>
+<script type="text/javascript" src="<?php echo STATIC_URL;?>plugin/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.menu_dropdown a').bind('click', function(){
+			$('.menu_dropdown a').removeClass('curmenu');
+			$(this).addClass('curmenu');
+		});
+	})
+
+	function lry_clear() {
+		$.ajax({
+			type: "GET",
+			url: "<?php echo U('clear_cache/public_clear');?>",
+			dataType: "json",
+			success: function(msg) {
+				if (msg.status == 1) {
+					layer.msg(msg.message, {icon:1, time: 1500, shade:0.1});
+				} else {
+					layer.alert(msg.message, {icon:2});
+				}
+			}
+		})
+	}
+
+	function lry_lock_screen() {
+		$.get("<?php echo U('public_lock_screen');?>");
+		$('#lock_desktop').css('display','');
+	}
+
+	function lry_unlock_screen() {
+		if($("#lock_password").val() == ''){
+			layer.msg('请输入您的密码！', {icon:2});
+			return false;
+		}
+		$.ajax({
+			type: "POST",
+			url: "<?php echo U('public_unlock_screen');?>",
+			data: $(".lock-box").serialize(),
+			dataType: "json",
+			success: function(msg) {
+				if (msg.status == 1) {
+					$('#lock_password').val('');
+					$('#lock_desktop').css('display','none');
+				} else {
+					layer.msg(msg.message, {icon:2});
+				}
+			}
+		})
+		return false;
+	}
+
+	function lry_change_site(siteid){
+        $.ajax({
+            type: "GET",
+            url: "<?php echo U('site/site/public_set_siteid');?>?siteid="+siteid, 
+		    dataType: "json", 
+            success: function (msg) {
+				if (msg.status == 1) {
+					layer.msg(msg.message, {icon:1, time:1000}, function(){
+						location.reload();
+					});
+				} else {
+					layer.msg(msg.message, {icon:2});
+				}
+            }
+        })
+	}
+</script>
+</body>
+</html>
