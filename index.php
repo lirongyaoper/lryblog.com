@@ -7,7 +7,7 @@
  * @lastmodify       2025.07.07
  */
 
-define('RY_DEBUG', true);
+define('RY_DEBUG', false);
 
 define('RYPHP_ROOT',dirname(__FILE__).DIRECTORY_SEPARATOR);
 
