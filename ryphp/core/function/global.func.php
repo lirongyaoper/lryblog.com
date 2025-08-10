@@ -1666,13 +1666,14 @@ function input($key = '', $default = '', $function = ''){
 }
 
 /**
+ * 这个函数 new_session_start() 是一个安全性增强的会话启动函数，用于替代 PHP 原生的 session_start()。
  * 以httponly方式开启SESSION
  * @return bool
  */
 function new_session_start(){
 	if(ini_get('session.auto_start')) return true;
 	// session_save_path(RYPHP_PATH.'cache/sessions');
-	ini_set('session.cookie_httponly', true);
+	ini_set('session.cookie_httponly', true);//启用 HttpOnly 标志，防止 JavaScript 访问会话 cookie，有效防止 XSS 攻击窃取会话 ID
 	$session_name = session_name();
 	if (isset($_COOKIE[$session_name]) && !preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[$session_name])) {
         unset($_COOKIE[$session_name]);
