@@ -1,223 +1,175 @@
 <?php
-
+/**
+ * code.class.php    验证码类
+ *
+ * @author           李荣耀  
+ * @license          https:/lryper.com
+ * @lastmodify       2018-03-12 
+ */
+ 
 class code{
-    private $img;
-    public $width = 100;
-    public $height = 35;
-    public $background = '#ffffff';
-    public $code ;
-    public $code_string  = 'abcdefghkmnprstuvwyzABCDEFGHKLMNPRSTUVWYZ23456789';
-    public $code_len = 4;
-    public $font;
-    public $font_size = 20;
-    public $font_color;
 
-    public function __construct(){
+    //资源
+    private $img;
+	
+    //画布宽度
+    public $width = 100;
+	
+    //画布高度
+    public $height = 35;
+	
+    //背景颜色
+    public $background = '#ffffff';
+	
+    //验证码
+    public $code;
+	
+    //验证码的随机种子
+    public $code_string  = 'abcdefghkmnprstuvwyzABCDEFGHKMNPRSTUVWYZ23456789';
+	
+    //验证码长度
+    public $code_len = 4;
+	
+    //验证码字体
+    public $font;
+	
+    //验证码字体大小
+    public $font_size = 20;
+	
+    //验证码字体颜色
+    public $font_color;
+	
+
+    /**
+     * 构造函数
+     */
+    public function __construct() {
         $this->font = RYPHP_ROOT.'common/data/font/elephant.ttf';
-        if(!is_file($this->font)) showmsg("验证码字体文件不存在!",'stop');
-        if(!$this->check_gd()) showmsg('PHP扩展GD库未开启!','stop');
+        if (!is_file($this->font))  showmsg('验证码字体文件不存在!', 'stop');
+		if (!$this->check_gd()) showmsg('PHP扩展GD库未开启!', 'stop');
     }
 
-
-    private function create_code(){
+	
+    /**
+     * 生成验证码
+     */
+    private function create_code() {
         $code = '';
-        for($i =0; $i < $this ->code_len; $i++){
-            $code .= $this->code_string[mt_rand(0,strlen($this->code_string) - 1)];
+        for ($i = 0; $i < $this->code_len; $i++) {
+            $code .= $this->code_string [mt_rand(0, strlen($this->code_string) - 1)];
         }
         $this->code = $code;
     }
 
-    public function get_code(){
+	
+    /**
+     * 返回验证码
+     */
+    public function get_code() {
         return strtolower($this->code);
     }
 
-
-    private function check_gd(){
-        return extension_loaded('gd') && function_exists('imagepng');
-    }
-
-
+	
     /**
-     * Creates a new image with the specified dimensions and background color
-     * This method initializes the image resource and fills it with the background color
+     * 建画布
      */
-        /**
-         * Creates a new true color image resource with specified width and height
-         * @var resource $this->img The image resource
-         */
-        
-        /**
-         * Allocates the background color for the image
-         * Converts hex color code to RGB values:
-         * - substr($this->background,1,2) gets the red component
-         * - substr($this->background,3,2) gets the green component 
-         * - substr($this->background,5,2) gets the blue component
-         * hexdec() converts hex values to decimal
-         * @var int $background The color identifier
-         */
-        
-        /**
-         * Fills the entire image with the allocated background color
-         * Parameters:
-         * - $this->img: target image
-         * - 0,0: starting x,y coordinates (top left)
-         * - $this->width,$this->height: ending coordinates (bottom right)
-         * - $background: fill color
-         */
-    public function create(){
-        // 创建一个真彩色图片，返回图片资源标识符
-        // $this->width 和 $this->height 定义了图片的宽度和高度
-        $this->img = imagecreatetruecolor($this->width,$this -> height);
-
-        // 为图片分配颜色
-        // substr($this->background,1,2) 从十六进制颜色代码中提取红色分量
-        // substr($this->background,3,2) 从十六进制颜色代码中提取绿色分量
-        // substr($this->background,5,2) 从十六进制颜色代码中提取蓝色分量
-        // hexdec() 将十六进制转换为十进制
-        $background =  $this->allocate_color($this->background);
-
-        // 在图片中填充一个矩形
-        // 参数分别是：图片资源，起始x坐标，起始y坐标，结束x坐标，结束y坐标，颜色
-        imagefilledrectangle($this->img,0,0,$this->width,$this->height,$background);
+    public function create() {  
+        $w = $this->width;
+        $h = $this->height;
+        $background = $this->background;
+        $img = imagecreatetruecolor($w, $h);
+        $background = imagecolorallocate($img, hexdec(substr($background, 1, 2)), hexdec(substr($background, 3, 2)), hexdec(substr($background, 5, 2)));
+        imagefill($img, 0, 0, $background);
+        $this->img = $img;
         $this->create_line();
         $this->create_font();
         $this->create_pix();
     }
-
-    private function create_line() {
+	
+	
+   /**
+    *  画线
+    */
+    private function create_line(){
+        $w = $this->width;
+        $h = $this->height;
         $line_color = "#dcdcdc";
-        $color = $this->allocate_color($line_color);
-
-        //Draw horizontal lines
-        $vertical_spacing = 5;
-        $vertical_lines = floor($this -> height / $vertical_spacing);
-        for($i = 1; $i < $vertical_lines; $i++){
-            imageline($this -> img, 0, $i * $vertical_spacing,  $this-> width,$i * $vertical_spacing, $color);
+        $color = imagecolorallocate($this->img, 
+            hexdec(substr($line_color, 1, 2)), 
+            hexdec(substr($line_color, 3, 2)), 
+            hexdec(substr($line_color, 5, 2))
+        );
+        $l = $h/5;
+        for($i=1;$i<$l;$i++){
+            $step =$i*5;
+            imageline($this->img, 0, $step, $w,$step, $color);
         }
-
-        //Draw vertical lines
-        $horizontal_spacing = 10;
-        $horizontal_lines = floor($this ->width / $horizontal_spacing);
-        for($i = 1; $i < $horizontal_lines; $i++){
-            imageline($this ->img, $i * $horizontal_spacing, 0, $i * $horizontal_spacing, $this-> height, $color);
+        $l= $w/10;
+        for($i=1;$i<$l;$i++){
+            $step =$i*10;
+            imageline($this->img, $step, 0, $step,$h, $color);
         }
     }
 
+
+    /**
+     * 写入验证码文字
+     */
     private function create_font() {
         $this->create_code();
-        
-        // Pre-calculate font color if specified
-        $font_color = null;
-        if (!empty($this->font_color)) {
-            $font_color = $this->allocate_color($this->font_color);
+        $color = $this->font_color;
+        if (!empty($color)) {
+            $font_color = imagecolorallocate($this->img, hexdec(substr($color, 1, 2)), hexdec(substr($color, 3, 2)), hexdec(substr($color, 5, 2)));
         }
-        
-        // Calculate base x position once
-        $x_base = intval(($this->width - 10) / $this->code_len);
-        $y_min = intval($this->height / 1.3);
-        $y_max = $this->height - 5;
-        
-        // Draw each character
+        $x = intval(($this->width - 10) / $this->code_len);
         for ($i = 0; $i < $this->code_len; $i++) {
-            // Generate random color if not specified
-            if ($font_color === null) {
-                $font_color = imagecolorallocate($this->img, 
-                    mt_rand(50, 155),
-                    mt_rand(50, 155),
-                    mt_rand(50, 155)
-                );
+            if (empty($color)) {
+                $font_color = imagecolorallocate($this->img, mt_rand(50, 155), mt_rand(50, 155), mt_rand(50, 155));
             }
-            
-            imagettftext(
-                $this->img, 
-                $this->font_size,
-                mt_rand(-30, 30),  // random angle
-                $x_base * $i + mt_rand(6, 10),  // x position
-                mt_rand($y_min, $y_max),  // y position
-                $font_color,
-                $this->font,
-                $this->code[$i]
-            );
+            imagettftext($this->img, $this->font_size, mt_rand(- 30, 30), $x * $i + mt_rand(6, 10), mt_rand(intval($this->height / 1.3), $this->height - 5), $font_color, $this->font, $this->code [$i]);
         }
-        
         $this->font_color = $font_color;
     }
 
-
-
-
+	
+    /**
+     * 画线
+     */
     private function create_pix() {
         $pix_color = $this->font_color;
-        $width = $this->width;
-        $height = $this->height;
-        
-        // Batch generate random points
-        $points = array_map(function() use ($width, $height) {
-            return [mt_rand(0, $width), mt_rand(0, $height)];
-        }, range(1, 50));
-        
-        // Draw pixels
-        foreach ($points as $point) {
-            imagesetpixel($this->img, $point[0], $point[1], $pix_color);
+        for ($i = 0; $i < 50; $i++) {
+            imagesetpixel($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), $pix_color);
         }
 
-        // Draw lines
         for ($i = 0; $i < 2; $i++) {
-            imageline(
-                $this->img, 
-                mt_rand(0, $width), 
-                mt_rand(0, $height), 
-                mt_rand(0, $width), 
-                mt_rand(0, $height), 
-                $pix_color
-            );
+            imageline($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height), $pix_color);
         }
-
-        // Draw arc
-        imagearc(
-            $this->img,
-            mt_rand(0, $width), 
-            mt_rand(0, $height),
-            mt_rand(0, $width), 
-            mt_rand(0, $height),
-            mt_rand(0, 160), 
-            mt_rand(0, 200), 
-            $pix_color
-        );
+        for ($i = 0; $i < 1; $i++) {
+            // 设置画线宽度
+           // imagesetthickness($this->img, mt_rand(1, 3));
+            imagearc($this->img, mt_rand(0, $this->width), mt_rand(0, $this->height), mt_rand(0, $this->width), mt_rand(0, $this->height)
+                    , mt_rand(0, 160), mt_rand(0, 200), $pix_color);
+        }
+        imagesetthickness($this->img, 1);
     }
 	
-
 
     /**
      * 显示验证码
      */
     public function show_code() {
-        // Create image if not already created
-        if (!isset($this->img)) {
-            $this->create();
-        }
-        
-        // Set cache control headers to prevent caching
-        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
-        header('Pragma: no-cache');
-        
-        // Set content type header
-        header('Content-Type: image/png');
-        
-        // Output image with maximum compression (9)
-        imagepng($this->img, null, 9);
-        
-        // Clean up resources
+        $this->create();
+        header("content-type:image/png");
+        imagepng($this->img);
         imagedestroy($this->img);
-        $this->img = null;
     }
 
-    // Helper method to allocate color from hex string
-    private function allocate_color($hex_color) {
-        return imagecolorallocate($this->img,
-            hexdec(substr($hex_color, 1, 2)),
-            hexdec(substr($hex_color, 3, 2)),
-            hexdec(substr($hex_color, 5, 2))
-        );
+	
+    /**
+     * 验证GD库
+     */
+    private function check_gd() {
+        return extension_loaded('gd') && function_exists("imagepng");
     }
+
 }

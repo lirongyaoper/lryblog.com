@@ -5,7 +5,7 @@
  * Date: 14-04-09
  * Time: 上午10:17
  */
-defined('IN_LRYCMS') or exit('Access Denied'); 
+defined('IN_RYPHP') or exit('Access Denied');
 include "Uploader.class.php";
 
 /* 上传配置 */

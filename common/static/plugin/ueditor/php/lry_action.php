@@ -8,7 +8,7 @@
  * Remarks: LRY-CMS All Rights Reserved.
  */
 
-defined('IN_LRYCMS') or exit('Access Denied'); 
+defined('IN_RYPHP') or exit('Access Denied'); 
 
 $document_root = rtrim(str_replace('\\','/', $_SERVER['DOCUMENT_ROOT']), '/');
 $web_path = str_replace('\\','/',dirname(dirname(__FILE__)));  
@@ -27,7 +27,7 @@ if(strpos($web_path, $document_root) !== false){
 	}
 }
 
-define('APP_DEBUG', false);
+define('RY_DEBUG', true);
 define('URL_MODEL', '3');
 if(version_compare(PHP_VERSION,'5.4.0','<')) {
     define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? true : false);
@@ -39,8 +39,8 @@ define('SERVER_PORT', is_https() ? 'https://' : 'http://');
 define('HTTP_HOST', (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''));
 define('SITE_PATH', $web_path);
 define('SITE_URL', SERVER_PORT.HTTP_HOST.SITE_PATH);
-define('RYPHP_PATH', stripos(PHP_OS, 'WIN')!==false ? str_replace('/', DIRECTORY_SEPARATOR, $document_root.$web_path) : $document_root.$web_path);
-define('APP_PATH', RYPHP_PATH.'application'.DIRECTORY_SEPARATOR);
+define('RYPHP_ROOT', stripos(PHP_OS, 'WIN')!==false ? str_replace('/', DIRECTORY_SEPARATOR, $document_root.$web_path) : $document_root.$web_path);
+define('RYPHP_APP', RYPHP_ROOT.'application'.DIRECTORY_SEPARATOR);
 define('EXT', '.class.php'); 
 
 $web_upload = $web_path.'uploads';
@@ -53,7 +53,7 @@ $CONFIG['filePathFormat'] = $web_upload.$CONFIG['filePathFormat'];
 $CONFIG['imageManagerListPath'] = $web_upload.$CONFIG['imageManagerListPath'];
 $CONFIG['fileManagerListPath'] = $web_upload.$CONFIG['fileManagerListPath'];
 
-class lry_base {
+class ryphp {
         
     /**
      * 加载系统类方法
@@ -64,7 +64,7 @@ class lry_base {
      */
     public static function load_sys_class($classname, $path = '', $initialize = 1) {
         static $classes = array();
-        if (empty($path)) $path = RYPHP_PATH.'lryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'class';
+        if (empty($path)) $path = RYPHP_ROOT.'ryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'class';
         $key = md5($path.$classname);
         if (isset($classes[$key])) {
             return $initialize&&!is_object($classes[$key]) ? new $classname : $classes[$key];
@@ -88,8 +88,8 @@ class lry_base {
      * @param string $func 函数库名
      */
     public static function load_sys_func($func) {
-        if (is_file(RYPHP_PATH.'lryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php')) {
-            include RYPHP_PATH.'lryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php';
+        if (is_file(RYPHP_ROOT.'ryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php')) {
+            include RYPHP_ROOT.'ryphp'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php';
         }
     }
 
@@ -101,28 +101,28 @@ class lry_base {
      */
     public static function load_common($path, $m = '') {
         if(!$m){
-            if (is_file(RYPHP_PATH.'common'.DIRECTORY_SEPARATOR.$path)) {
-                return include RYPHP_PATH.'common'.DIRECTORY_SEPARATOR.$path;
+            if (is_file(RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path)) {
+                return include RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path;
             }           
         }else{
-            if (is_file(APP_PATH.$m.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.$path)) {
-                return include APP_PATH.$m.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.$path;
-            }           
+            if (is_file(RYPHP_APP.$m.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.$path)) {
+                return include RYPHP_APP.$m.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.$path;
+            }
         }
     }
 
 }
 
-lry_base::load_sys_class('debug', '', 0);
-lry_base::load_sys_class('image', '', 0);
-lry_base::load_sys_func('global');
-lry_base::load_common('function/system.func.php');
+ryphp::load_sys_class('debug', '', 0);
+ryphp::load_sys_class('image', '', 0);
+ryphp::load_sys_func('global');
+ryphp::load_common('function/system.func.php');
 new_session_start();
 
 if(!isset($_SESSION['adminid']) && !isset($_SESSION['_userid'])){
     exit(json_encode(array('state'=> '请登录后再继续操作！')));
 }
-if(isset($_SESSION['roleid'])) define('IN_LRYADMIN', true);
+if(isset($_SESSION['roleid'])) define('IN_ADMIN', true);
 
 
 /**
@@ -164,7 +164,7 @@ function is_https() {
  */
 function attachment_write($info){
     $pathinfo = pathinfo($info['url']);
-    $param = lry_base::load_sys_class('param');
+    $param = ryphp::load_sys_class('param');
     $arr = array();
     $arr['siteid'] = get_siteid();
     $arr['originname'] = strlen($info['original'])<50 ? htmlspecialchars($info['original']) : htmlspecialchars(str_cut($info['original'], 50));
@@ -188,7 +188,7 @@ function attachment_write($info){
  * 附件关联内容
  */
 function attachment_content($id){
-    if(defined('IN_LRYADMIN')){
+    if(defined('IN_ADMIN')){
         $attachmentid = isset($_SESSION['attachmentid']) ? $_SESSION['attachmentid'].'|'.$id : $id;
         $_SESSION['attachmentid'] = $attachmentid;
     }else{
@@ -220,7 +220,7 @@ function ue_file_upload($fieldName, $config, $base64, $document_root){
 
 	}else{
 
-	    lry_base::load_sys_class($upload_type, RYPHP_PATH.'application/attachment/model', 0);
+	    ryphp::load_sys_class($upload_type, RYPHP_ROOT.'application/attachment/model', 0);
 	    if(!class_exists($upload_type)){
 	        $info = array(
 	            "state" => '附件上传类「'.$upload_type.'」不存在！',

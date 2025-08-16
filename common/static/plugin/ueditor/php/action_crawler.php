@@ -6,7 +6,7 @@
  * Time: 下午19:18
  */
 set_time_limit(0);
-defined('IN_LRYCMS') or exit('Access Denied'); 
+defined('IN_RYPHP') or exit('Access Denied'); 
 include("Uploader.class.php");
 
 if(!get_config('auto_down_imag'))

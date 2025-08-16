@@ -16,4 +16,7 @@ class index{
 		$_SESSION['code'] = $code->get_code();
 	}
 
+
+
+
 }

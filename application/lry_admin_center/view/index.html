@@ -8,7 +8,7 @@
 <?php include $this->admin_tpl('menu');?>
 <div class="lock-desktop" id="lock_desktop" style="<?php if(!isset($_SESSION['lry_lock_screen']) || $_SESSION['lry_lock_screen']==0) echo 'display:none';?>">
     <form action="" class="lock-box" onsubmit="return lry_unlock_screen()">
-    	<div class="lockuser"><img src="<?php echo STATIC_URL;?>admin/lry_admin/images/lockuser.png" alt="管理员"></div>
+    	<div class="lockuser"><img src="<?php echo STATIC_URL;?>lry_admin_center/lry_admin/images/lockuser.png" alt="管理员"></div>
     	<!-- <h5><i class="lry-iconfont lry-iconlock-line"></i> 锁屏状态，请输入密码解锁</h5> -->
     	<p class="lock-user"><?php echo $_SESSION['adminname'];?></p>
     	<div class="input-box">
