@@ -26,3 +26,15 @@ function url($url='', $vars='') {
 
 	return $string;
 }
+
+/**
+ * 从数据库获取菜单列表
+ */
+function get_menu_list(){
+	$menu_list = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid'=>'0','display' => '1')) ->order('listorder ASC ,id ASC')->limit('20')->select();
+	foreach ($menu_list as $key => $value){
+		$child = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid' =>$value['id'],'display' => '1')) -> order('listorder ASC,id ASC')->select();
+		
+	}
+	return $menu_list;
+}

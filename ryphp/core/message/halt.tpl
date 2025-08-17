@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>系统发生错误</title>
-    <link rel="Shortcut Icon" href="<?php echo STATIC_URL;?>admin/lry_admin/images/favicon.ico" />
+    <link rel="Shortcut Icon" href="<?php echo STATIC_URL;?>lry_admin_center/lry_admin/images/favicon.ico" />
     <style>
         * {
             margin: 0;
@@ -216,7 +216,7 @@
         <div id="title">⚠️ 系统错误</div>
         <div id="body"><?php echo htmlspecialchars($msg);?></div>
         <div id="footer">
-            <a href="http://www.lryper.com/" target="_blank" title="官方网站">RyPHP</a><sup><?php echo LRYCMS_VERSION;?></sup>
+            <a href="http://www.lryper.com/" target="_blank" title="官方网站">RyPHP</a><sup><?php echo RYCMS_VERSION;?></sup>
         </div>
     </div>
 </body>

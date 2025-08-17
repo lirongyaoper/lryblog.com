@@ -7,7 +7,9 @@ class index extends common{
         
         debug();
 		$total = D('guestbook')->field('id')->where(array('replyid'=>0,'siteid'=> self::$siteid,'isread'=>'0'))->total();
-		include $this->admin_tpl('index');
+		$menu_list = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid'=>'0','display' => '1')) ->order('listorder ASC ,id ASC')->limit('20')->select();
+		Palry($menu_list);
+		//include $this->admin_tpl('index');
 		
     }
 
