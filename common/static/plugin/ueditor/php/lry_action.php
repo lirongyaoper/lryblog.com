@@ -27,7 +27,7 @@ if(strpos($web_path, $document_root) !== false){
 	}
 }
 
-define('RY_DEBUG', true);
+define('RYPHP_DEBUG', true);
 define('URL_MODEL', '3');
 if(version_compare(PHP_VERSION,'5.4.0','<')) {
     define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc() ? true : false);

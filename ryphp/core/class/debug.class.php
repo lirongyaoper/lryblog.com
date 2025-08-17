@@ -52,7 +52,7 @@ class debug{
                 case E_COMPILE_ERROR:
                 case E_USER_ERROR:
                 ob_end_clean();
-                if(RY_DEBUG && !defined('DEBUG_HIDDEN')){
+                if(RYPHP_DEBUG && !defined('RYPHP_DEBUG_HIDDEN')){
                     application :: fatalerror($e['message'],$e['file']. 'on line' .$e['line'],1);
                 }else{
                     write_error_log(array(
@@ -73,7 +73,7 @@ class debug{
 	 * 错误 handler
 	 */
 	public static function catcher($errno, $errstr, $errfile, $errline){
-		if(RY_DEBUG && !defined('DEBUG_HIDDEN')){
+		if(RYPHP_DEBUG && !defined('RYPHP_DEBUG_HIDDEN')){
 			if(!isset(self::$msg[$errno])) 
 				$errno = 'Unknown';
 
@@ -99,7 +99,7 @@ class debug{
 	 * @param	object	$exception
 	 */ 
 	public static function exception($exception){
-		if(RY_DEBUG && !defined('DEBUG_HIDDEN')){
+		if(RYPHP_DEBUG && !defined('RYPHP_DEBUG_HIDDEN')){
 			$mess = '<span style="color:#b90202">';
 			$mess .= '系统异常 [文件 '.$exception->getFile().' 中,第 '.$exception->getLine().' 行] ：';
 			$mess .= $exception->getMessage();

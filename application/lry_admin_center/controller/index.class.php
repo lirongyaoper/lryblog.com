@@ -5,7 +5,10 @@ class index extends common{
 
     public function init(){
         
-        echo RYPHP_PATH;
+        debug();
+		$total = D('guestbook')->field('id')->where(array('replyid'=>0,'siteid'=> self::$siteid,'isread'=>'0'))->total();
+		include $this->admin_tpl('index');
+		
     }
 
  

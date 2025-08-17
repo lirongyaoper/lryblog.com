@@ -28,9 +28,9 @@ class application{
                 self::halt('This action is inaccessible.');
             }else{
                 call_user_func(array($controller,ROUTE_A));
-                if(RY_DEBUG){
+                if(RYPHP_DEBUG){
                     debug::stop();
-                    if(!defined('DEBUG_HIDDEN')) debug::message();
+                    if(!defined('RYPHP_DEBUG_HIDDEN')) debug::message();
                 }
 
             }
@@ -107,8 +107,8 @@ class application{
 
     public static function halt($msg,$code =404){
         if(ob_get_length() !== false) @ob_end_clean();
-        if(!RY_DEBUG) send_http_status($code);
-        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RY_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
+        if(!RYPHP_DEBUG) send_http_status($code);
+        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RYPHP_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
         include $tpl;
         exit();
 

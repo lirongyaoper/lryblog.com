@@ -478,7 +478,7 @@ function return_json($arr = array(),$show_debug = false){
     header("X-Powered-By:RYPHP/RYCMS");
     header('Content-Type:application/json;charset = utf-8');
     if(!$arr) $arr = array('status'=>0,'message'=>L('data_not_modified'));
-    if(RY_DEBUG || $show_debug) $arr = array_merge($arr,debug::get_debug());
+    if(RYPHP_DEBUG || $show_debug) $arr = array_merge($arr,debug::get_debug());
     exit(new_json_encode($arr,JSON_UNESCAPED_UNICODE));
 }
 
@@ -601,7 +601,7 @@ function setcache($name,$data,$timeout = 0){
 
 function showmsg($msg, $gourl = '', $limittime  =3){
     application::showmsg($msg, $gourl, $limittime);
-    if(RY_DEBUG){
+    if(RYPHP_DEBUG){
         debug::stop();
         debug::message();
     }
@@ -1471,7 +1471,7 @@ function M($classname, $m = ''){
  * @return null
  */	
 function debug(){
-	defined('DEBUG_HIDDEN') or define('DEBUG_HIDDEN', true);
+	defined('RYPHP_DEBUG_HIDDEN') or define('RYPHP_DEBUG_HIDDEN', true);
 }
 
 
@@ -1514,7 +1514,7 @@ function template($module = '', $template = 'index', $theme = ''){
     $filename = $template.'.html';
 	$tplfile = $template_path.$filename;   
 	if(!is_file($tplfile)) {
-		$template = RY_DEBUG ? str_replace(RYPHP_ROOT, '', $tplfile) : basename($tplfile);
+		$template = RYPHP_DEBUG ? str_replace(RYPHP_ROOT, '', $tplfile) : basename($tplfile);
 		showmsg($template.L('template_does_not_exist'), 'stop');			                      
 	}	
 	if(!is_dir(RYPHP_ROOT.'cache'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR)){

@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `ry_category`;
+DROP TABLE IF EXISTS `rycms_category`;
 CREATE TABLE `rycms_category` (
   `catid` smallint(5) NOT NULL AUTO_INCREMENT COMMENT '栏目ID',
   `siteid` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -128,3 +128,30 @@ LOCK TABLES `rycms_admin_login_log` WRITE;
 INSERT INTO `rycms_admin_login_log` VALUES (1,'lirongyaoper',1751433587,'127.0.0.1','','lryadin01.',0,'密码错误！'),(2,'lirongyaoper',1751433614,'127.0.0.1','','',1,'登录成功！'),(3,'lirongyaoper',1752252773,'117.159.129.34','','',1,'登录成功！'),(4,'lirongyaoper',1752269209,'117.159.129.34','','',1,'登录成功！'),(5,'lirongyaoper',1752304037,'182.120.189.36','','',1,'登录成功！'),(6,'lirongyaoper',1752315769,'42.227.0.186','','',1,'登录成功！'),(7,'lirongyaoper',1752533329,'123.13.79.138','','',1,'登录成功！'),(8,'lirongyaoper',1752656128,'123.13.79.138','','',1,'登录成功！'),(9,'lirongyaoper',1752680188,'123.13.79.138','','',1,'登录成功！'),(10,'lirongyaoper',1752759535,'123.13.72.236','','',1,'登录成功！'),(11,'lirongyaoper',1752759758,'123.13.72.236','','',1,'登录成功！'),(12,'lirongyaoper',1752822960,'117.159.129.34','','',1,'登录成功！'),(13,'lirongyaoper',1752831976,'117.159.129.34','','',1,'登录成功！'),(14,'lirongyaoper',1752841683,'123.13.72.236','','',1,'登录成功！'),(15,'lirongyaoper',1752844764,'123.13.72.236','','',1,'登录成功！'),(16,'lirongyaoper',1752893527,'182.120.189.152','','',1,'登录成功！'),(17,'lirongyaoper',1752894765,'117.159.129.34','','',1,'登录成功！'),(18,'lirongyaoper',1752895649,'117.159.129.34','','',1,'登录成功！'),(19,'lirongyaoper',1752925554,'117.159.129.34','','',1,'登录成功！'),(20,'lirongyaoper',1752930049,'117.159.129.34','','',1,'登录成功！'),(21,'lirongyaoper',1752936832,'117.159.129.34','','',1,'登录成功！'),(22,'lirongyaoper',1752937237,'117.159.129.34','','',1,'登录成功！'),(23,'lirongyaoper',1752937244,'117.159.129.34','','',1,'登录成功！'),(24,'lirongyaoper',1752966308,'117.159.129.34','','',1,'登录成功！'),(25,'lirongyaoper',1752972179,'117.159.129.34','','lryadfmin01.',0,'密码错误！'),(26,'lirongyaoper',1752972216,'117.159.129.34','','',1,'登录成功！'),(27,'lirongyaoper',1752978393,'117.159.129.34','','',1,'登录成功！'),(28,'lirongyaoper',1752978802,'117.159.129.34','','',1,'登录成功！'),(29,'lirongyaoper',1752982761,'123.13.72.236','','',1,'登录成功！'),(30,'lirongyaoper',1753108167,'115.51.62.231','','',1,'登录成功！'),(31,'lirongyaoper',1753137061,'115.51.62.231','','',1,'登录成功！'),(32,'lirongyaoper',1753189316,'115.51.62.231','','',1,'登录成功！'),(33,'lirongyaoper',1753289895,'117.159.129.34','','',1,'登录成功！'),(34,'lirongyaoper',1753290277,'117.159.129.34','','',1,'登录成功！'),(35,'lirongyaoper',1753506604,'122.10.198.225','','',1,'登录成功！'),(36,'lirongyaoper',1753509429,'182.120.189.168','','',1,'登录成功！'),(37,'lirongyaoper',1753515776,'182.120.189.168','','',1,'登录成功！'),(38,'lirongyaoper',1753632249,'117.159.129.34','','',1,'登录成功！'),(39,'lirongyaoper',1753657644,'117.159.129.34','','',1,'登录成功！'),(40,'lirongyaoper',1753971154,'117.159.129.34','','',1,'登录成功！'),(41,'lirongyaoper',1754222848,'123.13.149.210','','',1,'登录成功！'),(42,'lirongyaoper',1754224944,'123.13.149.210','','',1,'登录成功！'),(43,'lirongyaoper',1754314250,'117.159.129.34','','',1,'登录成功！'),(44,'lirongyaoper',1754324101,'47.251.83.224','','',1,'登录成功！'),(45,'lirongyaoper',1754357170,'47.251.83.224','','',1,'登录成功！'),(46,'lirongyaoper',1754360973,'47.251.83.224','','',1,'登录成功！'),(47,'lirongyaoper',1754384215,'123.13.144.251','','',1,'登录成功！'),(48,'lirongyaoper',1754385719,'123.13.144.251','','',1,'登录成功！'),(49,'lirongyaoper',1754740961,'42.227.0.186','','',1,'登录成功！');
 /*!40000 ALTER TABLE `rycms_admin_login_log` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `rycms_guestbook`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rycms_guestbook` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `siteid` tinyint unsigned NOT NULL DEFAULT '0',
+  `title` varchar(150) NOT NULL DEFAULT '' COMMENT '主题',
+  `booktime` int unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '名字',
+  `email` varchar(40) NOT NULL DEFAULT '' COMMENT '留言人电子邮箱',
+  `phone` varchar(11) NOT NULL DEFAULT '' COMMENT '留言人电话',
+  `qq` varchar(11) NOT NULL DEFAULT '' COMMENT '留言人qq',
+  `address` varchar(100) NOT NULL DEFAULT '' COMMENT '留言人地址',
+  `bookmsg` text NOT NULL COMMENT '内容',
+  `ip` varchar(20) NOT NULL DEFAULT '' COMMENT 'ip地址',
+  `ischeck` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否审核',
+  `isread` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否读过',
+  `ispc` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1电脑,0手机',
+  `replyid` int unsigned NOT NULL DEFAULT '0' COMMENT '回复的id',
+  PRIMARY KEY (`id`),
+  KEY `index_booktime` (`booktime`),
+  KEY `index_replyid` (`replyid`),
+  KEY `index_ischeck` (`siteid`,`ischeck`)
+) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb3;

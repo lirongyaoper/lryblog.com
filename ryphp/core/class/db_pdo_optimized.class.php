@@ -91,7 +91,7 @@ class db_pdo {
             return self::$link;
         } catch (PDOException $e) {
             self::$link = null;
-            $mysql_error = RY_DEBUG ? $e->getMessage() : 'Can not connect to MySQL server!';
+            $mysql_error = RYPHP_DEBUG ? $e->getMessage() : 'Can not connect to MySQL server!';
             throw new DbException($mysql_error, 550, 'connection_error');
         }
     }
@@ -195,7 +195,7 @@ class db_pdo {
             $sql_start_time = microtime(true);
             $statement->execute();
             $this->lastsql = $sql;
-            RY_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
+            RYPHP_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
             $this->key = array();
             return $statement;
         } catch (PDOException $e) {
@@ -218,7 +218,7 @@ class db_pdo {
             throw new DbException('MySQL Error: ' . $msg . ' | ' . $sql, 0, 'cli_error', $sql);
         }
         
-        if (RY_DEBUG) {
+        if (RYPHP_DEBUG) {
             if (is_ajax()) {
                 return_json(array('status' => 0, 'message' => 'MySQL Error: ' . $msg . ' | ' . $sql));
             }

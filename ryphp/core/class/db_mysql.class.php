@@ -36,12 +36,12 @@ class db_mysql{
 	public function connect(){ 
 		self::$link = @mysql_connect($this->config['db_host'] .($this->config['db_port'] ? ':'.intval($this->config['db_port']) : ''), $this->config['db_user'], $this->config['db_pwd']);  	
 		if(self::$link == false) {
-			$mysql_error = RY_DEBUG ? mysql_error() : 'Can not connect to MySQL server!';
+			$mysql_error = RYPHP_DEBUG ? mysql_error() : 'Can not connect to MySQL server!';
 			application::halt($mysql_error, 550);
 		}        
 		$db = mysql_select_db($this->config['db_name'], self::$link);            	         	
 		if($db == false)  {
-			$mysql_error = RY_DEBUG ? mysql_error() : 'Database selection failed!';
+			$mysql_error = RYPHP_DEBUG ? mysql_error() : 'Database selection failed!';
 			application::halt($mysql_error, 550);    
 		}                                      
 		mysql_query("SET names ".$this->config['db_charset'].", sql_mode=''"); 	
@@ -140,7 +140,7 @@ class db_mysql{
 			$this->lastsql = $sql;
 			$res = mysql_query($sql) or $this->geterr($sql);
 			$this->key = array();
-			RY_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
+			RYPHP_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
 			return $res;
 		}catch (Exception $e){
 			if (strpos($e->getMessage(), 'server has gone away') !== false) {
@@ -516,7 +516,7 @@ class db_mysql{
 			throw new Exception('MySQL Error: '.mysql_error().' | '.$msg);
 		}
 		
-		if(RY_DEBUG){
+		if(RYPHP_DEBUG){
 			if(is_ajax()) return_json(array('status'=>0, 'message'=>'MySQL Error: '.mysql_error().' | '.$msg));
 			application::fatalerror($msg, mysql_error(), 2);	
 		}else{

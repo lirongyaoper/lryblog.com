@@ -37,7 +37,7 @@ class db_mysqli{
 		self::$link = @new mysqli($this->config['db_host'], $this->config['db_user'], $this->config['db_pwd'], $this->config['db_name'], intval($this->config['db_port']));	
 		if(mysqli_connect_errno()){
 			self::$link = null;
-			$mysql_error = RY_DEBUG ? mysqli_connect_error() : 'Can not connect to MySQL server!';
+			$mysql_error = RYPHP_DEBUG ? mysqli_connect_error() : 'Can not connect to MySQL server!';
 			application::halt($mysql_error, 550);
 		}    
 		self::$link->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
@@ -138,7 +138,7 @@ class db_mysqli{
 			$this->lastsql = $sql;
 			$res = self::$link->query($sql) or $this->geterr($sql);
 			$this->key = array();
-			RY_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
+			RYPHP_DEBUG && debug::addmsg($sql, 1, $sql_start_time);
 			return $res;
 		}catch (Exception $e){
 			if (strpos($e->getMessage(), 'server has gone away') !== false) {
@@ -515,7 +515,7 @@ class db_mysqli{
 		if(PHP_SAPI == 'cli'){
 			throw new Exception('MySQL Error: '.self::$link->error.' | '.$msg);
 		}
-		if(RY_DEBUG){
+		if(RYPHP_DEBUG){
 			if(is_ajax()) return_json(array('status'=>0, 'message'=>'MySQL Error: '.self::$link->error.' | '.$msg));
 			application::fatalerror($msg, self::$link->error, 2);	
 		}else{

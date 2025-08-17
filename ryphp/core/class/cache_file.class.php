@@ -43,7 +43,7 @@ class cache_file{
          if($data['expire'] == 0 || SYS_TIME < $data['expire']){
             return $data['contents'];
          }
-         return false;
+         return false; 
     }
 
     public function set($id, $data,$cachelife = 0){
