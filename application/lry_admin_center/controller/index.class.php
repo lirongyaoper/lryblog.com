@@ -5,7 +5,7 @@ class index extends common{
 
     public function init(){
         
-        echo 'Welcome to the Admin Center!';
+        echo RYPHP_PATH;
     }
 
  

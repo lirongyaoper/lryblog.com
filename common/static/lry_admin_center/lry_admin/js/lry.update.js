@@ -12,7 +12,7 @@ function check_update(auto_update){
 	$.ajax({
         type: "POST",
         url: lry_admin_url+'lry_admin_center/store/public_check_update',
-        data: {"lry_csrf_token": lry_csrf_token, "auto_update": auto_update},
+        data: {"lry_sey_token": lry_sey_token, "auto_update": auto_update},
 	    dataType: "json", 
         success: function (msg) {
         	if(msg.status == 0){

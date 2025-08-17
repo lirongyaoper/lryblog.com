@@ -1,5 +1,5 @@
 /**
- * RyPHP 公共js文件 (lry cms轻量级开源CMS)
+ * 
  * 
  * @author           李荣耀  
  * @license          http://www.lryper.com
@@ -9,9 +9,9 @@
  
 //删除一条记录
 function lry_del(url){
-	var is_ajax = arguments[1] || 0;
+	var is_ajax = arguments[1] || 0;//是否ajax请求 arguments[1]
 	var symbol = url.indexOf('?')<0 ? '?' : '&';
-	url += symbol+'lry_csrf_token='+lry_csrf_token;
+	url += symbol+'lry_sey_token='+lry_sey_token;
 	layer.confirm('确认要删除吗？', {title:"操作提示"}, function(index){
 		if(!is_ajax){
 			window.location.href = url;
@@ -77,7 +77,7 @@ function lry_confirm(url, title, is_ajax, is_filter) {
 		is_filter = true;
 	}
 	var symbol = url.indexOf('?')<0 ? '?' : '&';
-	url += symbol+'lry_csrf_token='+lry_csrf_token;
+	url += symbol+'lry_sey_token='+lry_sey_token;
 	title = is_filter ? lry_htmlspecialchars(title) : title;
 	layer.confirm(title, {title:"操作提示"}, function(index){
 		if(!is_ajax){
@@ -319,7 +319,7 @@ function lry_change_status(obj, url) {
 	$.ajax({
         type: "POST",
         url: url, 
-        data: {"id":id,"field":field,"value":value,"lry_csrf_token":lry_csrf_token},
+        data: {"id":id,"field":field,"value":value,"lry_sey_token":lry_sey_token},
 	    dataType: "json", 
         success: function (msg) {
         	if(msg.status == 1){

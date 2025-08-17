@@ -1,5 +1,5 @@
 /**
- * LRYCMS内容管理系统   (lry cms轻量级开源CMS)
+ * RYCMS内容管理系统 
  * @author           李荣耀  
  * @license          http://www.lryper.com
  */
@@ -50,7 +50,7 @@
 
 })(jQuery);
 
-// 做最好用的开源CMS: RyPHP ，官方QQ交流群：161208398
+// 
 
 jQuery.extend({ 
 unselectContents: function(){ 

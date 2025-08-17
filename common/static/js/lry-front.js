@@ -1,6 +1,6 @@
 /**
- * LRYCMS内容管理系统  (lry cms轻量级开源CMS)
- * @author           李荣耀  
+ * RYCMS内容管理系统 
+ * @author     李荣耀
  * @license          http://www.lryper.com
  */
 
@@ -37,7 +37,7 @@ $(function(){
 	
 });
 
-// 做最好用的开源CMS: RyPHP ，官方QQ交流群：161208398
+// 
 
 function toreply(obj){
     if($("#rep_" + obj).css("display") == "none"){

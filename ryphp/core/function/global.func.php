@@ -1687,9 +1687,9 @@ function new_session_start(){
  * @param bool $isinput 是否返回input
  * @return string
  */
-function creat_token($isinput = true){
-	if(!isset($_SESSION['lry_csrf_token'])) $_SESSION['lry_csrf_token'] = create_randomstr(8);
-	return $isinput ? '<input type="hidden" name="token" value="'.$_SESSION['lry_csrf_token'].'">' : $_SESSION['lry_csrf_token'];
+function create_token($isinput = true){
+	if(!isset($_SESSION['lry_sey_token'])) $_SESSION['lry_sey_token'] = create_randomstr(8);
+	return $isinput ? '<input type="hidden" name="token" value="'.$_SESSION['lry_sey_token'].'">' : $_SESSION['lry_sey_token'];
 }
 
 
@@ -1700,7 +1700,7 @@ function creat_token($isinput = true){
  * @return bool
  */
 function check_token($token, $delete=false){
-	if(!$token || !isset($_SESSION['lry_csrf_token']) || $token!=$_SESSION['lry_csrf_token']) return false;
-	if($delete) unset($_SESSION['lry_csrf_token']);
+	if(!$token || !isset($_SESSION['lry_sey_token']) || $token!=$_SESSION['lry_sey_token']) return false;
+	if($delete) unset($_SESSION['lry_sey_token']);
 	return true;
 }
