@@ -793,7 +793,7 @@ function U($url = '',$vars = '',$domain = null, $suffix = true){
             if(!is_array($vars))  parse_str($vars, $vars);//如果是字符串则转换为数组		
             foreach($vars as $var => $val){
                 if(!is_array($val)  && trim($val) !==''){
-                    $val = str_replace('/','{LRYPHP_PATH}',$val);
+                    $val = str_replace('/','{RYPHP_ROUTE}',$val);
                     $string .= '/'.urlencode($var) .'/'. urlencode($val);
                 }
             }
@@ -1358,7 +1358,7 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
 function set_cookie($name, $value = '', $time = 0, $httponly = false) {
 	$time = $time > 0 ? SYS_TIME + $time : $time;
 	$name = C('cookie_pre').$name;
-	$value = is_array($value) ? 'in_lryphp'.string_auth(json_encode($value),'ENCODE',md5(RYPHP_PATH.C('db_pwd'))) : string_auth($value,'ENCODE',md5(RYPHP_PATH.C('db_pwd')));
+	$value = is_array($value) ? 'in_ryphp'.string_auth(json_encode($value),'ENCODE',md5(RYPHP_ROOT.C('db_pwd'))) : string_auth($value,'ENCODE',md5(RYPHP_ROOT.C('db_pwd')));
 	$httponly = $httponly ? $httponly : C('cookie_httponly');
 	setcookie($name, $value, $time, C('cookie_path'), C('cookie_domain'), C('cookie_secure'), $httponly);
 	$_COOKIE[$name] = $value;
@@ -1375,11 +1375,11 @@ function get_cookie($name = '', $default = '') {
 	if(!$name) return $_COOKIE;
 	$name = C('cookie_pre').$name;
 	if(isset($_COOKIE[$name])){
-		if(strpos($_COOKIE[$name],'in_lryphp')===0){
+		if(strpos($_COOKIE[$name],'in_ryphp')===0){
 			$temp = substr($_COOKIE[$name],9);
-			return json_decode(MAGIC_QUOTES_GPC?stripslashes(string_auth($temp,'DECODE',md5(RYPHP_PATH.C('db_pwd')))):string_auth($temp,'DECODE',md5(RYPHP_PATH.C('db_pwd'))), true);
+			return json_decode(MAGIC_QUOTES_GPC?stripslashes(string_auth($temp,'DECODE',md5(RYPHP_ROOT.C('db_pwd')))):string_auth($temp,'DECODE',md5(RYPHP_ROOT.C('db_pwd'))), true);
         }
-		return string_auth(safe_replace($_COOKIE[$name]),'DECODE',md5(RYPHP_PATH.C('db_pwd')));
+		return string_auth(safe_replace($_COOKIE[$name]),'DECODE',md5(RYPHP_ROOT.C('db_pwd')));
 	}else{
 		return $default;
 	}	
