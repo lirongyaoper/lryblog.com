@@ -13,12 +13,72 @@ class cache_file{
         }
     }
 
-    protected function _filenametoid($filename){
-        return str_replace($this->config['suffix'],'',$filename);
+
+    public function get($id){
+         if(!$this->has($id)){
+            return false;
+         }
+         $file = $this->_file($id);
+         
+         $data = $this -> _filegetcontents($file);
+
+         if($data['expire'] == 0 || SYS_TIME < $data['expire']){
+            return $data['contents'];
+         }
+         return false; 
     }
 
-    protected function _idtofilename($id){
-        return $id.$this->config['suffix'];
+
+
+
+    public function set($id, $data,$cachelife = 0){
+        $cache = array();
+        $cache['contents'] = $data;
+        $cache['expire']  = $cachelife === 0 ? 0 : SYS_TIME + $cachelife;
+        $cache['mtime'] = SYS_TIME;
+
+        if(!is_dir($this ->config['cache_dir'])){
+            @mkdir($this->config['cache_dir'],0777,true);
+        }
+
+        $file = $this-> _file($id);
+        return $this ->_fileputcontents($file, $cache);
+    }
+
+
+
+    public function delete($id){
+        if(!$this -> has($id)){
+            return false;
+        }
+        $file = $this -> _file($id);
+        return unlink($file);
+    }
+
+
+
+
+    public function flush(){
+        $glob = glob($this->config['cache_dir'].'*'.$this->config['suffix']);
+        if(empty($glob)){
+            return false;
+        }
+
+        foreach ($glob as $v){
+            $id = $this -> _filenametoid(basename($v));
+            $this ->delete($id);
+            
+        }
+        return true;
+    }
+
+    public function has($id){
+        $file = $this ->_file($id);
+
+        if(!is_file($file)){
+            return false;
+        }
+        return true;
     }
 
     protected function _file($id){
@@ -26,37 +86,32 @@ class cache_file{
         return $this->config['cache_dir'] . $filename;
     }
 
-    public function has($id){
-        $file = $this ->_file($id);
-        if(!is_file($file)){
-            return false;
-        }
-        return true;
+
+
+    protected function _idtofilename($id){
+        return $id.$this->config['suffix'];
     }
 
-    public function get($id){
-         if(!$this->has($id)){
-            return false;
-         }
-         $file = $this->_file($id);
-         $data = $this -> _filegetcontents($file);
-         if($data['expire'] == 0 || SYS_TIME < $data['expire']){
-            return $data['contents'];
-         }
-         return false; 
+
+
+
+    protected function _filenametoid($filename){
+        return str_replace($this->config['suffix'], '', $filename);
     }
 
-    public function set($id, $data,$cachelife = 0){
-        $cache = array();
-        $cache['contents'] = $data;
-        $cache['expire']  = $cachelife === 0 ? 0 : SYS_TIME +  $cachelife;
-        $cache['mtime'] = SYS_TIME;
-        if(!is_dir($this ->config['cache_dir'])){
-            @mkdir($this->config['cache_dir'],0777,true);
+
+    protected function _fileputcontents($file, $contents){
+        if(!is_file($file)) touch($file) && @chmod($file, 0777);
+        if($this ->config['mode'] ==1){
+            $contents = "<?php  exit('NO.'); ?>\n".serialize($contents);
+        }else{
+            $contents = "<?php\n return ".var_export($contents,true). ";\n?>";
         }
-        $file = $this-> _file($id);
-        return $this ->_fileputcontents($file, $cache);
+        $filesize = file_put_contents($file, $contents,LOCK_EX);
+        return $filesize ? $filesize : false;
     }
+
+
 
     protected function _filegetcontents($file){
         if(!file_exists($file)){
@@ -72,35 +127,4 @@ class cache_file{
         }
     }
 
-    protected function _fileputcontents($file, $contents){
-        if(!is_file($file)) touch($file) && @chmod($file, 0777);
-        if($this ->config['mode'] ==1){
-            $contents = "<?php  exit('NO.'); ?>".serialize($contents);
-        }else{
-            $contents = "<? php \n return ".var_export($contents,true). "\n?>";
-        }
-        $filesize = file_put_contents($file, $contents,LOCK_EX);
-        return $filesize ? $filesize : false;
-    }
-    public function delete($id){
-        if($this -> has($id)){
-            return false;
-        }
-        $file = $this -> _file($id);
-        return unlink($file);
-    }
-
-
-
-
-    public function flush(){
-        $glob = glob($this->config['cache_dir'].'*'.$this->config['suffix']);
-        if(empty($glob)) return false;
-        foreach ($glob as $v){
-            $id = $this -> _filenametoid(basename($v));
-            $this ->delete($id);
-            
-        }
-        return true;
-    }
 }
