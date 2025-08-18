@@ -22,34 +22,38 @@
  * @param int $level 当前递归层级（内部使用）
  * @param bool $isLast 当前元素是否是父数组的最后一项（内部使用）
  */
-function Printarraylry($data, $level = 0, $isLast = true, $maxDepth = 10) {
-    static $indent = 0;
-    
-    if ($level > $maxDepth) {
-        echo "<span class='palry-max-depth'>[max depth reached]</span>";
-        return;
-    }
+function Printarraylry($data, $level = 0, $isLast = true) {
+    static $indent = 0; // 缩进计数器
 
-    // 使用输出缓冲减少多次echo
-    ob_start();
-    
+    // HTML样式（自动内联，无需额外CSS）
+    $styles = [
+        'container' => 'margin-left: 15px; font-family: monospace;',
+        'array' => 'color: #d63384;',
+        'key' => 'color: #0066cc; font-weight: bold;',
+        'string' => 'color: #28a745;',
+        'number' => 'color: #fd7e14;',
+        'boolean' => 'color: #6610f2;',
+        'null' => 'color: #6c757d;'
+    ];
+
+    // 类型判断与颜色标记
     $type = gettype($data);
     switch ($type) {
         case 'array':
             $count = count($data);
-            echo "<div class='palry-container'>";
-            echo "<span class='palry-type-array'>Array(<span class='palry-meta'>$count</span>)</span> [";
+            echo "<div style='{$styles['container']}'>";
+            echo "<span style='{$styles['array']}'>Array(<span style='color:#6c757d'>$count</span>)</span> [";
 
             if ($count === 0) {
-                echo " <span class='palry-null'>empty</span> ";
+                echo " <span style='{$styles['null']}'>empty</span> ";
             } else {
-                echo "<ul class='palry-list'>";
+                echo "<ul style='list-style-type: none; padding-left: 15px; margin: 0;'>";
                 $i = 0;
                 foreach ($data as $key => $value) {
                     $i++;
                     echo "<li>";
-                    echo "<span class='palry-key'>" . htmlspecialchars($key, ENT_QUOTES) . "</span> => ";
-                    Printarraylry($value, $level + 1, $i === $count, $maxDepth);
+                    echo "<span style='{$styles['key']}'>" . htmlspecialchars($key) . "</span> => ";
+                    Printarraylry($value, $level + 1, $i === $count);
                     echo "</li>";
                 }
                 echo "</ul>";
@@ -59,72 +63,33 @@ function Printarraylry($data, $level = 0, $isLast = true, $maxDepth = 10) {
             break;
 
         case 'string':
-            echo "<span class='palry-string'>'" . htmlspecialchars($data, ENT_QUOTES) . "'</span>";
+            echo "<span style='{$styles['string']}'>'" . htmlspecialchars($data) . "'</span>";
             break;
 
         case 'integer':
         case 'double':
-            echo "<span class='palry-number'>$data</span>";
+            echo "<span style='{$styles['number']}'>$data</span>";
             break;
 
         case 'boolean':
             $val = $data ? 'true' : 'false';
-            echo "<span class='palry-boolean'>$val</span>";
+            echo "<span style='{$styles['boolean']}'>$val</span>";
             break;
 
         case 'NULL':
-            echo "<span class='palry-null'>null</span>";
-            break;
-            
-        case 'resource':
-            echo "<span class='palry-resource'>" . get_resource_type($data) . "</span>";
-            break;
-            
-        case 'object':
-            echo "<span class='palry-object'>" . get_class($data) . "</span>";
+            echo "<span style='{$styles['null']}'>null</span>";
             break;
 
         default:
-            echo "<span class='palry-unknown'>(unhandled type: $type)</span>";
+            echo "<span>(unhandled type: $type)</span>";
     }
-    
-    return ob_get_clean();
 }
 
-function Palry($data, $maxDepth = 10) {
-    // 添加CSS类替代内联样式
-    $css = "
-    <style>
-    .palry-wrapper {
-        background: #f8f9fa; 
-        border: 1px solid #ddd; 
-        padding: 15px; 
-        border-radius: 4px;
-        font-family: monospace;
-    }
-    .palry-container {
-        margin-left: 15px;
-    }
-    .palry-list {
-        list-style-type: none; 
-        padding-left: 15px; 
-        margin: 0;
-    }
-    .palry-type-array { color: #d63384; }
-    .palry-key { color: #0066cc; font-weight: bold; }
-    .palry-string { color: #28a745; }
-    .palry-number { color: #fd7e14; }
-    .palry-boolean { color: #6610f2; }
-    .palry-null, .palry-meta { color: #6c757d; }
-    .palry-resource { color: #17a2b8; }
-    .palry-object { color: #6f42c1; }
-    .palry-unknown { color: #dc3545; }
-    .palry-max-depth { color: #ffc107; }
-    </style>
-    ";
-    
-    echo "<div class='palry-wrapper'>";
-    echo $css;
-    echo Printarraylry($data, 0, true, $maxDepth);
+/**
+ * 包裹函数：添加统一的HTML容器
+ */
+function Palry($data) {
+    echo "<div style='background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 4px;'>";
+    Printarraylry($data);
     echo "</div>";
 }
