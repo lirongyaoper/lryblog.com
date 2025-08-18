@@ -34,7 +34,18 @@ function get_menu_list(){
 	$menu_list = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid'=>'0','display' => '1')) ->order('listorder ASC ,id ASC')->limit('20')->select();
 	foreach ($menu_list as $key => $value){
 		$child = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid' =>$value['id'],'display' => '1')) -> order('listorder ASC,id ASC')->select();
-		
+		foreach($child as $k => $v){
+			if($_SESSION['roleid'] != 1){
+				$data = D('admin_role_priv') -> field('roleid')->where(array('roleid' =>$_SESSION['roleid'],'m' =>$v['m'],'c'=> $v['c'],'a'=>$v['a'])) ->find();
+				if(!$data) unset($child[$k]);
+			}
+		}
+		if($child){
+			$menu_list[$key]['child'] = $child;
+		}else{
+			unset($menu_list[$key]);
+		}
 	}
-	return $menu_list;
+
+	return array_values($menu_list);
 }

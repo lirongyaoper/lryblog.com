@@ -1,15 +1,15 @@
 <?php
 defined('IN_RYPHP') or exit('Access Denied');
 ryphp::load_controller('common',ROUTE_M,0);
+ryphp::load_common('function/function.php', 'lry_admin_center');
 class index extends common{
 
     public function init(){
         
         debug();
 		$total = D('guestbook')->field('id')->where(array('replyid'=>0,'siteid'=> self::$siteid,'isread'=>'0'))->total();
-		$menu_list = D('menu')->field('`id`,`name`,`m`,`c`,`a`,`data`')->where(array('parentid'=>'0','display' => '1')) ->order('listorder ASC ,id ASC')->limit('20')->select();
-
-		Palry($menu_list);
+		get_menu_list();
+		
 		//include $this->admin_tpl('index');
 		
     }
