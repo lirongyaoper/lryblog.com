@@ -57,7 +57,22 @@ function show_menu(){
 		foreach($menu_list as $key => $value){
 			$s1 = $key == 0 ? ' class="selected"' : '';
 			$s2 = $key == 0 ? ' style="display:block;"' : '';
+			$menu_string .= '<div class="menu_dropdown">
+			<dl id="'.$value['id'].'-menu">
+				<dt'.$s1.'><i class="lry-iconfont '.$value['data'].' mr-5"></i>'.$value['name'].'<i class="lry-nav-icon lry-iconfont lry-iconxiangxia menu_dropdown-arrow"></i></dt>
+				<dd'.$s2.'>
+					<ul>';
+						foreach($value['child'] as $val){
+							$menu_string .= '<li><a href="javascript:void(0)" _href="'.url($val['m'].'/'.$val['c'].'/'.$val['a'],$val['data']).'"data-title="'.$val['name'].'">'.$val['name'].'</a></li>';
+
+						}
+					$menu_string .= '</ul>
+				</dd>
+			</dl>
+			</div>';
 		}
+		setcache('menu_string_'.$_SESSION['roleid'],$menu_string);
 
 	}
+	return $menu_string;
 }

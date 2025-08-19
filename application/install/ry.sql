@@ -290,13 +290,13 @@ CREATE TABLE `rycms_menu` (
 ) ENGINE=MyISAM AUTO_INCREMENT=319 DEFAULT CHARSET=utf8;
 
 
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (1,'内容管理',0,'lry_admin_center','content','top','yzm-iconneirong',1,1);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (2,'会员管理',0,'member','member','top','yzm-iconyonghu',2,1);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (3,'模块管理',0,'lry_admin_center','module','top','yzm-icondaohang',3,1);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (4,'管理员管理',0,'lry_admin_center','admin_manage','top','yzm-iconguanliyuan',4,1);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (5,'个人信息',0,'lry_admin_center','admin_manage','top','yzm-iconrizhi',5,0);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (6,'系统管理',0,'lry_admin_center','system_manage','top','yzm-iconshezhi',6,1);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (7,'数据管理',0,'lry_admin_center','database','top','yzm-iconshujuku',7,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (1,'内容管理',0,'lry_admin_center','content','top','lry-iconneirong',1,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (2,'会员管理',0,'member','member','top','lry-iconyonghu',2,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (3,'模块管理',0,'lry_admin_center','module','top','lry-icondaohang',3,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (4,'管理员管理',0,'lry_admin_center','admin_manage','top','lry-iconguanliyuan',4,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (5,'个人信息',0,'lry_admin_center','admin_manage','top','lry-iconrizhi',5,0);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (6,'系统管理',0,'lry_admin_center','system_manage','top','lry-iconshezhi',6,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (7,'数据管理',0,'lry_admin_center','database','top','lry-iconshujuku',7,1);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (8,'稿件管理',1,'lry_admin_center','admin_content','init','',13,1);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (9,'稿件浏览',8,'lry_admin_center','admin_content','public_preview','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (10,'稿件删除',8,'lry_admin_center','admin_content','del','',0,0);
@@ -438,7 +438,7 @@ INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `list
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (173,'新建内容发布方案',165,'collection','collection_content','create_programme','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (174,'采集列表',165,'collection','collection_content','collection_list','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (175,'删除采集列表',165,'collection','collection_content','collection_list_del','',0,0);
-INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (200,'微信管理',0,'wechat','wechat','top','yzm-iconweixin',3,1);
+INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (200,'微信管理',0,'wechat','wechat','top','lry-iconweixin',3,1);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (201,'微信配置',200,'wechat','config','init','',0,1);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (202,'保存配置',201,'wechat','config','save','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (203,'微信用户',200,'wechat','user','init','',0,1);
