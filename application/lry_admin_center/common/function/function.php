@@ -55,7 +55,8 @@ function show_menu(){
 		$menu_list = get_menu_list();
 		$menu_string = '';
 		foreach($menu_list as $key => $value){
-			
+			$s1 = $key == 0 ? ' class="selected"' : '';
+			$s2 = $key == 0 ? ' style="display:block;"' : '';
 		}
 
 	}
