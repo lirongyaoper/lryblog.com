@@ -46,6 +46,17 @@ function get_menu_list(){
 			unset($menu_list[$key]);
 		}
 	}
+	return array_values($menu_list);// array_values() 函数在 PHP 中不是递归的，它只会处理当前数组的第一层（顶层）元素，而不会递归处理嵌套的数组。
+}
 
-	return array_values($menu_list);
+
+function show_menu(){
+	if(!$menu_string = getcache('menu_string_'.$_SESSION['roleid'])){
+		$menu_list = get_menu_list();
+		$menu_string = '';
+		foreach($menu_list as $key => $value){
+			
+		}
+
+	}
 }

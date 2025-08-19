@@ -9,7 +9,7 @@ class index extends common{
         debug();
 		$total = D('guestbook')->field('id')->where(array('replyid'=>0,'siteid'=> self::$siteid,'isread'=>'0'))->total();
 		get_menu_list();
-		
+		Palry(get_menu_list());
 		//include $this->admin_tpl('index');
 		
     }
