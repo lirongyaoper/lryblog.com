@@ -339,7 +339,7 @@ function L($language = '', $module = ''){
 	$lang = C('language');
 	$module = empty($module) ? ROUTE_M : $module;
 	if(!$_lang) { 
-		$sys_lang = require(RYPHP_PATH.'language'.DIRECTORY_SEPARATOR.$lang.'.lang.php');
+		$sys_lang = require(RYPHP_RYPHP.'language'.DIRECTORY_SEPARATOR.$lang.'.lang.php');
 		$module_lang = array();
 		if(is_file(RYPHP_APP.$module.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$lang.'.lang.php')){
 			$module_lang = require(RYPHP_APP.$module.DIRECTORY_SEPARATOR.'common'.DIRECTORY_SEPARATOR.'language'.DIRECTORY_SEPARATOR.$lang.'.lang.php');
@@ -1672,7 +1672,7 @@ function input($key = '', $default = '', $function = ''){
  */
 function new_session_start(){
 	if(ini_get('session.auto_start')) return true;
-	// session_save_path(RYPHP_PATH.'cache/sessions');
+	// session_save_path(RYPHP_RYPHP.'cache/sessions');
 	ini_set('session.cookie_httponly', true);
 	$session_name = session_name();
 	if (isset($_COOKIE[$session_name]) && !preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[$session_name])) {

@@ -78,3 +78,14 @@ function show_menu(){
 	}
 	return $menu_string;
 }
+
+
+
+/**
+ * 配置文件
+ * common/config/config.php
+*/
+
+function set_configFile($config){
+	$configFile = 
+}

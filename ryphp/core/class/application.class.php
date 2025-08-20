@@ -77,7 +77,7 @@ class application{
 	public static function showmsg($msg, $gourl, $limittime) {
 		$gourl = empty($gourl) ? (strpos(HTTP_REFERER, SITE_URL)!==0 ? SITE_URL : htmlspecialchars(HTTP_REFERER, ENT_QUOTES, 'UTF-8')) : htmlspecialchars($gourl, ENT_QUOTES, 'UTF-8');
 		$stop = $gourl!='stop' ? false : true;
-		include(RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'message'.DIRECTORY_SEPARATOR.'message.tpl');
+		include(RYPHP_RYPHP.'core'.DIRECTORY_SEPARATOR.'message'.DIRECTORY_SEPARATOR.'message.tpl');
 	}
 
 
@@ -92,7 +92,7 @@ class application{
 	 */
 	public static function fatalerror($msg, $detailed = '', $type = 1) {
 		if(ob_get_length() !== false) @ob_end_clean();
-		include(RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'message'.DIRECTORY_SEPARATOR.'error.tpl');
+		include(RYPHP_RYPHP.'core'.DIRECTORY_SEPARATOR.'message'.DIRECTORY_SEPARATOR.'error.tpl');
 		exit();
 	}
 
@@ -108,7 +108,7 @@ class application{
     public static function halt($msg,$code =404){
         if(ob_get_length() !== false) @ob_end_clean();
         if(!RYPHP_DEBUG) send_http_status($code);
-        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RYPHP_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_PATH.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
+        $tpl = is_file(RYPHP_ROOT.C('error_page')) && ! RYPHP_DEBUG ? RYPHP_ROOT.C('error_page') : RYPHP_RYPHP.'core'.DIRECTORY_SEPARATOR.'tpl'.DIRECTORY_SEPARATOR.'halt.tpl';
         include $tpl;
         exit();
 

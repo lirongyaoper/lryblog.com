@@ -16,7 +16,8 @@ defined('RYPHP_ROOT') or exit('Access Denied!');
 
 define('IN_RYPHP',true);
 
-define('RYPHP_PATH', RYPHP_ROOT . 'ryphp' . DIRECTORY_SEPARATOR);
+define('RYPHP_RYPHP', RYPHP_ROOT . 'ryphp' . DIRECTORY_SEPARATOR);
+define('RYPHP_COMMON', RYPHP_ROOT . 'common' . DIRECTORY_SEPARATOR);
 
 define('RYPHP_VERSION', '1.0.0');
 define('RYPHP_RELEASE', '20250707');
@@ -93,8 +94,8 @@ class ryphp {
 	 * @param string $func 函数库名
 	 */
     public static function load_sys_func($func){
-        if(is_file(RYPHP_PATH.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php')){
-            require_once(RYPHP_PATH.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php');}
+        if(is_file(RYPHP_RYPHP.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php')){
+            require_once(RYPHP_RYPHP.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR.'function'.DIRECTORY_SEPARATOR.$func.'.func.php');}
     }
 		
 	/**
@@ -117,7 +118,7 @@ class ryphp {
     private static function _load_class($classname,$path = '', $initialize = 1){
         static $classes = array();
         if(empty($path)) {
-            $path = RYPHP_PATH . 'core' . DIRECTORY_SEPARATOR . 'class';
+            $path = RYPHP_RYPHP . 'core' . DIRECTORY_SEPARATOR . 'class';
         }
         $key = md5($path.$classname);
         if(isset($classes[$key])){
@@ -148,7 +149,7 @@ class ryphp {
             if(is_file(RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path)){
                 return include RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path;
             }else{
-                debug::addmsg(RYPHP_PATH.'common'.DIRECTORY_SEPARATOR.$path.L('does_not_exist'));
+                debug::addmsg(RYPHP_RYPHP.'common'.DIRECTORY_SEPARATOR.$path.L('does_not_exist'));
 
             }
         }else{
@@ -195,7 +196,7 @@ class ryphp {
 	 */
 	public static function load_job($classname, $initialize = 1) {
 
-		return self::_load_class($classname, RYPHP_PATH.'jobs', $initialize);
+		return self::_load_class($classname, RYPHP_RYPHP.'jobs', $initialize);
 	}	
 
 }

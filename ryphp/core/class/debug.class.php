@@ -141,7 +141,7 @@ class debug{
         $parameter = $_GET;
         unset($parameter['m'],$parameter['c'],$parameter['a']);
         $parameter = $parameter ? http_build_query($parameter) : '无';
-        include (RYPHP_PATH . 'core' . DIRECTORY_SEPARATOR . 'message' . DIRECTORY_SEPARATOR.'debug.tpl' );
+        include (RYPHP_RYPHP . 'core' . DIRECTORY_SEPARATOR . 'message' . DIRECTORY_SEPARATOR.'debug.tpl' );
 
     }
 }

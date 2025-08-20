@@ -121,7 +121,7 @@
 ```html
 {SITE_URL}            - 站点根URL路径
 {STATIC_URL}          - 静态资源URL路径
-{RYPHP_PATH}          - 框架根路径
+{RYPHP_RYPHP}          - 框架根路径
 {APP_PATH}            - 应用路径
 {RY_PATH}             - 框架路径
 ```
