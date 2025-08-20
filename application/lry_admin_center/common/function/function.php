@@ -87,5 +87,11 @@ function show_menu(){
 */
 
 function set_configFile($config){
-	$configFile = 
+	$configFile = RYPHP_COMMON.'config/config.php';
+	if(!is_writable($configFile))  return_message('Please chmod '.$configFile. ' to 0777!',0);
+	$pattern = $replacement = array();
+	foreach($config as $key => $value){
+		$value = str_replace(array(',','$','/'),'',$value);
+		$pattern[$key] = "/'".$key."";
+	}
 }
