@@ -27,6 +27,8 @@ function url($url='', $vars='') {
 	return $string;
 }
 
+
+
 /**
  * 从数据库获取菜单列表
  */
