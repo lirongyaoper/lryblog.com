@@ -80,11 +80,12 @@ function show_menu(){
 }
 
 
-
 /**
- * 配置文件
- * common/config/config.php
-*/
+ * 设置config文件
+ * @param $config 配置信息
+ * 
+ * 作用：重新设置配置信息，并保存到config.php文件中
+ */
 
 function set_configFile($config){
 	$configFile = RYPHP_COMMON.'config/config.php';
@@ -92,6 +93,10 @@ function set_configFile($config){
 	$pattern = $replacement = array();
 	foreach($config as $key => $value){
 		$value = str_replace(array(',','$','/'),'',$value);
-		$pattern[$key] = "/'".$key."";
+		$pattern[$key] = "/'".$key."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
+		$replacement[$key] = "'".$key."'=>\${1}".$value."\${2}\${3},";
 	}
+	$str = file_get_contents($configFile);
+	$str = preg_replace($pattern, $replacement, $str);
+	return file_put_contents($configFile,$str,LOCK_EX);
 }
