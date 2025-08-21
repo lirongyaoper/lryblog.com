@@ -57,6 +57,14 @@ class index extends common{
     }
 
 
+	/**
+	 * @author: lirongyaoper
+	 * 推出后台登录
+	 * 
+	 */
+	public function public_logout(){
+		unset($_SESSION['adminid'],$_SESSION['adminname']);
+	}
 
 
 
