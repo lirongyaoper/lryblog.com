@@ -100,3 +100,36 @@ function set_configFile($config){
 	$str = preg_replace($pattern, $replacement, $str);
 	return file_put_contents($configFile,$str,LOCK_EX);
 }
+
+/**
+ * 文件下载函数
+ * 
+ */
+
+function file_download($url,$md5){
+	if(extension_loaded('curl')){
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch,CURLOPT_FOLLOWLOCATION, true);
+		curl_setopt($ch,CURLOPT_TIMEOUT_MS, 5000);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
+		curl_setopt($ch,CURLOPT_HEADER,0);
+		$content= curl_exec($ch);
+		curl_close($ch);
+	}else{
+		$content = file_get_contents($url);
+	}
+
+	if(!$content) return array('status'=>0,'message'=>'升级包不存在，请检查升级包地址是否正确！，必要时重新尝试下载');
+	$filename = explode('/',$url);
+	$filename = end($filename);
+	$download_path = RYPHP_ROOT.'cache/down_package/'.$filename;
+	$fp = fopen($download_path,'w');
+	fwrite($fp,$content);
+	fclose($fp);
+	if(!is_file($download_path)) return array('status'=>0,'message' => '下载失败，请检查文件权限');
+	if($md5 != md5_file($download_path)) return array('status'=>0,'message' => '下载的升级包MD5值不匹配,请重新尝试下载');	
+	return array('status'=>1, 'message' =>'下载成功！','file_path' => $download_path);
+}
