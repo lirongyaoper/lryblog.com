@@ -103,21 +103,21 @@ function set_configFile($config){
 
 /**
  * 文件下载函数
- * 
+ * @author: lirongyaoper
  */
 
 function file_download($url,$md5){
 	if(extension_loaded('curl')){
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch,CURLOPT_FOLLOWLOCATION, true);
-		curl_setopt($ch,CURLOPT_TIMEOUT_MS, 5000);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);
-		curl_setopt($ch,CURLOPT_HEADER,0);
-		$content= curl_exec($ch);
-		curl_close($ch);
+		$ch = curl_init();//初始化 cURL 句柄。
+		curl_setopt($ch, CURLOPT_URL, $url);//设置请求的 URL。
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);//将响应内容以字符串返回而不是直接输出。
+		curl_setopt($ch,CURLOPT_FOLLOWLOCATION, true);//允许自动跟随重定向。
+		curl_setopt($ch,CURLOPT_TIMEOUT_MS, 5000);//设置总超时为 5000 毫秒。
+		curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false);//关闭 SSL 证书校验（不安全，防止自签名证书报错）。
+		curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);//关闭主机名校验（不安全）。
+		curl_setopt($ch,CURLOPT_HEADER,0);//不把响应头包含在返回的内容里。
+		$content= curl_exec($ch);//执行请求，得到文件内容到 $content。
+		curl_close($ch);// 关闭 cURL 资源。
 	}else{
 		$content = file_get_contents($url);
 	}
@@ -125,11 +125,38 @@ function file_download($url,$md5){
 	if(!$content) return array('status'=>0,'message'=>'升级包不存在，请检查升级包地址是否正确！，必要时重新尝试下载');
 	$filename = explode('/',$url);
 	$filename = end($filename);
-	$download_path = RYPHP_ROOT.'cache/down_package/'.$filename;
+	$down_dir = RYPHP_ROOT.'cache'.DIRECTORY_SEPARATOR.'down_package'.DIRECTORY_SEPARATOR;
+	if(!is_dir($down_dir)){
+		if(!mkdir($down_dir,0777,true)) return array('status' => 0, 'message'=>'创建下载目录失败，请检查文件权限');
+	}
+
+	$download_path = $down_dir.$filename;
 	$fp = fopen($download_path,'w');
 	fwrite($fp,$content);
 	fclose($fp);
 	if(!is_file($download_path)) return array('status'=>0,'message' => '下载失败，请检查文件权限');
 	if($md5 != md5_file($download_path)) return array('status'=>0,'message' => '下载的升级包MD5值不匹配,请重新尝试下载');	
 	return array('status'=>1, 'message' =>'下载成功！','file_path' => $download_path);
+}
+
+
+/**
+ * 解压函数 unzip
+ * @author: lirongyaoper
+ * 
+ */
+
+function unzips($filename,$unzip_folder){
+	if(!is_file($filename)) return array('status' => 0, 'message' =>'压缩文件不存在');
+	if(!is_dir($unzip_folder)){
+		if(!mkdir($unzip_folder,0777,true)) return array('status' =>0, 'message' => '创建解压目录失败，请检查文件权限');
+	}
+	$zip = new ZipArchive();
+	if(!$zip -> open($filename)){
+		return array('status' =>0,'message' =>'打开压缩文件失败');
+	}
+	$zip -> extractTo($unzip_folder);
+	$zip ->close();
+	return array('status' => 1, 'message' => '解压成功');
+
 }
