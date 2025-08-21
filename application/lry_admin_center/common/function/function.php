@@ -13,7 +13,7 @@ function url($url='', $vars='') {
 		}
 	}else{
 		if(URL_MODEL == 1) $string .= 'index.php?s=';
-		if(URL_MODEL == 4) $string .= 'index.php/';
+		if(URL_MODEL == 4) $string .= 'index.php'.DIRECTORY_SEPARATOR;
 		$string .= $url;
 		if($vars){
 			if(!is_array($vars)) parse_str($vars, $vars);			
