@@ -40,7 +40,7 @@ class cache_factory{
                 case 'file':
                     ryphp::load_sys_class('cache_file','',0);
                     self::$class = 'cache_file';
-                    self::$config = C('cache_file');
+                    self::$config = C('file_config');
                     break;
                 case 'redis':
 					ryphp::load_sys_class('cache_redis','',0);

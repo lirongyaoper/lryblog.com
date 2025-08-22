@@ -1,19 +1,19 @@
 DROP TABLE IF EXISTS `rycms_category`;
 CREATE TABLE `rycms_category` (
-  `catid` smallint(5) NOT NULL AUTO_INCREMENT COMMENT '栏目ID',
-  `siteid` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `catid` smallint NOT NULL AUTO_INCREMENT COMMENT '栏目ID',
+  `siteid` tinyint unsigned NOT NULL DEFAULT '0',
   `catname` varchar(60) NOT NULL DEFAULT '' COMMENT '栏目名称',
-  `modelid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '模型id',
-  `parentid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
+  `modelid` smallint unsigned NOT NULL DEFAULT '0' COMMENT '模型id',
+  `parentid` smallint unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
   `arrparentid` varchar(255) NOT NULL DEFAULT '' COMMENT '父级路径',
   `arrchildid` mediumtext NOT NULL COMMENT '子栏目id集合',
   `catdir` varchar(50) NOT NULL DEFAULT '' COMMENT '栏目目录',
   `catimg` varchar(150) NOT NULL DEFAULT '' COMMENT '栏目图片',
-  `cattype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '栏目类型:0普通栏目1单页2外部链接',
-  `listorder` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '栏目排序',
+  `cattype` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '栏目类型:0普通栏目1单页2外部链接',
+  `listorder` smallint unsigned NOT NULL DEFAULT '0' COMMENT '栏目排序',
   `target` char(10) NOT NULL DEFAULT '' COMMENT '打开方式',
-  `member_publish` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否会员投稿',
-  `display` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '在导航显示',
+  `member_publish` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否会员投稿',
+  `display` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '在导航显示',
   `pclink` varchar(100) NOT NULL DEFAULT '' COMMENT '电脑版地址',
   `domain` varchar(100) NOT NULL DEFAULT '' COMMENT '绑定域名',
   `entitle` varchar(80) NOT NULL DEFAULT '' COMMENT '英文标题',
@@ -28,7 +28,7 @@ CREATE TABLE `rycms_category` (
   PRIMARY KEY (`catid`),
   KEY `siteid` (`siteid`),
   KEY `modelid` (`modelid`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of ry_category
@@ -53,7 +53,7 @@ CREATE TABLE `rycms_config` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   KEY `type` (`type`)
-) ENGINE=MyISAM AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb3;
+) ENGINE=MyISAM AUTO_INCREMENT=74 DEFAULT CHARSET=utf8mb4;
 
 -- 使用完整列名的单行插入语句
 INSERT INTO `rycms_config` (`id`, `name`, `type`, `title`, `value`, `fieldtype`, `setting`, `status`) VALUES (1, 'site_name', 0, '站点名称', '荣耀历程--一个有激情，有梦想，不断探索未知世界的热血青年', '', '', 1);
@@ -133,19 +133,18 @@ INSERT INTO `rycms_config` (`id`, `name`, `type`, `title`, `value`, `fieldtype`,
 
 DROP TABLE IF EXISTS `rycms_urlrule`;
 CREATE TABLE `rycms_urlrule` (
-  `urlruleid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  `urlruleid` smallint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '规则名称',
   `urlrule` varchar(100) NOT NULL DEFAULT '' COMMENT 'URL规则',
   `route` varchar(100) NOT NULL DEFAULT '' COMMENT '指向的路由',
-  `listorder` tinyint(3) unsigned NOT NULL DEFAULT '50' COMMENT '优先级排序',
+  `listorder` tinyint unsigned NOT NULL DEFAULT '50' COMMENT '优先级排序',
   PRIMARY KEY (`urlruleid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 
 
 DROP TABLE IF EXISTS `rycms_admin`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `rycms_admin` (
   `adminid` mediumint unsigned NOT NULL AUTO_INCREMENT,
   `adminname` varchar(30) NOT NULL DEFAULT '',
@@ -161,17 +160,11 @@ CREATE TABLE `rycms_admin` (
   `errnum` tinyint unsigned NOT NULL DEFAULT '0',
   `addpeople` varchar(30) NOT NULL DEFAULT '',
   PRIMARY KEY (`adminid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `rycms_admin`
---
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `rycms_admin` WRITE;
-/*!40000 ALTER TABLE `rycms_admin` DISABLE KEYS */;
+
 INSERT INTO `rycms_admin` VALUES (1,'lirongyaoper','e6398f4dc35c4f37acb2f7f3abe0012d',1,'超级管理员','','轩鸿青','',1754740961,'42.227.0.186',1557731527,0,'系统');
-/*!40000 ALTER TABLE `rycms_admin` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -187,7 +180,7 @@ CREATE TABLE `rycms_admin_login_log` (
   `loginip` varchar(15) NOT NULL DEFAULT '' COMMENT '登录IP',
   `address` varchar(30) NOT NULL DEFAULT '' COMMENT '地理位置',
   `password` varchar(30) NOT NULL DEFAULT '' COMMENT '尝试的密码(仅记录错误)',
-  `loginresult` tinyint(1) NOT NULL DEFAULT 0 COMMENT '登录结果:1-成功,0-失败',
+  `loginresult` tinyint NOT NULL DEFAULT 0 COMMENT '登录结果:1-成功,0-失败',
   `cause` varchar(20) NOT NULL DEFAULT '' COMMENT '失败原因',
   PRIMARY KEY (`id`),
   KEY `idx_adminname_result` (`adminname`, `loginresult`),
@@ -198,57 +191,12 @@ INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, 
 INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (2, 'lirongyaoper', 1751433614, '127.0.0.1', '', '', 1, '登录成功！');
 INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (3, 'lirongyaoper', 1752252773, '117.159.129.34', '', '', 1, '登录成功！');
 INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (4, 'lirongyaoper', 1752269209, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (5, 'lirongyaoper', 1752304037, '182.120.189.36', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (6, 'lirongyaoper', 1752315769, '42.227.0.186', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (7, 'lirongyaoper', 1752533329, '123.13.79.138', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (8, 'lirongyaoper', 1752656128, '123.13.79.138', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (9, 'lirongyaoper', 1752680188, '123.13.79.138', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (10, 'lirongyaoper', 1752759535, '123.13.72.236', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (11, 'lirongyaoper', 1752759758, '123.13.72.236', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (12, 'lirongyaoper', 1752822960, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (13, 'lirongyaoper', 1752831976, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (14, 'lirongyaoper', 1752841683, '123.13.72.236', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (15, 'lirongyaoper', 1752844764, '123.13.72.236', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (16, 'lirongyaoper', 1752893527, '182.120.189.152', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (17, 'lirongyaoper', 1752894765, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (18, 'lirongyaoper', 1752895649, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (19, 'lirongyaoper', 1752925554, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (20, 'lirongyaoper', 1752930049, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (21, 'lirongyaoper', 1752936832, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (22, 'lirongyaoper', 1752937237, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (23, 'lirongyaoper', 1752937244, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (24, 'lirongyaoper', 1752966308, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (25, 'lirongyaoper', 1752972179, '117.159.129.34', '', 'lryadfmin01.', 0, '密码错误！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (26, 'lirongyaoper', 1752972216, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (27, 'lirongyaoper', 1752978393, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (28, 'lirongyaoper', 1752978802, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (29, 'lirongyaoper', 1752982761, '123.13.72.236', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (30, 'lirongyaoper', 1753108167, '115.51.62.231', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (31, 'lirongyaoper', 1753137061, '115.51.62.231', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (32, 'lirongyaoper', 1753189316, '115.51.62.231', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (33, 'lirongyaoper', 1753289895, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (34, 'lirongyaoper', 1753290277, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (35, 'lirongyaoper', 1753506604, '122.10.198.225', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (36, 'lirongyaoper', 1753509429, '182.120.189.168', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (37, 'lirongyaoper', 1753515776, '182.120.189.168', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (38, 'lirongyaoper', 1753632249, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (39, 'lirongyaoper', 1753657644, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (40, 'lirongyaoper', 1753971154, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (41, 'lirongyaoper', 1754222848, '123.13.149.210', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (42, 'lirongyaoper', 1754224944, '123.13.149.210', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (43, 'lirongyaoper', 1754314250, '117.159.129.34', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (44, 'lirongyaoper', 1754324101, '47.251.83.224', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (45, 'lirongyaoper', 1754357170, '47.251.83.224', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (46, 'lirongyaoper', 1754360973, '47.251.83.224', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (47, 'lirongyaoper', 1754384215, '123.13.144.251', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (48, 'lirongyaoper', 1754385719, '123.13.144.251', '', '', 1, '登录成功！');
-INSERT INTO `rycms_admin_login_log` (`id`, `adminname`, `logintime`, `loginip`, `address`, `password`, `loginresult`, `cause`) VALUES (49, 'lirongyaoper', 1754740961, '42.227.0.186', '', '', 1, '登录成功！');
+
 
 
 
 DROP TABLE IF EXISTS `rycms_guestbook`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `rycms_guestbook` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `siteid` tinyint unsigned NOT NULL DEFAULT '0',
@@ -261,33 +209,33 @@ CREATE TABLE `rycms_guestbook` (
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '留言人地址',
   `bookmsg` text NOT NULL COMMENT '内容',
   `ip` varchar(20) NOT NULL DEFAULT '' COMMENT 'ip地址',
-  `ischeck` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否审核',
-  `isread` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否读过',
-  `ispc` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1电脑,0手机',
+  `ischeck` tinyint NOT NULL DEFAULT '0' COMMENT '是否审核',
+  `isread` tinyint NOT NULL DEFAULT '0' COMMENT '是否读过',
+  `ispc` tinyint NOT NULL DEFAULT '1' COMMENT '1电脑,0手机',
   `replyid` int unsigned NOT NULL DEFAULT '0' COMMENT '回复的id',
   PRIMARY KEY (`id`),
   KEY `index_booktime` (`booktime`),
   KEY `index_replyid` (`replyid`),
   KEY `index_ischeck` (`siteid`,`ischeck`)
-) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb3;
+) ENGINE=MyISAM AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4;
 
 
 DROP TABLE IF EXISTS `rycms_menu`;
 CREATE TABLE `rycms_menu` (
-  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint unsigned NOT NULL AUTO_INCREMENT,
   `name` char(40) NOT NULL DEFAULT '',
-  `parentid` smallint(6) NOT NULL DEFAULT '0',
+  `parentid` smallint NOT NULL DEFAULT '0',
   `m` char(20) NOT NULL DEFAULT '',
   `c` char(20) NOT NULL DEFAULT '',
   `a` char(30) NOT NULL DEFAULT '',
   `data` char(100) NOT NULL DEFAULT '',
-  `listorder` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `display` tinyint(1) NOT NULL DEFAULT '0',
+  `listorder` smallint unsigned NOT NULL DEFAULT '0',
+  `display` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `listorder` (`listorder`),
   KEY `parentid` (`parentid`),
   KEY `module` (`m`,`c`,`a`)
-) ENGINE=MyISAM AUTO_INCREMENT=319 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=319 DEFAULT CHARSET=utf8mb4;
 
 
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (1,'内容管理',0,'lry_admin_center','content','top','lry-iconneirong',1,1);
@@ -546,3 +494,107 @@ INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `list
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (316,'管理非自己发布的内容',30,'lry_admin_center','content','all_content','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (317,'删除所有未审核',75,'comment','comment','del_all','',0,0);
 INSERT INTO `rycms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES (318,'删除所有未审核',79,'guestbook','guestbook','del_all','',0,0);
+
+
+
+
+DROP TABLE IF EXISTS `rycms_all_content`;
+
+CREATE TABLE `rycms_all_content` (
+  `allid` int unsigned NOT NULL AUTO_INCREMENT,
+  `siteid` tinyint unsigned NOT NULL DEFAULT '0',
+  `modelid` tinyint unsigned NOT NULL DEFAULT '0',
+  `catid` smallint unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL DEFAULT '0',
+  `userid` mediumint unsigned NOT NULL DEFAULT '0',
+  `username` char(30) NOT NULL DEFAULT '',
+  `title` varchar(150) NOT NULL DEFAULT '',
+  `inputtime` int unsigned NOT NULL DEFAULT '0',
+  `updatetime` int unsigned NOT NULL DEFAULT '0',
+  `url` varchar(100) NOT NULL DEFAULT '',
+  `thumb` varchar(150) NOT NULL DEFAULT '',
+  `status` tinyint unsigned NOT NULL DEFAULT '1',
+  `issystem` tinyint unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`allid`),
+  KEY `userid_index` (`userid`,`issystem`,`status`),
+  KEY `modelid_index` (`modelid`,`id`),
+  KEY `status` (`siteid`,`status`),
+  KEY `issystem` (`siteid`,`issystem`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+
+LOCK TABLES `rycms_all_content` WRITE;
+INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (1,0,1,2,1,1,'lirongyaoper','RYPHP轻量级开源框架 V1.0',1710000726,1710000726,'/guanfangxinwen/1.html','',1,1);
+INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (2,0,1,2,2,1,'lirongyaoper','RYCMS v1.0正式版发布',1748145623,1748145623,'/guanfangxinwen/2.html','',1,1);
+UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `rycms_member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rycms_member` (
+  `userid` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `password` char(32) NOT NULL DEFAULT '',
+  `regdate` int unsigned NOT NULL DEFAULT '0',
+  `lastdate` int unsigned NOT NULL DEFAULT '0',
+  `regip` char(15) NOT NULL DEFAULT '',
+  `lastip` char(15) NOT NULL DEFAULT '',
+  `loginnum` smallint unsigned NOT NULL DEFAULT '0',
+  `email` char(32) NOT NULL DEFAULT '',
+  `groupid` tinyint unsigned NOT NULL DEFAULT '0',
+  `amount` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '金钱',
+  `experience` smallint unsigned NOT NULL DEFAULT '0' COMMENT '经验',
+  `point` mediumint unsigned NOT NULL DEFAULT '0' COMMENT '积分',
+  `status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '0待审核,1正常,2锁定,3拒绝',
+  `vip` tinyint unsigned NOT NULL DEFAULT '0',
+  `overduedate` int unsigned NOT NULL DEFAULT '0',
+  `email_status` tinyint unsigned NOT NULL DEFAULT '0',
+  `problem` varchar(39) NOT NULL DEFAULT '' COMMENT '安全问题',
+  `answer` varchar(30) NOT NULL DEFAULT '' COMMENT '答案',
+  PRIMARY KEY (`userid`),
+  UNIQUE KEY `username` (`username`),
+  KEY `email` (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+DROP TABLE IF EXISTS `rycms_module`;
+
+CREATE TABLE `rycms_module` (
+  `module` varchar(30) NOT NULL DEFAULT '',
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `iscore` tinyint unsigned NOT NULL DEFAULT '0',
+  `version` varchar(50) NOT NULL DEFAULT '',
+  `description` varchar(255) NOT NULL DEFAULT '',
+  `setting` text,
+  `listorder` tinyint unsigned NOT NULL DEFAULT '0',
+  `disabled` tinyint unsigned NOT NULL DEFAULT '0',
+  `installdate` date NOT NULL DEFAULT '2016-01-01',
+  `updatedate` date NOT NULL DEFAULT '2016-01-01',
+  PRIMARY KEY (`module`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+LOCK TABLES `rycms_module` WRITE;
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('lry_admin_center','后台模块',1,'3.0','后台模块','',0,0,'2016-08-27','2023-05-12');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('index','前台模块',1,'2.0','前台模块','',0,0,'2016-09-21','2023-01-21');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('api','接口模块',1,'2.0','为整个系统提供接口','',0,0,'2016-08-28','2022-08-28');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('install','安装模块',1,'2.0','CMS安装模块','',0,0,'2016-10-28','2022-10-28');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('attachment','附件模块',1,'2.0','附件模块','',0,0,'2016-10-10','2023-05-10');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('member','会员模块',1,'3.0','会员模块','',0,0,'2016-09-21','2023-02-21');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('guestbook','留言模块',1,'2.0','留言板模块','',0,0,'2016-10-25','2022-10-25');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('search','搜索模块',1,'2.0','搜索模块','',0,0,'2016-11-21','2023-01-21');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('link','友情链接',0,'2.0','友情链接模块','',0,0,'2016-12-11','2023-02-10');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('comment','评论模块',1,'2.0','全站评论','',0,0,'2017-01-05','2022-01-05');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('mobile','手机模块',1,'2.0','手机模块','',0,0,'2017-04-05','2022-04-05');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('banner','轮播图管理',0,'2.0','轮播图管理模块','',0,0,'2017-05-12','2023-02-10');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('collection','采集模块',1,'1.0','采集模块','',0,0,'2017-08-16','2022-08-16');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('wechat','微信模块',1,'2.0','微信模块','',0,0,'2017-11-03','2022-11-03');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('diyform','自定义表单模块',1,'2.0','自定义表单模块','',0,0,'2018-01-15','2023-05-11');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('adver','广告管理',0,'2.0','广告管理模块','',0,0,'2018-01-18','2023-01-18');
+INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('pay','支付模块',1,'1.0','支付模块','',0,0,'2018-07-03','2022-07-03');
+
+UNLOCK TABLES;

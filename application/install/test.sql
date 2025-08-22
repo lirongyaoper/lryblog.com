@@ -95,7 +95,7 @@ CREATE TABLE `rycms_admin_login_log` (
   `loginip` varchar(15) NOT NULL DEFAULT '',
   `address` varchar(30) NOT NULL DEFAULT '',
   `password` varchar(30) NOT NULL DEFAULT '',
-  `loginresult` tinyint(1) NOT NULL DEFAULT '0' COMMENT '登录结果1为登录成功0为登录失败',
+  `loginresult` tinyint NOT NULL DEFAULT '0' COMMENT '登录结果1为登录成功0为登录失败',
   `cause` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `admin_index` (`adminname`,`loginresult`)
@@ -238,8 +238,8 @@ CREATE TABLE `rycms_all_content` (
 
 LOCK TABLES `rycms_all_content` WRITE;
 /*!40000 ALTER TABLE `rycms_all_content` DISABLE KEYS */;
-INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (1,0,1,2,1,1,'yzmcms','YZMPHP轻量级开源框架 V2.9',1710000726,1710000726,'/guanfangxinwen/1.html','',1,1);
-INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (2,0,1,2,2,1,'yzmcms','YzmCMS v7.3正式版发布',1748145623,1748145623,'/guanfangxinwen/2.html','',1,1);
+INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (1,0,1,2,1,1,'lirongyaoper','RYPHP轻量级开源框架 V1.0',1710000726,1710000726,'/guanfangxinwen/1.html','',1,1);
+INSERT INTO `rycms_all_content` (`allid`, `siteid`, `modelid`, `catid`, `id`, `userid`, `username`, `title`, `inputtime`, `updatetime`, `url`, `thumb`, `status`, `issystem`) VALUES (2,0,1,2,2,1,'lirongyaoper','RYCMS v1.0正式版发布',1748145623,1748145623,'/guanfangxinwen/2.html','',1,1);
 /*!40000 ALTER TABLE `rycms_all_content` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,7 +268,7 @@ CREATE TABLE `rycms_article` (
   `thumb` varchar(150) NOT NULL DEFAULT '',
   `url` varchar(100) NOT NULL DEFAULT '',
   `flag` varchar(12) NOT NULL DEFAULT '' COMMENT '1置顶,2头条,3特荐,4推荐,5热点,6幻灯,7跳转',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint NOT NULL DEFAULT '1',
   `issystem` tinyint unsigned NOT NULL DEFAULT '1',
   `listorder` tinyint unsigned NOT NULL DEFAULT '1',
   `groupids_view` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '阅读权限',
@@ -530,7 +530,7 @@ CREATE TABLE `rycms_comment` (
   `inputtime` int unsigned NOT NULL DEFAULT '0',
   `ip` char(15) NOT NULL DEFAULT '',
   `content` text NOT NULL,
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '评论状态{0:未审核,1:通过审核}',
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '评论状态{0:未审核,1:通过审核}',
   `reply` mediumint unsigned NOT NULL DEFAULT '0' COMMENT '是否为回复',
   PRIMARY KEY (`id`),
   KEY `siteid` (`siteid`),
@@ -702,7 +702,7 @@ CREATE TABLE `rycms_download` (
   `thumb` varchar(150) NOT NULL DEFAULT '',
   `url` varchar(100) NOT NULL DEFAULT '',
   `flag` varchar(12) NOT NULL DEFAULT '' COMMENT '1置顶,2头条,3特荐,4推荐,5热点,6幻灯,7跳转',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint NOT NULL DEFAULT '1',
   `issystem` tinyint unsigned NOT NULL DEFAULT '1',
   `listorder` tinyint unsigned NOT NULL DEFAULT '1',
   `groupids_view` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '阅读权限',
@@ -779,9 +779,9 @@ CREATE TABLE `rycms_guestbook` (
   `address` varchar(100) NOT NULL DEFAULT '' COMMENT '留言人地址',
   `bookmsg` text NOT NULL COMMENT '内容',
   `ip` varchar(20) NOT NULL DEFAULT '' COMMENT 'ip地址',
-  `ischeck` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否审核',
-  `isread` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否读过',
-  `ispc` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1电脑,0手机',
+  `ischeck` tinyint NOT NULL DEFAULT '0' COMMENT '是否审核',
+  `isread` tinyint NOT NULL DEFAULT '0' COMMENT '是否读过',
+  `ispc` tinyint NOT NULL DEFAULT '1' COMMENT '1电脑,0手机',
   `replyid` int unsigned NOT NULL DEFAULT '0' COMMENT '回复的id',
   PRIMARY KEY (`id`),
   KEY `index_booktime` (`booktime`),
@@ -879,7 +879,7 @@ CREATE TABLE `rycms_member` (
   `loginnum` smallint unsigned NOT NULL DEFAULT '0',
   `email` char(32) NOT NULL DEFAULT '',
   `groupid` tinyint unsigned NOT NULL DEFAULT '0',
-  `amount` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '金钱',
+  `amount` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '金钱',
   `experience` smallint unsigned NOT NULL DEFAULT '0' COMMENT '经验',
   `point` mediumint unsigned NOT NULL DEFAULT '0' COMMENT '积分',
   `status` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '0待审核,1正常,2锁定,3拒绝',
@@ -1074,7 +1074,7 @@ CREATE TABLE `rycms_menu` (
   `a` char(30) NOT NULL DEFAULT '',
   `data` char(100) NOT NULL DEFAULT '',
   `listorder` smallint unsigned NOT NULL DEFAULT '0',
-  `display` tinyint(1) NOT NULL DEFAULT '0',
+  `display` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `listorder` (`listorder`),
   KEY `parentid` (`parentid`),
@@ -1561,7 +1561,7 @@ DROP TABLE IF EXISTS `rycms_module`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rycms_module` (
-  `module` varchar(15) NOT NULL DEFAULT '',
+  `module` varchar(30) NOT NULL DEFAULT '',
   `name` varchar(30) NOT NULL DEFAULT '',
   `iscore` tinyint unsigned NOT NULL DEFAULT '0',
   `version` varchar(50) NOT NULL DEFAULT '',
@@ -1618,8 +1618,8 @@ CREATE TABLE `rycms_order` (
   `paytime` int unsigned NOT NULL DEFAULT '0' COMMENT '支付时间',
   `paytype` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '支付方式1支付宝2微信',
   `transaction` varchar(32) NOT NULL DEFAULT '' COMMENT '第三方交易单号',
-  `money` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单金额',
-  `quantity` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '数量',
+  `money` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '订单金额',
+  `quantity` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '数量',
   `type` tinyint unsigned NOT NULL DEFAULT '1' COMMENT '1积分,2金钱',
   `ip` char(15) NOT NULL DEFAULT '',
   `desc` varchar(250) NOT NULL DEFAULT '' COMMENT '备注',
@@ -1793,7 +1793,7 @@ CREATE TABLE `rycms_product` (
   `thumb` varchar(150) NOT NULL DEFAULT '',
   `url` varchar(100) NOT NULL DEFAULT '',
   `flag` varchar(12) NOT NULL DEFAULT '' COMMENT '1置顶,2头条,3特荐,4推荐,5热点,6幻灯,7跳转',
-  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `status` tinyint NOT NULL DEFAULT '1',
   `issystem` tinyint unsigned NOT NULL DEFAULT '1',
   `listorder` tinyint unsigned NOT NULL DEFAULT '1',
   `groupids_view` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '阅读权限',
@@ -1804,7 +1804,7 @@ CREATE TABLE `rycms_product` (
   `standard` varchar(100) NOT NULL DEFAULT '' COMMENT '型号',
   `yieldly` varchar(100) NOT NULL DEFAULT '' COMMENT '产地',
   `pictures` text COMMENT '产品图集',
-  `price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '单价',
+  `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '单价',
   `unit` varchar(30) NOT NULL DEFAULT '' COMMENT '价格单位',
   `stock` int unsigned NOT NULL DEFAULT '0' COMMENT '库存',
   PRIMARY KEY (`id`),
@@ -1971,7 +1971,7 @@ DROP TABLE IF EXISTS `rycms_wechat_mass`;
 CREATE TABLE `rycms_wechat_mass` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `message_type` char(6) NOT NULL DEFAULT '' COMMENT '消息类型',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0通过openid群发1通过分组群发2全部',
+  `type` tinyint NOT NULL DEFAULT '0' COMMENT '0通过openid群发1通过分组群发2全部',
   `media_id` varchar(200) NOT NULL DEFAULT '',
   `msg_id` varchar(10) NOT NULL DEFAULT '',
   `msg_data_id` varchar(10) NOT NULL DEFAULT '' COMMENT '图文消息的数据ID',
@@ -2004,7 +2004,7 @@ CREATE TABLE `rycms_wechat_media` (
   `filename` varchar(50) NOT NULL DEFAULT '',
   `filepath` char(200) NOT NULL DEFAULT '',
   `type` char(6) NOT NULL DEFAULT '',
-  `media_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0临时素材,1永久素材',
+  `media_type` tinyint NOT NULL DEFAULT '0' COMMENT '0临时素材,1永久素材',
   `media_id` varchar(200) NOT NULL DEFAULT '',
   `created_at` int unsigned NOT NULL DEFAULT '0',
   `url` varchar(200) NOT NULL DEFAULT '' COMMENT '永久素材的图片url/图文素材标题',
