@@ -598,3 +598,26 @@ INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`
 INSERT INTO `rycms_module` (`module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('pay','支付模块',1,'1.0','支付模块','',0,0,'2018-07-03','2022-07-03');
 
 UNLOCK TABLES;
+
+
+DROP TABLE IF EXISTS `rycms_admin_role_auth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rycms_admin_role_auth` (
+  `roleid` tinyint unsigned NOT NULL DEFAULT '0',
+  `m` char(20) NOT NULL DEFAULT '',
+  `c` char(20) NOT NULL DEFAULT '',
+  `a` char(30) NOT NULL DEFAULT '',
+  `data` char(100) NOT NULL DEFAULT '',
+  KEY `roleid` (`roleid`,`m`,`c`,`a`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rycms_admin_role_auth`
+--
+
+LOCK TABLES `rycms_admin_role_auth` WRITE;
+/*!40000 ALTER TABLE `rycms_admin_role_auth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rycms_admin_role_auth` ENABLE KEYS */;
+UNLOCK TABLES;

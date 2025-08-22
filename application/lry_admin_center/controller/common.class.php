@@ -1,6 +1,6 @@
 <?php
 defined('IN_RYPHP') or exit('Access Denied');
-define('IN_ADMIN',true);
+define('IN_RYPHP_ADMIN',true);
 new_session_start();
 class common {
     public static $siteid;
@@ -9,6 +9,8 @@ class common {
         self::$siteid = get_siteid();
         self::$ip = getip();
         self::_check_admin();
+        self::_check_authority();
+        self::_check_ip();
     }
 
     /**
@@ -39,6 +41,30 @@ class common {
                     </script>";
 				exit();
             }
+        }
+    }
+
+    /**
+     * @author :lirongyaoper
+     * 权限判断
+     */
+    private static function _check_authority(){
+        if(ROUTE_M =='lry_admin_center' && ROUTE_C =='index' && in_array(ROUTE_A,array('login','init'))) return true;
+        if($_SESSION['roleid'] == 1) return true;
+        if(strpos(ROUTE_A,'public_') === 0) return true;
+        $auth = D('admin_role_auth')->where(array('m'=>ROUTE_M,'c'=>ROUTE_C,'a'=>ROUTE_A,'roleid'=>$_SESSION['roleid']))->find();
+        if(!$auth) return_message(L('no_permission_to_access'),0);
+    }
+
+    /**
+     * @author:lirongyaoper
+     */
+    private static function _check_ip(){
+        $admin_prohibit_ip = get_config('admin_prohibit_ip');
+        if(!$admin_prohibit_ip) return true;
+        $arrip = explode(',',$admin_prohibit_ip);
+        foreach($arrip as $ip_val){
+            if(check_ip_matching($ip_val,self::$ip)) return_message('你在后台禁止登录IP名单内,禁止访问！', 0);
         }
     }
 
