@@ -116,6 +116,16 @@ class index extends common{
 
 	}
 
+	/**
+	 * @author lirongyaoper
+	 */
+	private function _force_logout(){
+		$_SESSION = array();
+		session_destroy();
+		echo '<script type="text/javascript">window.top.location="https:lirongyaoper.com"</script>';
+		exit;
+	}
+
 	
 
 }
