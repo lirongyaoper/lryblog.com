@@ -9,6 +9,7 @@ class admin_manage extends common{
      * 管理员列表
      */
     public function init(){
-        
+        $of = input('get.of');
+        $or = input('get.or');
     }
 }
