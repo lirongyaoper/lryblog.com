@@ -83,6 +83,37 @@ class index extends common{
 		return_json(array('status'=>1,'message' =>L('login_success')));
 	}
 
+
+	/**
+	 * @author:lirongyaoper
+	 * 清除错误日志
+	 */
+	public function public_login_log(){
+		if($_SESSION['roleid'] == 1) return_json(array('status' => 1,'message' =>L('no_permission_to_access')));
+		$log_file = RYPHP_ROOT.'cache'.DIRECTORY_SEPARATOR.'error_log.php';
+		if(!is_file($log_file)) return_json(array('status' => 0,'message' =>L('does_not_exist')));
+		$res = @unlink($log_file);
+		if(!$res){
+			return_json(array('status' => 0,'message' => L('delete_failure')));
+		}
+		D('admin_log')->insert(array(
+			'module' => ROUTE_M,
+			'controller' => ROUTE_C,
+			'adminname' => $_SESSION['adminname'],
+			'adminid' => $_SESSION['adminid'],
+			'querystring' => '清除错误日志',
+			'logtime' => SYS_TIME,
+			'ip' => self::$ip
+		));
+		return_json(array('status'=>1,'message' => L('operation_success')));
+	}
+
+
+
+
+
+
+
 	/**
 	 * @author: lirongyaoepr
 	 */

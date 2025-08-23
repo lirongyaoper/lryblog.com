@@ -11,6 +11,9 @@ class common {
         self::_check_admin();
         self::_check_authority();
         self::_check_ip();
+        self::lock_screen();
+        self::_check_token();
+
     }
 
     /**
@@ -68,7 +71,65 @@ class common {
         }
     }
 
+    /**
+     * @author:lirongyaoper
+     * 锁屏
+     */
+    private static function lock_screen(){
+        if(isset($_SESSION['lry_lock_screen']) && $_SESSION['lry_lock_screen'] == 1){
+            if(strpos(ROUTE_A,'public_') === 0 || ROUTE_A == 'login') return true;
+            include self::admin_tpl('index');exit();
+        }
+        return true;
+    }
 
+    /**
+     * @author:lirongyaoper
+     * 检查token
+     */
+    private static function _check_token(){
+        if(!is_post()) return true;
+        if(strpos(ROUTE_A,'public_') === 0 || (ROUTE_C =='index' && ROUTE_A=='login')) return true;
+        if(isset($_SESSION['lry_sey_token']) && $_SESSION['lry_sey_token']!='' && ($_SESSION['lry_sey_token']==$_POST['lry_sey_token']))  return true;
+        return_message(L('token_error'),0);
+    }
+
+
+    /**
+     * @author:lirongyaoper
+     */
+    private static function _check_referer(){
+        if(strpos(ROUTE_A,'public_') ===0 || (ROUTE_C =='index' && ROUTE_A=='login')) return true;
+        if(HTTP_REFERER  && strpos(HTTP_REFERER,SERVER_PORT.HTTP_HOST) !==0){
+            $arr = explode(':',HTTP_HOST);
+            if(strpos(HTTP_REFERER,SERVER_PORT.$arr[0]) !== 0) return_message('非法来源，拒绝访问！',0);
+        }
+        return true;
+    }
+
+    /**
+     * @author:lirongyaoper
+     */
+    private static function manage_log(){
+        if(ROUTE_A==''|| ROUTE_A=='init' || strpos(ROUTE_A,'_list') || in_array(ROUTE_A,array('login','public_home'))){
+            return false;
+        }else{
+            D('admin_log')->insert(array(
+                'module' => ROUTE_M,
+                'controller' => ROUTE_C,
+                'adminname' => $_SESSION['adminname'], 
+                'adminid' => $_SESSION['adminid'],
+                'querystring'=>http_build_query($_GET),
+                'logtime' => SYS_TIME,
+                'ip' => self::$ip
+            ));
+        }
+    }
+
+    /**
+     * @author:lirongyaoper
+     * 获取后台模板路径
+     */
     final public static function admin_tpl($file,$m = ''){
         if(empty($file)) return false;
         $m = empty($m)? ROUTE_M : $m;
