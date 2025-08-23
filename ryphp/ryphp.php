@@ -149,7 +149,7 @@ class ryphp {
             if(is_file(RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path)){
                 return include RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path;
             }else{
-                debug::addmsg(RYPHP_RYPHP.'common'.DIRECTORY_SEPARATOR.$path.L('does_not_exist'));
+                debug::addmsg(RYPHP_ROOT.'common'.DIRECTORY_SEPARATOR.$path.L('does_not_exist'));
 
             }
         }else{
@@ -196,7 +196,7 @@ class ryphp {
 	 */
 	public static function load_job($classname, $initialize = 1) {
 
-		return self::_load_class($classname, RYPHP_RYPHP.'jobs', $initialize);
+		return self::_load_class($classname, RYPHP_ROOT.'jobs', $initialize);
 	}	
 
 }

@@ -728,13 +728,13 @@ function trim_script($str) {
  *	- 含义
  *	- 这是一段三元表达式，用来决定是否给 `$string` 前面加上协议与域名，生成绝对 URL。
  *	- `.` 是 PHP 的字符串拼接。
- *	- `SERVER_PORT` 是 `http://` 或 `https://`，`HTTP_HOST` 是当前域名（含端口），`URL_MODEL` 是 URL 模式常量。
+ *	- `SERVER_REQUEST_SCHEME` 是 `http://` 或 `https://`，`HTTP_HOST` 是当前域名（含端口），`URL_MODEL` 是 URL 模式常量。
  *
  *	- 逻辑拆解
  *	- 条件1：`$domain === null && URL_MODEL == 3`
- *		- 为真时：`$string = SERVER_PORT . HTTP_HOST . $string`（强制加前缀，输出绝对 URL）
+ *		- 为真时：`$string = SERVER_REQUEST_SCHEME . HTTP_HOST . $string`（强制加前缀，输出绝对 URL）
  *		- 否则进入条件2
- *	- 条件2：`$domain ? SERVER_PORT . HTTP_HOST . $string : $string`
+ *	- 条件2：`$domain ? SERVER_REQUEST_SCHEME . HTTP_HOST . $string : $string`
  *		- `$domain` 为真（非空/非0）：同样加前缀为绝对 URL
  *		- `$domain` 为假（空串/0/false）：保持 `$string` 原样（相对 URL）
  *
@@ -752,11 +752,11 @@ function trim_script($str) {
  *	- 可读性写法
  *	$shouldPrefix = ($domain === null && URL_MODEL == 3) || (bool) $domain;
  *	if ($shouldPrefix) {
- *		$string = SERVER_PORT . HTTP_HOST . $string;
+ *		$string = SERVER_REQUEST_SCHEME . HTTP_HOST . $string;
  *	}
  *
  *	- 小提示
- *	- 表达式里的空格（如 `SERVER_PORT. HTTP_HOST`）在 PHP 中无影响。
+ *	- 表达式里的空格（如 `SERVER_REQUEST_SCHEME. HTTP_HOST`）在 PHP 中无影响。
  * 
  * 
  */
@@ -1672,7 +1672,7 @@ function input($key = '', $default = '', $function = ''){
  */
 function new_session_start(){
 	if(ini_get('session.auto_start')) return true;
-	// session_save_path(RYPHP_RYPHP.'cache/sessions');
+	// session_save_path(RYPHP_ROOT.'cache/sessions');
 	ini_set('session.cookie_httponly', true);
 	$session_name = session_name();
 	if (isset($_COOKIE[$session_name]) && !preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[$session_name])) {

@@ -172,17 +172,17 @@
 						<td>授权类型</td>
 					<td><span id="lrycms_license">超级管理权限（荣耀科技）</span></td>
 					</tr>
-					<?php if(is_file(RYPHP_RYPHP.'cache/error_log.php')){?>
+					<?php if(is_file(RYPHP_ROOT.'cache/error_log.php')){?>
 					<tr>
 						<td>安全提示</td>
 						<td>
 							<span class="c-red">错误日志（/cache/error_log.php）</span>
-							<?php echo sizecount(filesize(RYPHP_RYPHP.'cache/error_log.php'));?> 
+							<?php echo sizecount(filesize(RYPHP_ROOT.'cache/error_log.php'));?> 
 							<a href="javascript:lry_clear_log()" title="清除日志" style="border:1px solid #1e9fff;padding:1px 8px;margin:2px 0px 0px 5px;color:#1e9fff;white-space:nowrap;display:inline-block;">清除</a>
 						</td>
 					</tr>
 						<?php } ?>
-					<?php if(!is_file(RYPHP_RYPHP.'cache/install.up') && is_dir(RYPHP_RYPHP.'application/install')){?>
+					<?php if(!is_file(RYPHP_ROOT.'cache/install.up') && is_dir(RYPHP_ROOT.'application/install')){?>
 					<tr>
 						<td>安全提示</td>
 				  	<td>程序安装锁（/cache/installed.up）未存在！ <span class="c-red">可能会导致程序重装，请检查！</span></td>
