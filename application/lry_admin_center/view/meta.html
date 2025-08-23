@@ -22,7 +22,7 @@
 <![endif]-->
 <script type="text/javascript">
 	var lry_admin_url = '<?php echo SITE_URL?>';
-	<?php if(isset($_SESSION['lry_csrf_token'])) { ?>
+	<?php if(isset($_SESSION['lry_sey_token'])) { ?>
 	var lry_sey_token = '<?php echo $_SESSION['lry_sey_token'];?>';
 	window.onload = function() {
 		var html_form = document.forms;

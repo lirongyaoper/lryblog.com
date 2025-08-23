@@ -88,7 +88,7 @@ class index extends common{
 	 * @author:lirongyaoper
 	 * 清除错误日志
 	 */
-	public function public_login_log(){
+	public function public_clear_log(){
 		if($_SESSION['roleid'] == 1) return_json(array('status' => 1,'message' =>L('no_permission_to_access')));
 		$log_file = RYPHP_ROOT.'cache'.DIRECTORY_SEPARATOR.'error_log.php';
 		if(!is_file($log_file)) return_json(array('status' => 0,'message' =>L('does_not_exist')));

@@ -621,3 +621,22 @@ LOCK TABLES `rycms_admin_role_auth` WRITE;
 /*!40000 ALTER TABLE `rycms_admin_role_auth` DISABLE KEYS */;
 /*!40000 ALTER TABLE `rycms_admin_role_auth` ENABLE KEYS */;
 UNLOCK TABLES;
+
+
+
+DROP TABLE IF EXISTS `rycms_admin_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rycms_admin_log` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `module` varchar(15) NOT NULL DEFAULT '',
+  `controller` varchar(20) NOT NULL DEFAULT '',
+  `querystring` varchar(255) NOT NULL DEFAULT '',
+  `adminid` mediumint unsigned NOT NULL DEFAULT '0',
+  `adminname` varchar(30) NOT NULL DEFAULT '',
+  `ip` varchar(15) NOT NULL DEFAULT '',
+  `logtime` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `logtime` (`logtime`),
+  KEY `adminid` (`adminid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;

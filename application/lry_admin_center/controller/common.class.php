@@ -12,7 +12,9 @@ class common {
         self::_check_authority();
         self::_check_ip();
         self::_check_token();
-        self::lock_screen();
+        self::_lock_screen();
+        if(ROUTE_A =='init')  $_GET = array_map('new_html_special_chars',$_GET);
+        if(get_config('admin_log')) self::_manage_log();
 
     }
 
@@ -64,7 +66,7 @@ class common {
 	/**
 	 * 记录日志 
 	 */
-	private static function manage_log() {
+	private static function _manage_log() {
 		if(ROUTE_A == '' || ROUTE_A == 'init' || strpos(ROUTE_A, '_list') || in_array(ROUTE_A, array('login', 'public_home'))) {
 			return false;
 		}else {
@@ -91,6 +93,17 @@ class common {
     }
 
 
+    /**
+     * @author:lirongyaoper
+     * 锁屏
+     */
+    private static function _lock_screen(){
+        if(isset($_SESSION['lry_lock_screen']) && $_SESSION['lry_lock_screen'] == 1){
+            if(strpos(ROUTE_A,'public_') === 0 || ROUTE_A == 'login') return true;
+            include self::admin_tpl('index');exit();
+        }
+        return true;
+    }
 
     /**
      * @author:lirongyaoper
@@ -105,17 +118,6 @@ class common {
     }
 
 
-    /**
-     * @author:lirongyaoper
-     * 锁屏
-     */
-    private static function lock_screen(){
-        if(isset($_SESSION['lry_lock_screen']) && $_SESSION['lry_lock_screen'] == 1){
-            if(strpos(ROUTE_A,'public_') === 0 || ROUTE_A == 'login') return true;
-            include self::admin_tpl('index');exit();
-        }
-        return true;
-    }
 
     /**
      * @author:lirongyaoper
