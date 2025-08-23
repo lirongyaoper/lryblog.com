@@ -11,8 +11,8 @@ class common {
         self::_check_admin();
         self::_check_authority();
         self::_check_ip();
-        self::lock_screen();
         self::_check_token();
+        self::lock_screen();
 
     }
 
@@ -30,7 +30,7 @@ class common {
     private static function _check_admin() {
         if(ROUTE_M == 'lry_admin_center' && ROUTE_C == 'index' && ROUTE_A =='login'){
             return true;
-        }else{
+        } else {
             $adminid = intval(get_cookie('adminid'));
             if(!isset($_SESSION['adminid']) || !isset($_SESSION['roleid'])  || !$_SESSION['adminid'] || !$_SESSION['roleid'] || $adminid !=$_SESSION['adminid']){
                 $loginUrl = U('lry_admin_center/index/login');
@@ -59,6 +59,25 @@ class common {
         if(!$auth) return_message(L('no_permission_to_access'),0);
     }
 
+
+
+	/**
+	 * 记录日志 
+	 */
+	private static function manage_log() {
+		if(ROUTE_A == '' || ROUTE_A == 'init' || strpos(ROUTE_A, '_list') || in_array(ROUTE_A, array('login', 'public_home'))) {
+			return false;
+		}else {
+			D('admin_log')->insert(array(
+                'module'=>ROUTE_M,
+                'controller'=>ROUTE_C,
+                'adminname'=>$_SESSION['adminname'],
+                'adminid'=>$_SESSION['adminid'],
+                'querystring'=>http_build_query($_GET),
+                'logtime'=>SYS_TIME,'ip'=>self::$ip
+            ));
+		}		
+	}
     /**
      * @author:lirongyaoper
      */
@@ -70,6 +89,21 @@ class common {
             if(check_ip_matching($ip_val,self::$ip)) return_message('你在后台禁止登录IP名单内,禁止访问！', 0);
         }
     }
+
+
+
+    /**
+     * @author:lirongyaoper
+     */
+    private static function _check_referer(){
+        if(strpos(ROUTE_A,'public_') ===0 || (ROUTE_C =='index' && ROUTE_A=='login')) return true;
+        if(HTTP_REFERER  && strpos(HTTP_REFERER,SERVER_REQUEST_SCHEME.HTTP_HOST) !==0){
+            $arr = explode(':',HTTP_HOST);
+            if(strpos(HTTP_REFERER,SERVER_REQUEST_SCHEME.$arr[0]) !== 0) return_message('非法来源，拒绝访问！',0);
+        }
+        return true;
+    }
+
 
     /**
      * @author:lirongyaoper
@@ -95,36 +129,6 @@ class common {
     }
 
 
-    /**
-     * @author:lirongyaoper
-     */
-    private static function _check_referer(){
-        if(strpos(ROUTE_A,'public_') ===0 || (ROUTE_C =='index' && ROUTE_A=='login')) return true;
-        if(HTTP_REFERER  && strpos(HTTP_REFERER,SERVER_PORT.HTTP_HOST) !==0){
-            $arr = explode(':',HTTP_HOST);
-            if(strpos(HTTP_REFERER,SERVER_PORT.$arr[0]) !== 0) return_message('非法来源，拒绝访问！',0);
-        }
-        return true;
-    }
-
-    /**
-     * @author:lirongyaoper
-     */
-    private static function manage_log(){
-        if(ROUTE_A==''|| ROUTE_A=='init' || strpos(ROUTE_A,'_list') || in_array(ROUTE_A,array('login','public_home'))){
-            return false;
-        }else{
-            D('admin_log')->insert(array(
-                'module' => ROUTE_M,
-                'controller' => ROUTE_C,
-                'adminname' => $_SESSION['adminname'], 
-                'adminid' => $_SESSION['adminid'],
-                'querystring'=>http_build_query($_GET),
-                'logtime' => SYS_TIME,
-                'ip' => self::$ip
-            ));
-        }
-    }
 
     /**
      * @author:lirongyaoper

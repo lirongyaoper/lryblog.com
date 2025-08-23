@@ -800,10 +800,10 @@ function U($url = '',$vars = '',$domain = null, $suffix = true){
         }
         $string .= $suffix == true ? C('url_html_suffix') : $suffix;
     }
-    $string = $domain === null  && URL_MODEL ==3 ? SERVER_PORT.HTTP_HOST.$string : ($domain ? SERVER_PORT. HTTP_HOST. $string : $string);
+    $string = $domain === null  && URL_MODEL ==3 ? SERVER_REQUEST_SCHEME.HTTP_HOST.$string : ($domain ? SERVER_REQUEST_SCHEME. HTTP_HOST. $string : $string);
     // $shouldPrefix = ($domain === null && URL_MODEL == 3) || (bool) $domain;
 	// if ($shouldPrefix) {
-	// 	$string = SERVER_PORT . HTTP_HOST . $string;
+	// 	$string = SERVER_REQUEST_SCHEME . HTTP_HOST . $string;
 	// }
 	return $string;
 }
@@ -1268,7 +1268,7 @@ function thumb($imgurl, $width = 300, $height = 200 ,$autocut = 0, $smallpic = '
 	$upload_url = SITE_PATH.C('upload_file').'/';
 	$upload_path = RYPHP_ROOT.C('upload_file').'/';
 	if(empty($imgurl)) return STATIC_URL.'images/'.$smallpic;
-	if(!strpos($imgurl, '://')) $imgurl = SERVER_PORT.HTTP_HOST.$imgurl;
+	if(!strpos($imgurl, '://')) $imgurl = SERVER_REQUEST_SCHEME.HTTP_HOST.$imgurl;
 	$imgurl_replace= str_replace(SITE_URL.C('upload_file').'/', '', $imgurl); 
 	if(!extension_loaded('gd') || strpos($imgurl_replace, '://')) return $imgurl;
 	if(!is_file($upload_path.$imgurl_replace)) return STATIC_URL.'images/'.$smallpic;
@@ -1296,7 +1296,7 @@ function thumb($imgurl, $width = 300, $height = 200 ,$autocut = 0, $smallpic = '
 function watermark($source, $target = '') {
 	global $image_w;
 	if(empty($source)) return $source;
-	if(strpos($source, '://')) $source = str_replace(SERVER_PORT.HTTP_HOST, '', $source);
+	if(strpos($source, '://')) $source = str_replace(SERVER_REQUEST_SCHEME.HTTP_HOST, '', $source);
 	if(!extension_loaded('gd') || strpos($source, '://')) return $source;
 	
 	if(!is_object($image_w)){

@@ -196,7 +196,7 @@ class page{
 		if(SITE_PATH == '/'){
 			return SITE_URL.$request_url.$this->page_prefix.'PAGE'.C('url_html_suffix').$parameter; 
 		}
-		return SERVER_PORT.HTTP_HOST.'/'.$request_url.$this->page_prefix.'PAGE'.C('url_html_suffix').$parameter; 
+		return SERVER_REQUEST_SCHEME.HTTP_HOST.'/'.$request_url.$this->page_prefix.'PAGE'.C('url_html_suffix').$parameter; 
 	}
 
 }

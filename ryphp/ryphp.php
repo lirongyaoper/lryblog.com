@@ -34,7 +34,7 @@ define('RYPHP_APP',RYPHP_ROOT.'application'.DIRECTORY_SEPARATOR);
 ryphp::load_sys_func('global');
 
 //主机协议
-define('SERVER_PORT', is_ssl() ? 'https://' : 'http://');
+define('SERVER_REQUEST_SCHEME', is_ssl() ? 'https://' : 'http://');
 
 //当前访问的主机名
 define('HTTP_HOST',(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''));
@@ -60,7 +60,7 @@ if(IS_CGI){
 
 
 define('SITE_PATH',str_replace('index.php', '' , PHP_FILE));
-define('SITE_URL',SERVER_PORT.HTTP_HOST.SITE_PATH);
+define('SITE_URL',SERVER_REQUEST_SCHEME.HTTP_HOST.SITE_PATH);
 define('STATIC_URL',SITE_URL.'common/static/');
 
 if(version_compare(PHP_VERSION,'5.4.0','<') && function_exists('get_magic_quotes_gpc')) {

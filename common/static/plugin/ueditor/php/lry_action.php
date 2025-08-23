@@ -35,10 +35,10 @@ if(version_compare(PHP_VERSION,'5.4.0','<')) {
     define('MAGIC_QUOTES_GPC', false);
 }
 define('SYS_TIME', time());
-define('SERVER_PORT', is_https() ? 'https://' : 'http://');
+define('SERVER_REQUEST_SCHEME', is_https() ? 'https://' : 'http://');
 define('HTTP_HOST', (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : ''));
 define('SITE_PATH', $web_path);
-define('SITE_URL', SERVER_PORT.HTTP_HOST.SITE_PATH);
+define('SITE_URL', SERVER_REQUEST_SCHEME.HTTP_HOST.SITE_PATH);
 define('RYPHP_ROOT', stripos(PHP_OS, 'WIN')!==false ? str_replace('/', DIRECTORY_SEPARATOR, $document_root.$web_path) : $document_root.$web_path);
 define('RYPHP_APP', RYPHP_ROOT.'application'.DIRECTORY_SEPARATOR);
 define('EXT', '.class.php'); 
