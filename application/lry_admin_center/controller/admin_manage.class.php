@@ -62,4 +62,44 @@ class admin_manage extends common{
             include $this->admin_tpl('public_edit_info');
         }
      }
+
+     /**
+      * @author lirongyaoper
+     
+      */
+      public function public_edit_pwd(){
+        $adminid = $_SESSION['adminid'];
+        if(isset($_POST['dosubmit'])){
+            if(!$_POST['password']) return_json(array('status' => 0, 'message' => L('data_not_modified')));
+            $admin = D('admin');
+            if(!$admin->where(array('adminid'=>$adminid,'password'=>password($_POST['old_password'])))->find()){
+                return_json(array('status'=>0,'message'=>'旧密码错误'));
+            }
+            if(!is_password($_POST['password'])) return_json(array('status'=> 0,'message'=>L('password_format_error')));
+            if($admin->update(array('password'=>password($_POST['password'])),array('adminid'=>$adminid))){
+                if(!get_config('admin_log')){
+                    D('admin_log')->insert(array(
+                        'module' => ROUTE_M,
+                        'controller'=> ROUTE_C,
+                        'adminname'=>$_SESSION['adminname'],
+                        'adminid'=>$_SESSION['adminid'],
+                        'querystring' =>'修改密码',
+                        'logtime' =>SYS_TIME,
+                        'ip' => self::$ip
+
+                    ));
+                }
+                session_destroy();
+                del_cookie('adminid');
+                del_cookie('adminname');
+                return_json(array('status'=>1,'message'=>L('operation_success')));
+            }else{
+                return_json(array('status'=>0,'message'=>L('data_not_modified')));
+            }
+        }else{
+            $data = D('admin')->where(array('adminid'=> $adminid))->find();
+            include $this->admin_tpl('public_edit_pwd');
+        }
+
+      }
 }
