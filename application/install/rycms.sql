@@ -629,7 +629,7 @@ DROP TABLE IF EXISTS `rycms_admin_log`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rycms_admin_log` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `module` varchar(15) NOT NULL DEFAULT '',
+  `module` varchar(30) NOT NULL DEFAULT '',
   `controller` varchar(20) NOT NULL DEFAULT '',
   `querystring` varchar(255) NOT NULL DEFAULT '',
   `adminid` mediumint unsigned NOT NULL DEFAULT '0',
