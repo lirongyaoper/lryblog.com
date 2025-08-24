@@ -14,6 +14,10 @@ class category extends common{
      */
     public function init(){
         $modelinfo = get_site_modelinfo();
+        $modelarr = array();
+        foreach($modelinfo as $val){
+            $modelarr[$val['modelid']] = $val['name'];
+        }
     }
 
 
