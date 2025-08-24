@@ -9,7 +9,7 @@ $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 define('IN_RYPHP', true); 
-define('IN_RYCMS', true); 
+define('IN_RYPHP', true); 
 include("lry_action.php");
 $CONFIG['imageMaxSize'] = get_config('upload_maxsize')*1024;
 $imageAllowFiles = handle_upload_types(1);

@@ -640,3 +640,41 @@ CREATE TABLE `rycms_admin_log` (
   KEY `logtime` (`logtime`),
   KEY `adminid` (`adminid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+
+
+
+
+
+DROP TABLE IF EXISTS `rycms_model`;
+CREATE TABLE `rycms_model` (
+  `modelid` int unsigned NOT NULL AUTO_INCREMENT,
+  `siteid` tinyint unsigned NOT NULL DEFAULT '0',
+  `name` char(30) NOT NULL DEFAULT '',
+  `tablename` varchar(30) NOT NULL DEFAULT '',
+  `alias` varchar(30) NOT NULL DEFAULT '',
+  `description` varchar(100) NOT NULL DEFAULT '',
+  `setting` text,
+  `inputtime` int unsigned NOT NULL DEFAULT '0',
+  `items` smallint unsigned NOT NULL DEFAULT '0',
+  `disabled` tinyint unsigned NOT NULL DEFAULT '0',
+  `type` tinyint unsigned NOT NULL DEFAULT '0',
+  `sort` tinyint unsigned NOT NULL DEFAULT '0',
+  `issystem` tinyint unsigned NOT NULL DEFAULT '0',
+  `isdefault` tinyint unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`modelid`),
+  KEY `siteid` (`siteid`,`type`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+
+--
+-- Dumping data for table `rycms_model`
+--
+
+LOCK TABLES `rycms_model` WRITE;
+/*!40000 ALTER TABLE `rycms_model` DISABLE KEYS */;
+INSERT INTO `rycms_model` (`modelid`, `siteid`, `name`, `tablename`, `alias`, `description`, `setting`, `inputtime`, `items`, `disabled`, `type`, `sort`, `issystem`, `isdefault`) VALUES (1,0,'文章模型','article','article','文章模型','',1466393786,0,0,0,0,1,1);
+INSERT INTO `rycms_model` (`modelid`, `siteid`, `name`, `tablename`, `alias`, `description`, `setting`, `inputtime`, `items`, `disabled`, `type`, `sort`, `issystem`, `isdefault`) VALUES (2,0,'产品模型','product','product','产品模型','',1466393786,0,0,0,0,1,0);
+INSERT INTO `rycms_model` (`modelid`, `siteid`, `name`, `tablename`, `alias`, `description`, `setting`, `inputtime`, `items`, `disabled`, `type`, `sort`, `issystem`, `isdefault`) VALUES (3,0,'下载模型','download','download','下载模型','',1466393786,0,0,0,0,1,0);
+INSERT INTO `rycms_model` (`modelid`, `siteid`, `name`, `tablename`, `alias`, `description`, `setting`, `inputtime`, `items`, `disabled`, `type`, `sort`, `issystem`, `isdefault`) VALUES (4,0,'单页模型','page','page','单页模型','',1683775806,0,0,2,0,1,0);
+/*!40000 ALTER TABLE `rycms_model` ENABLE KEYS */;
+UNLOCK TABLES;

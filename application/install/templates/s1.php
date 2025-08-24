@@ -1,4 +1,4 @@
-<?php defined('IN_RYCMS') or exit('No Define RYCMS.'); ?>
+<?php defined('IN_RYPHP') or exit('No Define RYCMS.'); ?>
 <!doctype html>
 <html>
     <head>

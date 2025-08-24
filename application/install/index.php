@@ -3,7 +3,7 @@
  
 header('Content-Type:text/html;charset=utf-8'); 
 
-define('IN_RYCMS', true);
+define('IN_RYPHP', true);
 
 date_default_timezone_set('PRC');
 error_reporting(E_ALL & ~E_NOTICE);

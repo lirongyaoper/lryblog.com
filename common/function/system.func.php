@@ -859,13 +859,25 @@ function get_field_val($value, $field, $modelid){
 }
 
 /**
+ * @author lirongyaoper
  * 字段排序
  * @param $field 字段名
  * @return string 
  * @param $field_name 字段名称: adminid
  */
 function field_order($field){
-	$str = isset($_GET['of'])&&$_GET['of']==$field&&in_array($_GET['or'],array('ASC', 'DESC')) ? strtolower($_GET['or']) : '';
+	// 检查是否正在对当前字段进行排序
+	$is_current_sorting_field = isset($_GET['of']) && $_GET['of'] == $field;
+	// 检查排序方向是否有效
+	$has_valid_sort_direction = isset($_GET['or']) && in_array($_GET['or'], array('ASC', 'DESC'));
+
+	// 如果当前字段正在排序且方向有效，返回小写的排序方向，否则返回空字符串
+	if ($is_current_sorting_field && $has_valid_sort_direction) {
+		$str = strtolower($_GET['or']);
+	} else {
+		$str = '';
+	}			
+	//$str = isset($_GET['of'])&&$_GET['of']==$field&&in_array($_GET['or'],array('ASC', 'DESC')) ? strtolower($_GET['or']) : '';
 	unset($_GET['m'],$_GET['c'],$_GET['a'],$_GET['page']);
 	return '<span class="lry-caret-wrapper '.$str.'">
             <a class="lry-sort-caret lry-ascending" href="'.U(ROUTE_A, array_merge($_GET, array('of'=>$field,'or'=>'ASC'))).'" title="正序排列"></a><a class="lry-sort-caret lry-descending" href="'.U(ROUTE_A, array_merge($_GET, array('of'=>$field,'or'=>'DESC'))).'" title="倒序排列"></a>
