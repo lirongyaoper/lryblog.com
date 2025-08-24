@@ -142,4 +142,12 @@ class common {
         if(empty($m)) return false;
         return RYPHP_APP.$m.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$file.'.html';
     }
+
+	/**
+	 * 系统信息
+	 */
+	public function public_system_info(){
+
+		include $this->admin_tpl('system_info');
+	}
 }

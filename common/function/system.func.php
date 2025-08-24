@@ -862,6 +862,7 @@ function get_field_val($value, $field, $modelid){
  * 字段排序
  * @param $field 字段名
  * @return string 
+ * @param $field_name 字段名称: adminid
  */
 function field_order($field){
 	$str = isset($_GET['of'])&&$_GET['of']==$field&&in_array($_GET['or'],array('ASC', 'DESC')) ? strtolower($_GET['or']) : '';

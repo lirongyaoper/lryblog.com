@@ -1,0 +1,40 @@
+<?php include $this->admin_tpl('meta');?>
+<title>关于系统 - RYCMS荣耀内容管理系统</title>
+<style>
+	.system_info{margin:0 8px;}
+	.system_info li{border-bottom:1px dashed #d7d7d7;padding:9px 0;}
+	.system_info li:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+<article class="page-container">
+	<ul class="system_info">
+		<li>
+			<label>系统版本：</label><a href="http://www.lryblog.com" target="_blank"><?php echo RYCMS_SOFTNAME;?></a> <?php echo RYCMS_VERSION;?>(<?php echo RYCMS_UPDATE;?>)
+		</li>
+		<li>
+			<label>系统框架：</label><a href="http://www.lryblog.com" target="_blank">RYPHP V<?php echo RYPHP_VERSION;?></a>
+		</li>
+		<li>
+			<label>官方网站：</label><a href="http://www.lryblog.com" target="_blank">lryblog.com</a></a>
+		</li>
+		<li>
+			<label>官方社区：</label><a href="http://www.lryblog.com" target="_blank">lryblog.com</a></a>
+		</li>
+		<li>
+			<label>作者QQ：</label>1021295530 (支持功能定制)</a>
+		</li>
+		<li>
+			<label>官方QQ群：</label>1122334455</a>
+		</li>
+		<li>
+			<label>系统特色：</label>开源免费/速度快/轻量级/系统简洁/安全稳定... </a>
+		</li>
+		<li>
+			<label>版权信息：</label>Powered By <a href="http://www.lryblog.com" target="_blank">荣耀历程</a> © 2014-<?php echo date('Y')?> 荣耀科技</a>
+		</li>
+	</ul>
+</article>
+<?php include $this->admin_tpl('footer');?>
+</body>
+</html>
