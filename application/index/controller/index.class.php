@@ -12,7 +12,7 @@ class index{
     }
 
     public function init(){
-
-        echo "nihao,woaini ";
+        $data = D('category')->field('catid AS id,catname AS name,parentid,`cattype`,modelid,listorder,member_publish,pclink,domain,display')->where(array('siteid'=>0))->order('listorder ASC,catid ASC')->select();
+        var_dump($data);
     }
 }
