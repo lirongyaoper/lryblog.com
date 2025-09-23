@@ -148,6 +148,7 @@ class db_mysql{
 		        return $this->execute($sql, $is_private);
 		    }
 			$this->geterr('Execute SQL error, message : '.$e->getMessage(), $sql);
+			return false;
 		}
 	}	
 	
@@ -172,7 +173,7 @@ class db_mysql{
 					}else if(substr($vv, 0, 1) == '%' || substr($vv, -1) == '%'){
 						$str .= $kk." LIKE '".$vv."' AND "; 
 					}else{ 
-						$str .= $kk."'".$vv."' AND ";   
+						$str .= $kk." = '".$vv."' AND ";   
 					}
 				}
 				$str = rtrim($str,' AND ').')';
@@ -217,7 +218,7 @@ class db_mysql{
 						$rule = $tmp_exp;
 					}
 
-					if(!$exp) $this->geterr('The expression '.$vv[0].' does not exis!');
+					if(!$exp) $this->geterr('The expression '.$vv[0].' does not exist!');
 					if($fun && !in_array($fun, $fun_arr)) $this->geterr('The callback function '.$fun.' is disabled!'); 
 					
 					if(is_array($rule)) {
