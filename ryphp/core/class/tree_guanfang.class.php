@@ -2,8 +2,8 @@
 /**
  * tree.class.php 通用的树型类，可以生成任何树型结构
  *
- * @author           李荣耀  
- * @license          https://lirongyaoper.com
+ * @author           袁志蒙  
+ * @license          http://www.yzmcms.com
  * @lastmodify       2016-10-17 
  */
  
@@ -47,15 +47,21 @@ class tree {
     /**
      * 得到父级数组
      * @param int
+     * 
+     * 该方法返回的是“祖父级的子级”，即当前节点的“叔伯级”节点（与父节点同级的兄弟节点）。
+     * 
      * @return array
      */
     public function get_parent($myid){
         $newarr = array();
         if(!isset($this->arr[$myid])) return false;
+        // 获取父级ID
         $pid = $this->arr[$myid]['parentid'];
+        // 获取祖父级ID
         $pid = $this->arr[$pid]['parentid'];
         if(is_array($this->arr)){
             foreach($this->arr as $id => $a){
+                //如果当前节点的父级id 等于祖父级ID,则将当前节点添加到新数组中
                 if($a['parentid'] == $pid) $newarr[$id] = $a;
             }
         }
@@ -71,6 +77,8 @@ class tree {
         $a = $newarr = array();
         if(is_array($this->arr)){
             foreach($this->arr as $id => $a){
+                //如果某个节点的父级id 等于当前节点的id，则表明该节点为id等于$myid的节点的子节点。
+                //将该节点添加进新的数组。
                 if($a['parentid'] == $myid) $newarr[$id] = $a;
             }
         }

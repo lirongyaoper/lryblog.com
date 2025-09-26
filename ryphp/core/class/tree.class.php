@@ -69,14 +69,20 @@ class tree {
      * 得到父级数组
      * @param int
      * @return array
+     * 
+     * 该方法返回的是“祖父级的子级”，即当前节点的“叔伯级”节点（与父节点同级的兄弟节点）。
+     * 
      */
     public function get_parent($myid){
         $newarr = array();
         if(!isset($this->arr[$myid])) return false;
+        // 获取父级ID
         $pid = $this->arr[$myid]['parentid'];
+        // 获取祖父级ID
         $pid = $this->arr[$pid]['parentid'];
         if(is_array($this->arr)){
             foreach($this->arr as $id => $a){
+                //如果当前节点的父级id 等于祖父级ID,则将当前节点添加到新数组中
                 if($a['parentid'] == $pid) $newarr[$id] = $a;
             }
         }
