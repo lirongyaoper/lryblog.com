@@ -34,6 +34,16 @@ class category extends common{
         }
         $arrchildid_arr = explode(',',$childid_hide);
 
+        $tree = ryphp::load_sys_class('tree');
+        $tree->icon = array('&nbsp;&nbsp;&nbsp;│ ','&nbsp;&nbsp;&nbsp;├─ ','&nbsp;&nbsp;&nbsp;└─ ');
+        $tree->nbsp = '&nbsp;&nbsp;&nbsp;';
+        $data = $this->db->field('catid AS id,catname AS name,parentid,`type`,modelid,listorder,member_publish,pclink,domain,display')->where(array('siteid'=>self::$siteid))->order('listorder ASC,catid ASC')->select();
+        $array = array();
+        foreach($data as $val){
+            if($val['cattype'] =="0"){
+                $string = 'lry_open_full("添加内容", "'.U('content/add', array('modelid'=>$v['modelid'],'catid'=>$v['id'])).'")'; 
+            }
+        }
     }
 
 
