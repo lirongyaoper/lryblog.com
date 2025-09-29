@@ -71,7 +71,7 @@ class category extends common{
         $str = "
                 <tr class='text-c \$class'>
                     <td><input type='text' class='input-text listorder' name='listorder[]' value='\$listorder'><input type='hidden' name='catid[]' value='\$id'></td>
-                    <td>\$i</td>
+                    <td>\$id</td>
                     <td class='text-l'> \$parentoff\$spacer <a href='\$catlink'  class='lry_text_link'> \$name</a></td>
 					<td>\$cattype</td>
 					<td>\$catmodel</td>
@@ -82,7 +82,7 @@ class category extends common{
                 </tr>
                 ";
         $tree->init($array);
-        $categorys = $tree->get_tree(0,$tree);
+        $categorys = $tree->get_tree(0, $str);
         include $this->admin_tpl('category_list');
     }
 
