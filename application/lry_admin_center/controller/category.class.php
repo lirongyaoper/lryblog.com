@@ -86,8 +86,35 @@ class category extends common{
         include $this->admin_tpl('category_list');
     }
 
+    /**
+     * @author lirongyaoper
+     * document: order
+     * 
+     */
+    public function order(){
+        if(isset($_POST['catid']) && is_array($_POST['catid'])){
+            foreach($_POST['catid'] as $key => $val){
+                $this->db->update(array('listorder' => $_POST['listorder'][$key]),array('catid' => intval($val)));
+            }
+            $this->delcache();
+
+        }
+        showmsg(L('operation_success'),'',1);
+    }
 
 
+
+
+    /**
+     * @author lirongyaoper
+     *  clear cache of category
+     */
+    private function delcache(){
+        $site_mapping = self::$siteid ? 'site_mapping_site_'.self::$siteid : 'site_mapping_index_'.self::$siteid;
+        delcache('categoryinfo');
+        delcache('categoryinfo_siteid_'.self::$siteid);
+        delcache($site_mapping);
+    }
 
 
 }
