@@ -102,6 +102,25 @@ class category extends common{
         showmsg(L('operation_success'),'',1);
     }
 
+    /**
+     * @author lirongyaoper
+     * description: delete
+     * 
+     */
+    public function delete(){
+        $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
+        $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
+        $data = $this->db->field('arrparentid, arrchildid')->where(array('catid' => $catid))->find();
+        if(strpos($data['arrchildid'],',')){
+            return_json(array('status' => 0, 'message' => '该分类下有子栏目，请先删除子栏目后再进行此操作！'));
+        }
+        $allcontent = D('all_content')->field('allid') -> where(array('catid'=>$catid))->one();
+        if($allcontent) return_json(array('status' => 0, 'message' => '该分类下有内容，请先删除内容或转移内容后再进行此操作！'));
+        if()
+        
+    }
+
+
 
 
 
