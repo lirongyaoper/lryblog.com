@@ -103,6 +103,21 @@ class category extends common{
     }
 
     /**
+     * 
+     * @author lirongyaoper
+     * description: add category
+     * 
+     */
+    public function add(){
+        $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : get_default_model('modelid');
+        $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
+        $type= isset($_GET['type']) ? intval($_GET['type']) : intval($_POST['type']);
+        if(isset($_POST['dosubmit'])){
+            
+        }
+    }
+
+    /**
      * @author lirongyaoper
      * description: delete
      * 
@@ -116,7 +131,14 @@ class category extends common{
         }
         $allcontent = D('all_content')->field('allid') -> where(array('catid'=>$catid))->one();
         if($allcontent) return_json(array('status' => 0, 'message' => '该分类下有内容，请先删除内容或转移内容后再进行此操作！'));
-        if()
+        if($this->db->delete(array('catid' =>$catid))){
+            if($type ==1) D('page')->delete(array('catid' => $catid));
+            $this->repairs($data['arrparentid']);
+            $this->delcache();
+            return_json(array('status' =>1, 'message' => L('operation_success')));
+        }else{
+            return_json(array('status' =>0, 'message' => L('operation_fail')));
+        }
         
     }
 
