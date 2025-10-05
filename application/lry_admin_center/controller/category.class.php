@@ -113,7 +113,63 @@ class category extends common{
         $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
         $type= isset($_GET['type']) ? intval($_GET['type']) : intval($_POST['type']);
         if(isset($_POST['dosubmit'])){
-            
+            if($_POST['domain']) $this->set_domain();
+            $_POST['catname'] = trim($_POST['catname']);
+            $_POST['catdir'] = trim($_POST['catdir'],' /'); 
+            if($type !=2){ // no external link
+                $res = $this->db->where(array('siteid' => self::$siteid,'catdir' => $_POST['catdir']))->find();
+                if($res) return_json(array('status' => 0,'message' =>'该栏目已存在，请重新填写！'));
+            }
+            if(!$_POST['mobname']) $_POST['mobname'] = $_POST['catname'];
+            if($_POST['parentid']=='0'){
+                $_POST['arrparentid'] = '0';
+            }else{
+                $data = $this->db->field('arrparentid, arrchildid,domain')->where(array('catid' => $_POST['parentid']))->find();
+                $_POST['arrparentid'] = $data['arrparentid'].','.$_POST['parentid'];// 父级路径
+            }
+            $_POST['siteid'] = self::$siteid;
+            $_POST['arrchildid'] = '';
+            $catid = $this->db->insert($_POST,true);
+            Palry($catid);
+            if($type != 2){ // no external link
+                if($type == 1){ //single page
+                    $arr = array();
+                    $arr['catid'] = $catid;
+                    $arr['title'] = $_POST['catname'];
+                    $arr['description'] = $_POST['seo_description'];
+                    $arr['content'] = '';
+                    $arr['updatetime'] = SYS_TIME;
+                    D('page')->insert($arr,false,false);
+                }
+                $domain = isset($data['domain']) ? $data['domain'] : '';
+                $_POST['pclink'] = isset($_POST['domain']) && !empty($_POST['domain']) ? $_POST['domain'] : $this->get_category_url($domain,$_POST['catdir']);
+
+            }
+
+
+
+        }else{
+            $modelinfo = get_site_modelinfo();
+            $parent_temp = $this ->db ->field('category_template,list_template,show_template,pclink')->where(array('catid' =>$catid))->find();
+            $parent_dir = $parent_temp ? str_replace(SITE_URL, '',$parent_temp['pclink']) : '';
+
+            if($type == 0){
+                $default_model = $modelid ? get_model($modelid,false) : get_default_model();
+                $category_temp = $this->select_template('category_temp','category_',$default_model);
+                $list_temp = $this->select_template('list_temp','list_',$default_model);
+                $show_temp = $this->select_template('show_temp','show_',$default_model);
+                $tablename = $default_model ? $default_model['alias'] : '模型别名';
+                include $this->admin_tpl('category_add');
+
+            }else if ($type == 1){
+                $page_data = D('model') ->field('modelid,alias')->where(array('type' => 2)) ->order('modelid ASC')->find();
+                $alias = $page_data ? $page_data['alias'] : 'page';
+                $category_temp = $this->select_template('category_temp','category_',$alias);
+                $tablename = $alias;
+                include $this->admin_tpl('category_page');
+            }else{
+                include $this->admin_tpl('category_link');
+            }
         }
     }
 
@@ -155,6 +211,22 @@ class category extends common{
         delcache('categoryinfo');
         delcache('categoryinfo_siteid_'.self::$siteid);
         delcache($site_mapping);
+    }
+
+    /**
+     * @author lirongyaoper
+     * description: select template
+     * 
+     */
+    private function select_template($tyle,$pre='',$model = null){
+        if(!$model) return array();
+        $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');
+        $tablename = is_array($model) ? $model['alias'] : $model;
+        $pre = $model ? $pre.$tablename : $pre;
+        $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
+        $files = @array_map('basename',$files);
+        $templates = array();
+        $tem_style 
     }
 
 

@@ -94,7 +94,7 @@ function page_content($catid = 1, $limit = 300, $strip = true, $field = 'content
 function get_siteid(){
     if(!is_file(RYPHP_APP.'site/common/function/site.php')) return 0;
     include RYPHP_APP.'site/common/function/site.php';
-    return public_get_siteis();
+    return public_get_siteid();
 }
 
 /**
