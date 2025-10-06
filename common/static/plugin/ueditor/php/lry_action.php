@@ -122,7 +122,7 @@ new_session_start();
 if(!isset($_SESSION['adminid']) && !isset($_SESSION['_userid'])){
     exit(json_encode(array('state'=> '请登录后再继续操作！')));
 }
-if(isset($_SESSION['roleid'])) define('IN_ADMIN', true);
+if(isset($_SESSION['roleid'])) define('IN_RYPHP_ADMIN', true);
 
 
 /**
@@ -188,7 +188,7 @@ function attachment_write($info){
  * 附件关联内容
  */
 function attachment_content($id){
-    if(defined('IN_ADMIN')){
+    if(defined('IN_RYPHP_ADMIN')){
         $attachmentid = isset($_SESSION['attachmentid']) ? $_SESSION['attachmentid'].'|'.$id : $id;
         $_SESSION['attachmentid'] = $attachmentid;
     }else{

@@ -155,6 +155,7 @@ class category extends common{
 
             if($type == 0){
                 $default_model = $modelid ? get_model($modelid,false) : get_default_model();
+                //Palry($default_model);
                 $category_temp = $this->select_template('category_temp','category_',$default_model);
                 $list_temp = $this->select_template('list_temp','list_',$default_model);
                 $show_temp = $this->select_template('show_temp','show_',$default_model);
@@ -218,15 +219,46 @@ class category extends common{
      * description: select template
      * 
      */
-    private function select_template($tyle,$pre='',$model = null){
+    private function select_template($style,$pre='',$model = null){
         if(!$model) return array();
         $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');
-        $tablename = is_array($model) ? $model['alias'] : $model;
-        $pre = $model ? $pre.$tablename : $pre;
+        $tablename = is_array($model) ? $model['alias'] : $model;//article
+        $pre = $model ? $pre.$tablename : $pre;//category_article
         $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
         $files = @array_map('basename',$files);
         $templates = array();
-        $tem_style 
+        $tem_style = RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.'config.php';
+        $templates_style  = is_file($tem_style) ? require($tem_stype) : array();
+        $templates_style = $templates_style ? $templates_style[$style] : $templates_style;
+        if(is_array($files)){
+            foreach($files as $file){
+                $key = substr($file, 0, -5);
+                $templates[$key] = isset($templates_style[$key]) ? $templates_style[$key] : $file;
+
+            }
+        }
+        return $templates;
+    }
+
+    private function repairs(){}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private function get_category_url(){
+        return 1;
+    }
+    private function set_domain(){
+        return_json(array('status' => 0, 'message' =>''));
     }
 
 
