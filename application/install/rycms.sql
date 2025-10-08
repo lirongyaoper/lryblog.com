@@ -505,7 +505,7 @@ CREATE TABLE `rycms_all_content` (
   `siteid` tinyint unsigned NOT NULL DEFAULT '0',
   `modelid` tinyint unsigned NOT NULL DEFAULT '0',
   `catid` smallint unsigned NOT NULL DEFAULT '0',
-  `id` int unsigned NOT NULL DEFAULT '0',
+  `id` int unsigned NOT NULL DEFAULT '0' COMMENT 'relation_content_id(文章id)',
   `userid` mediumint unsigned NOT NULL DEFAULT '0',
   `username` char(30) NOT NULL DEFAULT '',
   `title` varchar(150) NOT NULL DEFAULT '',
@@ -668,7 +668,7 @@ CREATE TABLE `rycms_model` (
 
 --
 -- Dumping data for table `rycms_model`
---
+-- 
 
 LOCK TABLES `rycms_model` WRITE;
 /*!40000 ALTER TABLE `rycms_model` DISABLE KEYS */;

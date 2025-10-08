@@ -155,7 +155,23 @@ class category extends common{
 
             if($type == 0){
                 $default_model = $modelid ? get_model($modelid,false) : get_default_model();
-                //Palry($default_model);
+                    // Palry($default_model);
+                    // Array(14) [
+                    //     modelid => 1
+                    //     siteid => 0
+                    //     name => '文章模型'
+                    //     tablename => 'article'
+                    //     alias => 'article'
+                    //     description => '文章模型'
+                    //     setting => ''
+                    //     inputtime => 1466393786
+                    //     items => 0
+                    //     disabled => 0
+                    //     type => 0
+                    //     sort => 0
+                    //     issystem => 1
+                    //     isdefault => 1                   
+                    // ]
                 $category_temp = $this->select_template('category_temp','category_',$default_model);
                 $list_temp = $this->select_template('list_temp','list_',$default_model);
                 $show_temp = $this->select_template('show_temp','show_',$default_model);
@@ -225,10 +241,20 @@ class category extends common{
         $tablename = is_array($model) ? $model['alias'] : $model;//article
         $pre = $model ? $pre.$tablename : $pre;//category_article
         $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
+            // array(
+            //     0 => '/home/.../application/index/view/rongyao/category_article.html',
+            //     1 => '/home/.../application/index/view/rongyao/category_article_list.html',
+            //     2 => '/home/.../application/index/view/rongyao/category_article_default.html'
+            // )
         $files = @array_map('basename',$files);
+            // array(
+            //     0 => 'category_article.html',
+            //     1 => 'category_article_list.html',
+            //     2 => 'category_article_default.html'
+            // )
         $templates = array();
         $tem_style = RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.'config.php';
-        $templates_style  = is_file($tem_style) ? require($tem_stype) : array();
+        $templates_style  = is_file($tem_style) ? require($tem_style) : array();
         $templates_style = $templates_style ? $templates_style[$style] : $templates_style;
         if(is_array($files)){
             foreach($files as $file){
@@ -252,7 +278,17 @@ class category extends common{
 
 
 
-
+    public function public_category_template(){
+        $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : 1;
+        $default_model = $modelid ? get_model($modelid,'alias') : 'page';
+        $data = array(
+            'category_template' => $this->select_template('category_temp','category_',$default_model),
+            'list_template' => $this->select_template('list_temp','list_',$default_model),
+            'show_template' => $this->select_template('show_temp','show_',$default_model),
+            'tablename' => $default_model
+        );
+        return_json($data);
+    }
 
     private function get_category_url(){
         return 1;
