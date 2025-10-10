@@ -237,7 +237,7 @@ class category extends common{
      */
     private function select_template($style,$pre='',$model = null){
         if(!$model) return array();
-        $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');
+        $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');//rongyao 默认主题
         $tablename = is_array($model) ? $model['alias'] : $model;//article
         $pre = $model ? $pre.$tablename : $pre;//category_article
         $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');

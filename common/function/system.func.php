@@ -117,7 +117,7 @@ function get_copyfrom($modelid = 1){
  * @return array
  */
 function get_site_modelinfo(){
-	$siteid = get_siteid();
+	$siteid = get_siteid();// 获取当前站点ID  0
 	$filename = 'modelinfo_siteid_'.$siteid;
 	
 	if(!$modelinfo = getcache($filename)){
@@ -314,14 +314,14 @@ function get_thumb($thumb, $default = ''){
  * @return string
  */
 function select_category($name='parentid', $value='0', $root='', $member_publish=0, $attribute='', $parent_disabled=true, $disabled=true, $modelid=0){
-	if($root == '') $root = '≡ 作为一级栏目 ≡';
-	$selected = $value=='0' ? 'selected' : '';
+	if($root == '') $root = '≡ 作为顶级栏目 ≡';
+	$selected = $value=='0' ? '1selected' : '';
 	$categorys = array();
 	$html='<select id="select" name="'.$name.'" class="select" '.$attribute.'>';
 	$html.='<option value="0" data-name="" '.$selected.'>'.$root.'</option>';
 
 	$tree = ryphp::load_sys_class('tree');
-	$data = D('category')->field('catid AS id,catname AS name,parentid,arrparentid,arrchildid,type,modelid,member_publish')->where(array('siteid'=>get_siteid()))->order('listorder ASC,catid ASC')->select(); 
+	$data = D('category')->field('catid AS id,catname AS name,parentid,arrparentid,arrchildid,cattype,modelid,member_publish')->where(array('siteid'=>get_siteid()))->order('listorder ASC,catid ASC')->select(); 
 
 	$arrparentid = array();
 	if($modelid){

@@ -13,3 +13,4 @@
 | rycms_model | `modelid(1=>文章模型,2=>产品模型,3=>下载模型,4=>单页模型)`, `siteid`, `name`, `tablename`, `alias`, `description`, `setting`, `inputtime`, `items`, `disabled`, `type`(0=>文章模型,产品模型,下载模型 ,2=>单页模型), `sort`, `issystem`, `isdefault` |
 | rycms_module | `module`, `name`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate` |
 | rycms_urlrule | `urlruleid`, `name`, `urlrule`, `route`, `listorder` |
+|               |      |
