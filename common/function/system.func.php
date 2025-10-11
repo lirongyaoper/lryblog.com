@@ -313,9 +313,10 @@ function get_thumb($thumb, $default = ''){
  * @param $modelid  modelid
  * @return string
  */
+//-----------------------'parentid', $catid, '', 0, '', false, false
 function select_category($name='parentid', $value='0', $root='', $member_publish=0, $attribute='', $parent_disabled=true, $disabled=true, $modelid=0){
 	if($root == '') $root = '≡ 作为顶级栏目 ≡';
-	$selected = $value=='0' ? '1selected' : '';
+	$selected = $value=='0' ? 'selected' : '';
 	$categorys = array();
 	$html='<select id="select" name="'.$name.'" class="select" '.$attribute.'>';
 	$html.='<option value="0" data-name="" '.$selected.'>'.$root.'</option>';
