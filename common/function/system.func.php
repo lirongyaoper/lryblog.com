@@ -310,7 +310,7 @@ function get_thumb($thumb, $default = ''){
  * @param $attribute 外加属性
  * @param $parent_disabled 是否禁父级栏目
  * @param $disabled 是否禁单页和外部链接
- * @param $modelid  modelid
+ * @param $modelid  modelid 
  * @return string
  */
 //-----------------------'parentid', $catid, '', 0, '', false, false
