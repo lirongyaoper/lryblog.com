@@ -567,12 +567,45 @@ function is_childid($data){
 
 
 /**
- * 获取栏目信息
- *
- * @param  int $catid
- * @param  string $parameter
- * @param  bool  $all
- * @return array|string
+ * 函数功能分析：
+ * 1. 该函数用于获取栏目(category)信息，支持三种使用场景：
+ *    - 获取所有站点的栏目信息($all=true)
+ *    - 获取当前站点的栏目信息($all=false)
+ *    - 获取指定栏目ID的信息($catid>0)
+ * 
+ * 2. 缓存机制：
+ *    - 使用文件缓存存储栏目数据，减少数据库查询
+ *    - 根据$all参数决定缓存文件名：
+ *      * $all=true: 'categoryinfo' (所有站点)
+ *      * $all=false: 'categoryinfo_siteid_{siteid}' (当前站点)
+ * 
+ * 3. 数据查询逻辑：
+ *    - 从缓存中读取栏目信息，缓存不存在时从数据库查询
+ *    - 查询条件：根据$all参数决定是否过滤siteid
+ *    - 排序规则：按listorder ASC, catid ASC排序
+ * 
+ * 4. 返回值处理：
+ *    - $catid=0: 返回所有栏目信息数组
+ *    - $catid>0 且 $parameter为空: 返回该栏目的完整信息数组
+ *    - $catid>0 且 $parameter不为空: 返回该栏目指定字段的值
+ *    - 栏目不存在: 根据$parameter参数返回空字符串或空数组
+ * 
+ * 5. 性能优化：
+ *    - 使用lry_array_column()将栏目数组转换为以catid为键的关联数组
+ *    - 避免循环查找，直接通过键访问栏目信息
+ * 
+ * 6. 容错处理：
+ *    - 检查栏目ID是否存在于结果集中
+ *    - 检查指定字段是否存在于栏目信息中
+ *    - 提供合理的默认返回值(空字符串或空数组)
+ * 
+ * 参数说明：
+ * @param int $catid - 栏目ID，0表示获取所有栏目
+ * @param string $parameter - 指定返回的字段名，空表示返回完整信息
+ * @param bool $all - 是否获取所有站点的栏目，false表示仅当前站点
+ * 
+ * 返回值说明：
+ * @return array|string - 根据参数返回栏目数组或字段值
  */
 function get_category($catid = 0, $parameter = '', $all = false){
 	if($all){

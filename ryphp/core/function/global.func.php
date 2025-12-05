@@ -877,28 +877,52 @@ function string2array($data) {
 
 
 
+
 /**
- * 兼容低版本的array_column
- * @param  $array      多维数组
- * @param  $column_key 需要返回值的列
- * @param  $index_key  可选。作为返回数组的索引/键的列。
- * @return array       返回一个数组，数组的值为输入数组中某个单一列的值。
+ * 兼容低版本PHP的array_column函数实现
+ * 
+ * 该函数用于从多维数组中提取指定列的值，并可以指定返回数组的索引键
+ * 在项目中主要用于处理数据库查询结果，方便提取特定字段或重新组织数据结构
+ * 
+ * @param array $array 输入的多维数组（通常是数据库查询结果集）
+ * @param mixed $column_key 需要返回的列键名，如果为null则返回整个子数组
+ * @param mixed $index_key 可选参数，作为返回数组的索引/键的列名
+ * 
+ * @return array 返回提取后的一维数组
+ * 
+ * 使用场景示例：
+ * 1. 从用户列表中提取所有用户ID：lry_array_column($users, 'id')
+ * 2. 提取用户名并以ID作为键：lry_array_column($users, 'username', 'id')
+ * 3. 重组数组结构：lry_array_column($data, null, 'id') // 以id为键保留完整数据
+ * 
+ * 兼容性说明：
+ * - PHP 5.5+ 版本直接使用原生array_column函数
+ * - PHP 5.5以下版本使用自定义实现，确保代码在低版本环境下也能正常运行
  */
 function lry_array_column($array, $column_key, $index_key = null){
+	// 如果PHP版本支持原生array_column，优先使用原生函数（性能更好）
 	if(function_exists('array_column')) return array_column($array, $column_key, $index_key);
 
     $result = array();
 	foreach ($array as $key => $value) {
+		// 跳过非数组元素，确保数据安全性
 		if(!is_array($value)) continue;
+		
+        // 如果指定了列键名，提取该列的值
         if($column_key){
+        	// 如果该列不存在，跳过当前元素
         	if(!isset($value[$column_key])) continue;
         	$tmp = $value[$column_key];
         }else{
+        	// 如果未指定列键名，返回整个子数组
         	$tmp = $value;
         }
+        
+        // 如果指定了索引键，使用该列的值作为结果数组的键，否则使用原数组的键
         if ($index_key) {
         	$key = isset($value[$index_key]) ? $value[$index_key] : $key;
         }
+        
         $result[$key] = $tmp;
     }
     return $result;
