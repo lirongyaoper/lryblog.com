@@ -73,7 +73,7 @@ class tree {
      * 该方法返回的是“祖父级的子级”，即当前节点的“叔伯级”节点（与父节点同级的兄弟节点）。
      * 
      */
-    public function get_parent($myid){
+    public function get_parent_siblings($myid){
         $newarr = array();
         if(!isset($this->arr[$myid])) return false;
         // 获取父级ID
