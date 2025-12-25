@@ -20,6 +20,7 @@ class category extends common{
         }
         //处理栏目展开/收起状态（第21-35行）
         $category_show_status= isset($_COOKIE['category_show_status_'.self::$siteid]) ? json_decode($_COOKIE['category_show_status_'.self::$siteid],true) : array();
+		
         $tree_toggle = 0;
         $childid_hide = '';
         if($category_show_status) {

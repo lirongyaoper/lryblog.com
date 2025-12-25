@@ -36,10 +36,7 @@ class category extends common{
         
         // 第8-22行：处理栏目展开/收起状态
         // 从Cookie中读取用户设置的分类展开/收起状态，用于记忆用户的操作习惯
-        $category_show_status = isset($_COOKIE['category_show_status_'.self::$siteid]) 
-            ? json_decode($_COOKIE['category_show_status_'.self::$siteid], true) 
-            : array(); // 获取Cookie中存储的分类展开状态，格式为 {catid: '1'或'0'}
-        
+        $category_show_status = isset($_COOKIE['category_show_status_'.self::$siteid]) ? json_decode($_COOKIE['category_show_status_'.self::$siteid], true) : array(); // 获取Cookie中存储的分类展开状态，格式为 {catid: '1'或'0'}      
         $tree_toggle = 0; // 树节点切换标志（当前未使用）
         $childid_hide = ''; // 用于存储需要隐藏的子分类ID字符串
         
