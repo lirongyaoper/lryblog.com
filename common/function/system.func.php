@@ -606,6 +606,7 @@ function is_childid($data){
  * 
  * 返回值说明：
  * @return array|string - 根据参数返回栏目数组或字段值
+ * $k(1,4,5), 'arrchildid', true
  */
 function get_category($catid = 0, $parameter = '', $all = false){
 	if($all){
