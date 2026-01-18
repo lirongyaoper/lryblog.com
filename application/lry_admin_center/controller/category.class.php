@@ -42,18 +42,23 @@ class category extends common{
          *       5 => '2'
 
          *   ]
+         * 当$v=1时，表示分类为收起状态，子分类隐藏
+         * 当$v=2时，表示分类为展开状态，子分类显示
+         * 
          */
+        //Palry($category_show_status);
         if($category_show_status) {
 
             foreach($category_show_status as $k => $v){
                 if($v == '1'){
-                    $childid_hide .= get_category($k, 'arrchildid', true).',';
+                    $childid_hide .= get_category($k, 'arrchildid', true).',';    //1,2,3,4,5,'
                     $tree_toggle = 1;
                 }else{
                     $tree_toggle = 0;
                 }
             }
         }
+        //Palry($childid_hide);
         $arrchildid_arr = explode(',', $childid_hide);
 
         $tree = ryphp::load_sys_class('tree');
@@ -64,7 +69,7 @@ class category extends common{
             ->where(array('siteid' => self::$siteid))
             ->order('listorder ASC,catid ASC')
             ->select();
-        
+        //Palry($data);
         $array = array();
         foreach($data as $val){
             if($val['cattype'] == "0"){

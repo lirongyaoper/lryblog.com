@@ -898,6 +898,7 @@ function string2array($data) {
  * 兼容性说明：
  * - PHP 5.5+ 版本直接使用原生array_column函数
  * - PHP 5.5以下版本使用自定义实现，确保代码在低版本环境下也能正常运行
+ * - lrystudy($categoryinfo, null, 'catid')
  */
 function lry_array_column($array, $column_key, $index_key = null){
 	// 如果PHP版本支持原生array_column，优先使用原生函数（性能更好）
