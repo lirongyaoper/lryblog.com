@@ -91,6 +91,7 @@ class category extends common{
             }
             
             $show_status = in_array($val['id'], $arrchildid_arr) ? ' tr_hide' : '';
+            //如果$val['parentid'] =0, 表示该分类为顶级分类，否则为子分类
             $val['class'] = $val['parentid'] ? 'child'.$show_status : 'top';
             
             $val['parentoff'] = $val['parentid'] ? '' : '<i class="lry-iconfont parentid" catid="'.$val['id'].'" action="'.$action.'">'.$icon.'</i> ';

@@ -16,8 +16,8 @@
  * 8. 添加字符编码转换兼容方法
  * 9. 完全模拟原始 @extract() 行为，支持动态变量（如id,name,parentid,type,modelid,listorder等）
  *
- * @author           袁志蒙
- * @license          http://www.yzmcms.com
+ * @author           lirongyaoper
+ * @license          http://www.rycms.com
  * @lastmodify       2016-10-17
  * @optimized        2024-12-19 (性能优化，保持API兼容)
  */
