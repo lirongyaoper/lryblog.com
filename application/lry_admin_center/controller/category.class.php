@@ -164,20 +164,25 @@ class category extends common{
             $_POST['catname'] = trim($_POST['catname']);
             $_POST['catdir'] = trim($_POST['catdir'],' /'); 
             if($type !=2){ // no external link
+                // 检查栏目目录是否已存在
                 $res = $this->db->where(array('siteid' => self::$siteid,'catdir' => $_POST['catdir']))->find();
                 if($res) return_json(array('status' => 0,'message' =>'该栏目已存在，请重新填写！'));
             }
-            if(!$_POST['mobname']) $_POST['mobname'] = $_POST['catname'];
+            // 如果没有填写移动设备名称，则使用栏目名称
+            if(!$_POST['mobname']) {
+                $_POST['mobname'] = $_POST['catname'];
+            }
             if($_POST['parentid']=='0'){
+                // 如果父级ID为0，则arrparentid为0
                 $_POST['arrparentid'] = '0';
             }else{
+                // 获取父级分类的arrparentid
                 $data = $this->db->field('arrparentid, arrchildid,domain')->where(array('catid' => $_POST['parentid']))->find();
                 $_POST['arrparentid'] = $data['arrparentid'].','.$_POST['parentid'];// 父级路径
             }
             $_POST['siteid'] = self::$siteid;
             $_POST['arrchildid'] = '';
             $catid = $this->db->insert($_POST,true);
-            Palry($catid);
             if($type != 2){ // no external link
                 if($type == 1){ //single page
                     $arr = array();
@@ -193,7 +198,11 @@ class category extends common{
 
             }
 
-
+            $this->db->update(array('arrchildid' => $catid, 'pclink' => $_POST['pclink']), array('catid' => $catid));
+            if($_POST['parentid'] != '0') $this->repairs($_POST['arrparentid']);
+            if($_POST['domain']) $this-> set_domain();
+            $this->delcache();
+            return_json(array('status' => 1, 'message' => L('operation_success')));
 
         }else{
             $modelinfo = get_site_modelinfo();

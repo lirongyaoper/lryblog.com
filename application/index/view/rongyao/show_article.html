@@ -1,0 +1,517 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$seo_title}</title>
+<meta name="keywords" content="{$keywords}" />
+<meta name="description" content="{$description}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 关键CSS资源 -->
+<link href="{SITE_URL}application/index/view/{C('site_theme')}/css/main.min.css" rel="stylesheet">
+<link href="{SITE_URL}application/index/view/{C('site_theme')}/css/comment.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<!-- 文章页面专用样式 -->
+<link href="{SITE_URL}application/index/view/{C('site_theme')}/css/show_article.css" rel="stylesheet">
+<!-- 预加载关键资源 -->
+<link rel="preload" href="{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.min.js" as="script">
+<link rel="preload" href="{SITE_URL}application/index/view/{C('site_theme')}/js/common.js" as="script">
+<!-- 关键JS资源 -->
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.min.js"></script>
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/common.js"></script>
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/comment.js"></script>
+<!-- 非关键资源延迟加载 -->
+<script>
+// 延迟加载非关键资源
+setTimeout(function() {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '{SITE_URL}application/index/view/{C('site_theme')}/css/responsive.css';
+    document.head.appendChild(link);
+    
+    var scripts = [
+        '{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.easyfader.min.js',
+        '{SITE_URL}application/index/view/{C('site_theme')}/js/scrollReveal.js',
+        '{SITE_URL}application/index/view/{C('site_theme')}/js/js.js'
+    ];
+    
+    scripts.forEach(function(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        document.head.appendChild(script);
+    });
+}, 1000);
+</script> 
+
+<!--[if lt IE 9]>
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/modernizr.js"></script>
+<![endif]-->
+</head>
+<body>
+{m:include "index","header"} 
+<article>
+  <h1 class="t_nav"><span>{get_location($catid)}</span><a href="{SITE_URL}" class="n1"></a><a href="{get_category($catid, 'pclink')}" class="n2">{get_catname($catid)}</a></h1>
+  <div class="infosbox">
+    <div class="newsview">
+      <h3 class="news_title">{$title}</h3>
+      <div class="bloginfo">
+        <ul>
+          <li class="author"><a href="javascript:void">{$nickname}</a></li>
+          <li class="lmname"><a href="javascript:void"></a></li>
+          <li class="timer">{date('Y-m-d H:i:s',$updatetime)}</li>
+          <li class="view">{$click} </li>
+          <!-- <li class="like">8888888</li> -->
+        </ul>
+      </div>
+     
+      <div class="news_about"><!-- -->{$description}<!-- --></div>
+
+      <div class="news_con"><!-- -->{$content}<!-- -->
+      </div>
+	  <!-- 美化的标签区域 -->
+	  <div class="article-tags-section">
+		  <div class="tags-container">
+			  <h4 class="tags-title">
+				  <i class="fas fa-tags"></i>
+				  相关标签
+			  </h4>
+			  <div class="tags-list">
+			  {m:centent_tag modelid="$modelid" id="$id" limit="10"}
+					{if empty($data)}
+					<span class="no-tags">暂无标签</span>
+					{else}
+					{loop $data $v}
+						<a href="{U('search/index/tag',array('id'=>$v['id']))}" target="_blank" class="tag-item" title="查看包含 '{$v[tag]}' 标签的所有文章">
+							<i class="fas fa-tag"></i>
+							{$v[tag]}
+						</a>
+					{/loop}
+					{/if}
+			  </div>
+		  </div>
+		  
+		  <!-- 美化的原文链接区域 -->
+		  {if !empty($url)}
+		  <div class="original-link-section">
+			  <h4 class="original-link-title">
+				  <i class="fas fa-external-link-alt"></i>
+				  原文链接
+			  </h4>
+			  <div class="original-link-container">
+				  <div class="link-display">
+					  <i class="fas fa-link link-icon"></i>
+					  <span class="link-url" id="originalUrl">{$url}</span>
+					  <button class="copy-btn" onclick="copyToClipboard()" title="复制链接">
+						  <i class="far fa-copy"></i>
+					  </button>
+				  </div>
+				  <div class="link-actions">
+					  <a href="{$url}" target="_blank" class="visit-btn">
+						  <i class="fas fa-external-link-alt"></i>
+						  访问原文
+					  </a>
+				  </div>
+			  </div>
+		  </div>
+		  {/if}
+	  </div>
+	  <!-- tag和原文链接区域结束 -->
+    </div>
+  <!--  <div class="share">
+      pingmikaishi <p class="diggit"><a href="JavaScript:makeRequest('lrycms','EchoReturnedText','GET','');">  </a>(<b id="diggnum"><script type="text/javascript" src="lrycms"></script>13</b>)</p> pingbijieshu
+      <p class="dasbox"><a href="javascript:void(0)" onClick="dashangToggle()" class="dashang" title=""></a></p>
+      <div class="hide_box"></div>
+      <div class="shang_box"> <a class="shang_close" href="javascript:void(0)" onclick="dashangToggle()" title=""></a>
+        <div class="shang_tit">
+          <p>!</p>
+        </div>
+        <div class="shang_payimg"> <img src="./images/alipayimg.jpg" alt="" title=""> </div>
+        <div class="pay_explain"></div>
+        <div class="shang_payselect">
+          <div class="pay_item checked" data-id="alipay"> <span class="radiobox"></span> <span class="pay_logo"><img src="./images/alipay.jpg" alt=""></span> </div>
+          <div class="pay_item" data-id="weipay"> <span class="radiobox"></span> <span class="pay_logo"><img src="./images/wechat.jpg" alt=""></span> </div>
+        </div>
+        <script type="text/javascript">
+    $(function(){
+    	$(".pay_item").click(function(){
+    		$(this).addClass('checked').siblings('.pay_item').removeClass('checked');
+    		var dataid=$(this).attr('data-id');
+    		$(".shang_payimg img").attr("src","./images/"+dataid+"img.jpg");
+    		$("#shang_pay_txt").text(dataid=="alipay"?"":"");
+    	});
+    });
+    function dashangToggle(){
+    	$(".hide_box").fadeToggle();
+    	$(".shang_box").fadeToggle();
+    }
+    </script> 
+      </div>
+  </div> --> 
+			<!--  -->
+	<script type="text/javascript" src="{STATIC_URL}js/digg.js"></script>
+	<div id="lrycms_digg_div">
+		<div class="digg_up" onclick="digg('{U('index/index/dingcai')}', {$modelid}, {$id}, 1)"> <span id="up">{$up}</span></div>
+		<div class="digg_down" onclick="digg('{U('index/index/dingcai')}', {$modelid}, {$id}, 0)"> <span id="down">{$down}</span></div>
+	</div>
+	<!--  -->
+    <div class="nextinfo">
+      <div class="nextinfo-header">
+        <h3 class="nextinfo-title">
+          <i class="fas fa-arrow-left-right"></i>
+          文章导航
+        </h3>
+      </div>
+      <div class="nextinfo-content">
+        <div class="nav-item prev-article">
+          <span class="nav-label">
+            <i class="fas fa-arrow-left"></i>
+            上一篇
+          </span>
+          <div class="nav-content">{$pre}</div>
+        </div>
+        <div class="nav-item next-article">
+          <span class="nav-label">
+            下一篇
+            <i class="fas fa-arrow-right"></i>
+          </span>
+          <div class="nav-content">{$next}</div>
+        </div>
+      </div>
+    </div>
+    <div class="otherlink">
+      <h2>相关推荐</h2>
+      <div class="related-content">
+        {m:relation field="title,url,thumb" modelid="$modelid" id="$id" limit="10"}
+        {if empty($data)}
+        <div class="no-related-articles">
+          <div class="no-content-icon">
+            <i class="fas fa-search"></i>
+          </div>
+          <p class="no-content-text">暂无相关文章</p>
+          <p class="no-content-desc">可以尝试浏览其他分类或使用搜索功能</p>
+        </div>
+        {else}
+        <ul class="related-list">
+          {loop $data $k=>$v}
+          <li><a href="{$v[url]}" title="{$v[title]}">{str_cut($v['title'], 36)}</a></li>
+          {/loop}
+        </ul>
+        {/if}
+      </div>
+    </div>
+    <div class="news_pl">
+	{m:comment_list modelid="$modelid" catid="$catid" id="$id" limit="20"}
+      <div class="comment-container">
+        <div class="comment-header">
+          <h3 class="comment-title">
+            <i class="fas fa-comments"></i>
+            共有 {count($data)} 条热心评论
+          </h3>
+        </div>
+        
+        <div class="comment-list">
+          {loop $data $v}
+          <div class="comment-item" data-scroll-reveal="enter bottom over 1s">
+            <div class="comment-avatar">
+              <img src="{if !empty($v['userpic'])}{$v[userpic]}{else}{STATIC_URL}images/default.gif{/if}" alt="{$v[username]}" title="{$v[username]}">
+            </div>
+            <div class="comment-content">
+              <div class="comment-info">
+                <div class="comment-author">
+                  <a href="{U('member/myhome/init', array('userid'=>$v['userid']))}" target="blank">{$v[username]}</a>
+                </div>
+                <div class="comment-time">
+                  <i class="far fa-clock"></i>
+                  {date('Y-m-d H:i:s',$v['inputtime'])}
+                </div>
+              </div>
+              <div class="comment-text">
+                {nl2br($v['content'])}
+              </div>
+              <div class="comment-actions">
+                <a href="javascript:toreply('{$v[id]}');" class="reply-btn">
+                  <i class="fas fa-reply"></i>
+                  回复
+                </a>
+              </div>
+              
+              <!-- 回复表单 -->
+              <div id="rep_{$v[id]}" class="reply-form none">
+                <form action="{U('comment/index/init')}" method="post" onsubmit="return check_rep(this)">
+                  <input type="hidden" name="modelid" value="{$modelid}">
+                  <input type="hidden" name="catid" value="{$catid}">
+                  <input type="hidden" name="id" value="{$id}">
+                  <input type="hidden" name="title" value="{$title}">
+                  <input type="hidden" name="url" value="{$url}">
+                  <input type="hidden" name="reply" value="{$v[id]}">
+                  <input type="hidden" name="reply_to" value="{$v[username]}">
+                  <div class="form-group">
+                    <textarea name="content" class="reply-textarea" placeholder="回复 {$v[username]}..."></textarea>
+                  </div>
+                  {if $site['comment_code']}
+                  <div style="text-align: center; margin: 20px 0;">
+                    <div style="display: inline-flex; align-items: center; gap: 12px; padding: 15px 20px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border: 2px solid #e8ecef; border-radius: 16px; box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; position: relative; max-width: 350px; margin: 20px auto;">
+                      <img src="{U('api/index/code')}" onclick="this.src=this.src+'?'" title="看不清？点击更换" style="height: 40px; width: 115px; border: 2px solid #dee2e6; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; background: #ffffff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+                      <input type="text" name="code" placeholder="请输入验证码" required="required" style="height: 40px; width: 130px; padding: 8px 12px; border: 2px solid #dee2e6; border-radius: 20px; font-size: 14px; font-weight: 600; text-align: center; letter-spacing: 2px; transition: all 0.3s ease; outline: none; background: #ffffff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+                      <span style="position: absolute; top: -8px; left: 15px; background: linear-gradient(135deg, #00A7EB, #3690cf); color: white; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 500; box-shadow: 0 2px 4px rgba(0, 167, 235, 0.3);">回复验证</span>
+                    </div>
+                  </div>
+                  {/if}
+                  <div class="form-actions">
+                    <button type="submit" class="submit-reply-btn">
+                      <i class="fas fa-paper-plane"></i>
+                      发表回复
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          {/loop}
+          
+          {if empty($data)}
+          <div class="empty-comments">
+            <div class="empty-icon">
+              <i class="far fa-comment-dots"></i>
+            </div>
+            <p class="empty-text">快快抢占沙发吧！</p>
+          </div>
+          {/if}
+        </div>
+        
+        <!-- 发表评论表单 -->
+        <div class="comment-form">
+          <h4 class="form-title">发表评论</h4>
+          <form action="{U('comment/index/init')}" method="post" onsubmit="return check_comm(this)">
+            <input type="hidden" name="modelid" value="{$modelid}">
+            <input type="hidden" name="catid" value="{$catid}">
+            <input type="hidden" name="id" value="{$id}">
+            <input type="hidden" name="title" value="{$title}">
+            <input type="hidden" name="url" value="{$url}">
+            <div class="form-group">
+              <textarea class="comment-textarea" id="content" name="content" placeholder="来都来了，不说点啥呢"></textarea>
+            </div>
+            {if $site['comment_code']}
+            <div style="text-align: center; margin: 25px 0;">
+              <div style="display: inline-flex; align-items: center; gap: 15px; padding: 20px 25px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border: 2px solid #e8ecef; border-radius: 20px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; position: relative; max-width: 400px; margin: 25px auto;">
+                <img src="{U('api/index/code')}" onclick="this.src=this.src+'?'" title="看不清？点击更换" style="height: 45px; width: 130px; border: 2px solid #dee2e6; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                <input type="text" name="code" placeholder="请输入验证码" required="required" style="height: 45px; width: 150px; padding: 10px 15px; border: 2px solid #dee2e6; border-radius: 22px; font-size: 16px; font-weight: 600; text-align: center; letter-spacing: 3px; transition: all 0.3s ease; outline: none; background: #ffffff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+                <span style="position: absolute; top: -10px; left: 20px; background: linear-gradient(135deg, #00A7EB, #3690cf); color: white; padding: 4px 12px; border-radius: 15px; font-size: 11px; font-weight: 500; box-shadow: 0 2px 6px rgba(0, 167, 235, 0.3);">安全验证</span>
+              </div>
+            </div>
+            {/if}
+            <div class="form-actions">
+              <button type="submit" class="submit-comment-btn">
+                <i class="fas fa-paper-plane"></i>
+                快一点
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sidebar">
+    <div class="zhuanti">
+      <h2 class="hometitle">特别推荐</h2>
+      <ul>
+{m:lists field="title,thumb,catid,url" thumb="1" flag="3" modelid="1" limit="3"}
+{loop $data $v}	
+        <li> <i><img src="{$v[thumb]}"></i>
+          <p>{str_cut($v['title'], 81)} <span><a href="{$v[url]}">阅读</a></span> </p>
+        </li>
+{/loop}
+
+      </ul>
+    </div>
+    <div class="tuijian">
+      <h2 class="hometitle">随机推荐</h2>
+      <ul class="tjpic">
+	  {m:lists field="title,url,thumb,inputtime" modelid="$modelid" order="RAND()" limit="1"}
+			{loop $data $v}	
+        <i><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}{STATIC_URL}images/nopic.jpg{/if}" alt="{$v[title]}"></i>
+        <p><a href="{$v[url]}">{str_cut($v['title'], 81)}</a></p>
+		{/loop}
+      </ul>
+      <ul class="sidenews">
+	  {m:lists field="title,url,thumb,inputtime" modelid="$modelid" order="RAND()" limit="4"}
+			{loop $data $v}	
+        <li> <i><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}{STATIC_URL}images/nopic.jpg{/if}" alt="{$v[title]}"></i>
+          <p><a href="{$v[url]}">{str_cut($v['title'], 81)}</a></p>
+          <span>{date('Y-m-d H:i:s',$v['inputtime'])}</span> </li>
+      {/loop}
+      </ul>
+    </div>
+    <div class="tuijian">
+      <h2 class="hometitle">点击排行</h2>
+      <ul class="tjpic">
+	  {m:lists field="title,url,thumb,inputtime" modelid="$modelid" order="RAND()" limit="1"}
+			{loop $data $v}	
+        <i><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}{STATIC_URL}images/nopic.jpg{/if}" alt="{$v[title]}"></i>
+        <p><a href="{$v[url]}">{str_cut($v['title'], 81)}</a></p>
+		{/loop}
+      </ul>
+      <ul class="sidenews">
+    {m:hits field="title,url,thumb,inputtime" modelid="$modelid"  limit="4"}
+		{loop $data $v}	
+        <li> <i><img src="{if !empty($v['thumb'])}{$v[thumb]}{else}{STATIC_URL}images/nopic.jpg{/if}" alt="{$v[title]}"></i>
+          <p><a href="{$v[url]}">{str_cut($v['title'], 81)}</a></p>
+          <span>{date('Y-m-d H:i:s',$v['inputtime'])}</span> </li>
+		{/loop}
+        
+      </ul>
+    </div>
+    <div class="cloud">
+      <h2 class="hometitle">标签云</h2>
+      <ul>
+	  {m:tag field="id,tag,total" limit="20"}
+	  {loop $data $v}
+        <a href="{U('search/index/tag',array('id'=>$v['id']))}" target="_blank">{$v[tag]}</a>
+    {/loop} 
+      </ul>
+    </div>
+    <div class="guanzhu" id="follow-us">
+      <h2 class="hometitle">版主信息</h2>
+      <ul>        
+		{if isset($site['about'])}
+		<li class="wx"><img src="{$site[about]}"></li>
+		{else}
+       		    <p><strong></strong>lirongyaoper@163.com</p>
+                    <p><strong>&nbsp;&nbsp;&nbsp;&nbsp;</strong>http://www.lryper.com</p>
+		{/if}        
+      </ul>
+    </div>
+  </div>
+</article>
+
+<!-- 复制链接功能的JavaScript -->
+<script>
+function copyToClipboard() {
+    const urlElement = document.getElementById('originalUrl');
+    const copyBtn = document.querySelector('.copy-btn');
+    const originalText = copyBtn.innerHTML;
+    
+    if (!urlElement) {
+        console.error('URL element not found');
+        return;
+    }
+    
+    const url = urlElement.textContent || urlElement.innerText;
+    
+    // 创建临时文本域来复制文本
+    const textArea = document.createElement('textarea');
+    textArea.value = url;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        // 尝试使用现代API
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(url).then(function() {
+                showCopySuccess(copyBtn, originalText);
+            }).catch(function(err) {
+                // 如果现代API失败，使用传统方法
+                fallbackCopy(textArea, copyBtn, originalText);
+            });
+        } else {
+            // 使用传统的execCommand方法
+            fallbackCopy(textArea, copyBtn, originalText);
+        }
+    } catch (err) {
+        console.error('复制失败:', err);
+        showCopyError(copyBtn, originalText);
+    } finally {
+        document.body.removeChild(textArea);
+    }
+}
+
+function fallbackCopy(textArea, copyBtn, originalText) {
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopySuccess(copyBtn, originalText);
+        } else {
+            showCopyError(copyBtn, originalText);
+        }
+    } catch (err) {
+        console.error('传统复制方法失败:', err);
+        showCopyError(copyBtn, originalText);
+    }
+}
+
+function showCopySuccess(copyBtn, originalText) {
+    copyBtn.classList.add('copied');
+    copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+    
+    // 显示成功提示
+    if (typeof layer !== 'undefined') {
+        layer.msg('链接已复制到剪贴板！', {icon: 1, time: 2000});
+    } else if (typeof alert !== 'undefined') {
+        // 使用更友好的提示而不是alert
+        console.log('链接已复制到剪贴板！');
+    }
+    
+    // 2秒后恢复按钮状态
+    setTimeout(function() {
+        copyBtn.classList.remove('copied');
+        copyBtn.innerHTML = originalText;
+    }, 2000);
+}
+
+function showCopyError(copyBtn, originalText) {
+    // 显示错误提示
+    if (typeof layer !== 'undefined') {
+        layer.msg('复制失败，请手动复制链接', {icon: 2, time: 3000});
+    } else {
+        console.error('复制失败，请手动复制链接');
+    }
+    
+    // 简单的错误状态显示
+    copyBtn.style.background = '#e74c3c';
+    setTimeout(function() {
+        copyBtn.style.background = '#3690cf';
+    }, 1000);
+}
+
+// 页面加载完成后的增强功能
+$(document).ready(function() {
+    // 为标签添加动画效果
+    $('.tag-item').each(function(index) {
+        $(this).css('animation-delay', (index * 0.1) + 's');
+        $(this).addClass('fadeInUp');
+    });
+    
+    // 原文链接区域的动画
+    $('.original-link-section').addClass('fadeInUp');
+    
+    // 添加标签点击统计（如果需要的话）
+    $('.tag-item').on('click', function() {
+        const tagName = $(this).text().trim();
+        console.log('点击了标签:', tagName);
+        // 这里可以添加统计代码
+    });
+});
+
+// 添加CSS动画类
+const style = document.createElement('style');
+style.textContent = `
+    .fadeInUp {
+        animation: fadeInUp 0.6s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+{m:include "index","footer"} 
