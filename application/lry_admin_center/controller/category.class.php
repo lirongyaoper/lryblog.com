@@ -364,9 +364,27 @@ class category extends common{
         return $templates;
     }
 
-    private function repairs(){}
+    private function repairs($arrparentid, $cpath = null){
+        $data1 = explode(',', $arrparentid);
+        $data2 = $cpath ? explode(',',$cpath) : array();
+        $data = array_merge($data1, $data2);
+        foreach($data as $val){
+            if($val) $this->repair($val);
+        }
+    }
 
+    private function repair($catid){
+        $this->db->update(array('arrchildid' => $this->get_arrchildid($catid)),array('catid' => $catid));
+    }
 
+    private function get_arrchildid($catid){
+        $arrchildid = $catid;
+        $data = $this ->db ->field('catid')->where("FIND_IN_SET('$catid',arrparentid)")->order('catid ASC')->select();
+        foreach($data as $val){
+            $arrchildid .= ','.$val['catid'];
+        }
+        return $arrchildid;
+    }
 
 
 
@@ -388,8 +406,13 @@ class category extends common{
         return_json($data);
     }
 
-    private function get_category_url(){
-        return 1;
+    private function get_category_url($domain, $catdir){
+        $system_str = URL_MODEL ==3 ? '' : 'index.php?s=';
+        $url_mode = get_config('url_mode');
+        if($url_mode ==1 || $url_mode ==3){
+            return $domain ? $domain.$system_str.'/'.$catdir.'/' : get_site_url().$system_str.'/';
+        }
+        return SITE_PATH.$system_str.$catdir.'/';
     }
     private function set_domain(){
         return_json(array('status' => 0, 'message' =>''));
