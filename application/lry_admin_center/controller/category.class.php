@@ -157,37 +157,79 @@ class category extends common{
      */
     public function add(){
         $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : get_default_model('modelid');
+        //   从 $_GET['catid'] 里取父栏目 ID（如果是“增加子类”，就会有父栏目）。  没有传就默认 0，表示新增的是顶级栏目。
         $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
+        //  $type 是栏目类型（0 普通栏目，1 单页面，2 外部链接）。。优先从 $_GET['type'] 取（URL 上可能带着），否则从 $_POST['type']（表单提交）取。
         $type= isset($_GET['type']) ? intval($_GET['type']) : intval($_POST['type']);
         if(isset($_POST['dosubmit'])){
             if($_POST['domain']) $this->set_domain();
             $_POST['catname'] = trim($_POST['catname']);
             $_POST['catdir'] = trim($_POST['catdir'],' /'); 
-            if($type !=2){ // no external link
+            //如果 $type != 2，说明 不是外部链接栏目（普通栏目或单页栏目），要在本站生成访问路径。
+            if($type !=2){ 
                 // 检查栏目目录是否已存在
                 $res = $this->db->where(array('siteid' => self::$siteid,'catdir' => $_POST['catdir']))->find();
+                //如果$res不为空，说明已存在同名的栏目名称，应停止后续执行。
                 if($res) return_json(array('status' => 0,'message' =>'该栏目已存在，请重新填写！'));
             }
-            // 如果没有填写移动设备名称，则使用栏目名称
+            // 如果没有填写移动设备名称，就自动使用 PC 端的栏目名称 catname。
             if(!$_POST['mobname']) {
                 $_POST['mobname'] = $_POST['catname'];
             }
+            /**
+             *   如果 parentid == '0'，说明这是一个顶级栏目。
+             *   顶级栏目的 arrparentid 就写成 '0'，表示没有上级，只以 0 作为根。
+             */            
             if($_POST['parentid']=='0'){
-                // 如果父级ID为0，则arrparentid为0
                 $_POST['arrparentid'] = '0';
             }else{
-                // 获取父级分类的arrparentid
+                /**
+                 *   如果 parentid != '0'，说明它是某个栏目的子栏目
+                 *   先根据 parentid 从数据库取出父栏目记录，拿到父栏目的 arrparentid、arrchildid、domain 等。
+                 *   将子栏目的 arrparentid 设置为：父栏目的 arrparentid 加上父栏目自己的 catid，中间用逗号拼接。
+                 *   举例：
+                 *      父栏目 arrparentid = 0，catid = 5
+                 *      → 子栏目 arrparentid = 0,5  (父栏目 arrparentid + 父栏目 catid)
+                 *      父栏目 arrparentid = 0,5，catid = 8
+                 *      → 子栏目 arrparentid = 0,5,8
+                 *      父栏目 arrparentid = 0,5,8，catid = 10
+                 *      → 子栏目 arrparentid = 0,5,8,10
+                 *     这样可以很快算出一个节点的整条父级路径。
+                 */
+                
                 $data = $this->db->field('arrparentid, arrchildid,domain')->where(array('catid' => $_POST['parentid']))->find();
                 $_POST['arrparentid'] = $data['arrparentid'].','.$_POST['parentid'];// 父级路径
             }
+            //  把当前站点 ID 填入表单数据：siteid = 当前后台站点id。  支持多站点时就靠这个区分。
             $_POST['siteid'] = self::$siteid;
+            /**
+             *   新增的栏目暂时还没有子栏目，所以 arrchildid 先设为空字符串。
+             *   后面新增完本条记录后，会通过
+             * {$this->db->update(array('arrchildid' => $catid, 'pclink' => $_POST['pclink']), array('catid' => $catid));} 
+             * 代码行再更新 arrchildid。
+             */
             $_POST['arrchildid'] = '';
+            /**
+             *  把整套 $_POST 数据插入 category 表。
+             *  第二个参数 true 一般表示“返回主键 ID”。
+             *  完后返回的新栏目 ID 存在 $catid。
+             */
             $catid = $this->db->insert($_POST,true);
-            if($type != 2){ // no external link
+            /**
+             * 如果 $type != 2，说明 不是外部链接栏目：
+             *     普通栏目（0）
+             *     单页面栏目（1）
+             *   这两类栏目会在本系统中有实际内容和真实访问地址，需要做额外处理。
+             */
+            if($type != 2){ 
+                /**
+                 *   如果 $type == 1，说明是单页面栏目。
+                 *   需要向 page 表插入一条记录。
+                 */
                 if($type == 1){ //single page
                     $arr = array();
-                    $arr['catid'] = $catid;
-                    $arr['title'] = $_POST['catname'];
+                    $arr['catid'] = $catid; //对应刚刚插入的栏目 ID。
+                    $arr['title'] = $_POST['catname'];//    title：用栏目的 catname 作为页面标题。
                     $arr['description'] = $_POST['seo_description'];
                     $arr['content'] = '';
                     $arr['updatetime'] = SYS_TIME;
