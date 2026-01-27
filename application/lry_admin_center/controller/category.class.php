@@ -249,8 +249,8 @@ class category extends common{
         }else{
             $modelinfo = get_site_modelinfo();
             $parent_temp = $this ->db ->field('category_template,list_template,show_template,pclink')->where(array('catid' =>$catid))->find();
+            //Palry($parent_temp);
             $parent_dir = $parent_temp ? str_replace(SITE_URL, '',$parent_temp['pclink']) : '';
-
             if($type == 0){
                 $default_model = $modelid ? get_model($modelid,false) : get_default_model();
                     // Palry($default_model);
@@ -276,8 +276,11 @@ class category extends common{
                 $tablename = $default_model ? $default_model['alias'] : '模型别名';
                 include $this->admin_tpl('category_add');
 
-            }else if ($type == 1){
+            }else if ($type == 1){ // 单页面
+                //  $type 是栏目类型（0 普通栏目，1 单页面，2 外部链接）。。优先从 $_GET['type'] 取（URL 上可能带着），否则从 $_POST['type']（表单提交）取。
+                //model表中 type(0=>文章模型,产品模型,下载模型 ,2=>单页模型)
                 $page_data = D('model') ->field('modelid,alias')->where(array('type' => 2)) ->order('modelid ASC')->find();
+
                 $alias = $page_data ? $page_data['alias'] : 'page';
                 $category_temp = $this->select_template('category_temp','category_',$alias);
                 $tablename = $alias;
