@@ -106,9 +106,9 @@ class category extends common{
             
             $val['member_publish'] = $val['member_publish'] ? '<span class="lry-status-enable" data-field="member_publish" data-id="'.$val['id'].'" onclick="lry_change_status(this,\''.U('public_change_status').'\')" ><i class="lry-iconfont">&#xe81f;</i>是</span>' : '<span class="lry-status-disable" data-field="member_publish" data-id="'.$val['id'].'" onclick="lry_change_status(this,\''.U('public_change_status').'\')" ><i class="lry-iconfont">&#xe601;</i>否</span>';
             
-            $val['string'] = '<a title="增加子类" href="javascript:;" onclick="lry_open(\'增加栏目\',\''.U('add', array('modelid' => $val['modelid'], 'type' => $val['cattype'], 'catid' => $val['id'])).'\',800,500)" class="btn-mini btn-primary ml-5" style="text-decoration:none">增加子类</a> 
-			<a title="编辑栏目" href="javascript:;" onclick="lry_open(\'编辑栏目\',\''.U('edit', array('type' => $val['cattype'], 'catid' => $val['id'])).'\',800,500)" class="btn-mini btn-success ml-5" style="text-decoration:none">编辑</a> 
-			<a title="删除" href="javascript:;" onclick="lry_confirm(\''.U('delete', array('type' => $val['cattype'], 'catid' => $val['id'])).'\', \'确定要删除【'.$val['name'].'】吗？\', 1)" class="btn-mini btn-danger ml-5" style="text-decoration:none">删除</a>';   
+            $val['string'] = '<a title="增加子类" href="javascript:;" onclick="lry_open(\'增加栏目\',\''.U('add', array('modelid' => $val['modelid'], 'cattype' => $val['cattype'], 'catid' => $val['id'])).'\',800,500)" class="btn-mini btn-primary ml-5" style="text-decoration:none">增加子类</a> 
+			<a title="编辑栏目" href="javascript:;" onclick="lry_open(\'编辑栏目\',\''.U('edit', array('cattype' => $val['cattype'], 'catid' => $val['id'])).'\',800,500)" class="btn-mini btn-success ml-5" style="text-decoration:none">编辑</a> 
+			<a title="删除" href="javascript:;" onclick="lry_confirm(\''.U('delete', array('cattype' => $val['cattype'], 'catid' => $val['id'])).'\', \'确定要删除【'.$val['name'].'】吗？\', 1)" class="btn-mini btn-danger ml-5" style="text-decoration:none">删除</a>';   
             
             $array[] = $val;       
         }
@@ -160,7 +160,7 @@ class category extends common{
         //   从 $_GET['catid'] 里取父栏目 ID（如果是“增加子类”，就会有父栏目）。  没有传就默认 0，表示新增的是顶级栏目。
         $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
         //  $type 是栏目类型（0 普通栏目，1 单页面，2 外部链接）。。优先从 $_GET['type'] 取（URL 上可能带着），否则从 $_POST['type']（表单提交）取。
-        $type= isset($_GET['type']) ? intval($_GET['type']) : intval($_POST['type']);
+        $type= isset($_GET['cattype']) ? intval($_GET['cattype']) : intval($_POST['cattype']);
         if(isset($_POST['dosubmit'])){
             if($_POST['domain']) $this->set_domain();
             $_POST['catname'] = trim($_POST['catname']);
@@ -298,7 +298,7 @@ class category extends common{
      */
     public function delete(){
         $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
-        $type = isset($_GET['type']) ? intval($_GET['type']) : 0;
+        $type = isset($_GET['cattype']) ? intval($_GET['cattype']) : 0;
         $data = $this->db->field('arrparentid, arrchildid')->where(array('catid' => $catid))->find();
         if(strpos($data['arrchildid'],',')){
             return_json(array('status' => 0, 'message' => '该分类下有子栏目，请先删除子栏目后再进行此操作！'));

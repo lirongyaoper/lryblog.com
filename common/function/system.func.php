@@ -345,12 +345,31 @@ function select_category($name='parentid', $value='0', $root='', $member_publish
 	}
 
 	foreach($data as $val){
-		if($modelid && !array_search($val['id'], $arrparentid)) continue;
-		if($member_publish && !array_search($val['id'], $publish_arr)) continue;
-		
+		//if($modelid && !array_search($val['id'], $arrparentid)) continue;
+		//if($member_publish && !array_search($val['id'], $publish_arr)) continue;
+		if($modelid && array_search($val['id'], $arrparentid) === false) continue;
+		if($member_publish && array_search($val['id'], $publish_arr) === false) continue;
+		/**
+		 * 代码作用：给当前栏目 $val 增加一个字段 html_disabled，初始设为 0。
+		 * 业务作用：
+		 * 	准备一个“标记位”，用于告诉后面的树形渲染逻辑：
+		 * 		0：这个栏目在下拉框中是可以被选中的；
+		 * 		1：这个栏目在下拉框中是禁用的（不可选，只能看）。
+		 * 后面的 352、353 行会根据业务规则，把某些栏目设为 1，实现：
+		 * 	“有子栏目的栏目不允许被选中，只作为目录节点”；
+		 * 	“特殊类型栏目（外链、单页等）不允许作为内容发布目标”。
+		 */
 		$val['html_disabled'] = 0;
+		/**
+		 * 如果系统配置要禁用有子栏目的栏目（$parent_disabled==true），
+		 * 并且当前栏目有子栏目（$val['arrchildid'] 包含 , 号），就把这个栏目标记为禁用。
+		 */
 		if($parent_disabled && strpos($val['arrchildid'], ',')) $val['html_disabled'] = 1;
-		if($disabled && $val['type']) $val['html_disabled'] = 1;
+		/**
+		 * 如果系统配置要禁用特殊栏目（$disabled==true），
+		 * 并且当前栏目 type 非 0（比如单页、外链），就把这个栏目标记为禁用。
+		 */
+		if($disabled && $val['cattype']) $val['html_disabled'] = 1;
 		$categorys[$val['id']] = $val;
 	}
 	$tree->init($categorys);
