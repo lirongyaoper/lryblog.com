@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手写 Tab 切换示例 - 不依赖 H-ui</title>
+    
+    <!-- 引入 jQuery（从 CDN） -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 0;
+        }
+        
+        /* Tab 按钮区域样式 */
+        .tab-bar {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab-bar span {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-bar span:hover {
+            background: #e9ecef;
+            color:red;
+        }
+        
+        /* 当前激活的 Tab 按钮样式 */
+        .tab-bar span.current {
+            color: #667eea;
+            font-weight: bold;
+            background: #fff;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        /* Tab 内容区域样式 */
+        .tab-content {
+            padding: 30px;
+            min-height: 300px;
+        }
+        
+        .tab-content h2 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .tab-content p {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .tab-content ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .tab-content li {
+            line-height: 2;
+            color: #666;
+        }
+        
+        /* 内容块默认隐藏 */
+        .tab-con {
+            display: none;
+        }
+        
+        /* 控制按钮区域 */
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+        }
+        
+        .controls button {
+            padding: 10px 25px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>手写 Tab 切换示例（基于 jQuery）</h1>
+        
+        <!-- Tab 按钮区域 -->
+        <div class="tab-bar">
+            <span class="current">基本信息</span>
+            <span>联系方式</span>
+            <span>兴趣爱好</span>
+            <span>其他资料</span>
+        </div>
+        
+        <!-- Tab 内容区域 -->
+        <div class="tab-content">
+            <!-- 第 1 个内容块：基本信息 -->
+            <div class="tab-con" style="display:block;">
+                <h2>📋 基本信息</h2>
+                <p><strong>姓名：</strong>张三</p>
+                <p><strong>年龄：</strong>25 岁</p>
+                <p><strong>职业：</strong>前端开发工程师</p>
+                <p><strong>城市：</strong>北京</p>
+                <p>这是第一个 Tab 的内容区域，默认显示。</p>
+            </div>
+            
+            <!-- 第 2 个内容块：联系方式 -->
+            <div class="tab-con">
+                <h2>📞 联系方式</h2>
+                <p><strong>手机：</strong>138-0000-0000</p>
+                <p><strong>邮箱：</strong>zhangsan@example.com</p>
+                <p><strong>微信：</strong>zhangsan_wx</p>
+                <p><strong>QQ：</strong>123456789</p>
+                <p>这是第二个 Tab 的内容，点击上方"联系方式"标签后显示。</p>
+            </div>
+            
+            <!-- 第 3 个内容块：兴趣爱好 -->
+            <div class="tab-con">
+                <h2>🎨 兴趣爱好</h2>
+                <p>我喜欢的活动包括：</p>
+                <ul>
+                    <li>🏀 打篮球</li>
+                    <li>📚 阅读技术书籍</li>
+                    <li>🎮 玩游戏（策略类）</li>
+                    <li>✈️ 旅游（去过 10 个城市）</li>
+                    <li>💻 写代码（PHP、JavaScript）</li>
+                </ul>
+                <p>这是第三个 Tab 的内容区域。</p>
+            </div>
+            
+            <!-- 第 4 个内容块：其他资料 -->
+            <div class="tab-con">
+                <h2>📝 其他资料</h2>
+                <p><strong>学历：</strong>本科</p>
+                <p><strong>毕业院校：</strong>某某大学</p>
+                <p><strong>工作经验：</strong>3 年</p>
+                <p><strong>技能标签：</strong></p>
+                <ul>
+                    <li>熟练掌握 HTML / CSS / JavaScript</li>
+                    <li>熟悉 jQuery、Vue.js 前端框架</li>
+                    <li>了解 PHP 后端开发</li>
+                    <li>熟悉 Git 版本控制</li>
+                </ul>
+                <p>这是第四个 Tab 的内容区域。</p>
+            </div>
+        </div>
+        
+        <!-- 控制按钮（用于演示程序控制跳转） -->
+        <div class="controls">
+            <p style="margin-bottom:15px; color:#666;">
+                <strong>演示：通过 JS 程序控制跳转到指定 Tab</strong>
+            </p>
+            <button class="btn-primary" onclick="jumpToTab(0)">跳转到"基本信息"</button>
+            <button class="btn-success" onclick="jumpToTab(1)">跳转到"联系方式"</button>
+            <button class="btn-warning" onclick="jumpToTab(2)">跳转到"兴趣爱好"</button>
+            <button class="btn-info" onclick="jumpToTab(3)">跳转到"其他资料"</button>
+        </div>
+    </div>
+    
+    <script>
+        // ==================== 核心函数：myTab ====================
+        // 作用：手写的 Tab 切换函数（模仿 $.Huitab）
+        // 参数说明：
+        //   tabBar: Tab 按钮选择器（字符串），如 ".tab-bar span"
+        //   tabCon: Tab 内容块选择器（字符串），如 ".tab-con"
+        //   className: 高亮按钮的类名（字符串），如 "current"
+        //   eventType: 触发事件类型（字符串），如 "click"
+        //   defaultIndex: 默认打开第几个 Tab（数字，从 0 开始）
+        function myTab(tabBar, tabCon, className, eventType, defaultIndex) {
+            // 1. 获取所有 Tab 按钮和内容块
+            var $tabButtons = $(tabBar);  // 所有按钮
+            var $tabContents = $(tabCon); // 所有内容块
+            
+            // 2. 初始化：设置默认显示哪个 Tab
+            $tabButtons.removeClass(className);        // 先清空所有按钮的高亮类
+            $tabButtons.eq(defaultIndex).addClass(className); // 给默认按钮加高亮
+            $tabContents.hide();                       // 隐藏所有内容块
+            $tabContents.eq(defaultIndex).show();      // 只显示默认那个内容块
+            
+            // 3. 给每个按钮绑定事件（点击 / 鼠标悬停等）
+            $tabButtons.on(eventType, function() {
+                // 3.1 清空所有按钮的高亮类
+                $tabButtons.removeClass(className);
+                
+                // 3.2 给当前点击的按钮加高亮类
+                $(this).addClass(className);
+                
+                // 3.3 获取当前按钮在所有按钮里的索引（第几个，从 0 开始）
+                var index = $tabButtons.index(this);
+                
+                // 3.4 隐藏所有内容块
+                $tabContents.hide();
+                
+                // 3.5 只显示对应索引的内容块
+                $tabContents.eq(index).show();
+                
+                // 打印调试信息（可选）
+                console.log('切换到第 ' + (index + 1) + ' 个 Tab');
+            });
+        }
+        
+        // ==================== 页面加载完成后执行 ====================
+        $(function() {
+            // 调用 myTab 初始化 Tab 切换
+            myTab(
+                '.tab-bar span',  // Tab 按钮
+                '.tab-con',       // Tab 内容块
+                'current',        // 高亮类名
+                'click',          // 点击触发
+                0                 // 默认打开第 1 个（索引 0）
+            );
+            
+            console.log('Tab 初始化完成！');
+        });
+        
+        // ==================== 程序控制跳转函数 ====================
+        // 作用：通过按钮点击，程序主动跳转到指定 Tab
+        // 参数：index - 要跳转的 Tab 索引（从 0 开始）
+        function jumpToTab(index) {
+            var $tabButtons = $('.tab-bar span');
+            var $tabContents = $('.tab-con');
+            
+            // 清空所有按钮高亮
+            $tabButtons.removeClass('current');
+            // 给目标按钮加高亮
+            $tabButtons.eq(index).addClass('current');
+            
+            // 隐藏所有内容
+            $tabContents.hide();
+            // 显示目标内容
+            $tabContents.eq(index).show();
+            
+            console.log('程序跳转到第 ' + (index + 1) + ' 个 Tab');
+        }
+    </script>
+</body>
+</html>
