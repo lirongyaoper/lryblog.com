@@ -331,41 +331,6 @@ class category extends common{
         delcache($site_mapping);
     }
 
-    /**
-     * @author lirongyaoper
-     * description: select template
-     * 
-     */
-    private function select_template($style,$pre='',$model = null){
-        if(!$model) return array();
-        $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');//rongyao 默认主题
-        $tablename = is_array($model) ? $model['alias'] : $model;//article
-        $pre = $model ? $pre.$tablename : $pre;//category_article
-        $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
-            // array(
-            //     0 => '/home/.../application/index/view/rongyao/category_article.html',
-            //     1 => '/home/.../application/index/view/rongyao/category_article_list.html',
-            //     2 => '/home/.../application/index/view/rongyao/category_article_default.html'
-            // )
-        $files = @array_map('basename',$files);
-            // array(
-            //     0 => 'category_article.html',
-            //     1 => 'category_article_list.html',
-            //     2 => 'category_article_default.html'
-            // )
-        $templates = array();
-        $tem_style = RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.'config.php';
-        $templates_style  = is_file($tem_style) ? require($tem_style) : array();
-        $templates_style = $templates_style ? $templates_style[$style] : $templates_style;
-        if(is_array($files)){
-            foreach($files as $file){
-                $key = substr($file, 0, -5);
-                $templates[$key] = isset($templates_style[$key]) ? $templates_style[$key] : $file;
-
-            }
-        }
-        return $templates;
-    }
 
     private function repairs($arrparentid, $cpath = null){
         $data1 = explode(',', $arrparentid);
@@ -394,9 +359,6 @@ class category extends common{
 
 
 
-
-
-
     public function public_category_template(){
         $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : 1;
         $default_model = $modelid ? get_model($modelid,'alias') : 'page';
@@ -408,6 +370,27 @@ class category extends common{
         );
         return_json($data);
     }
+
+    private function select_template($style,$pre='',$model = null){
+        if(!$model) return array();
+        $site_theme   = self::$siteid ? get_site(self::$siteid,'site_theme') : C('site_theme');//rongyao 默认主题
+        $tablename = is_array($model) ? $model['alias'] : $model;//article
+        $pre = $model ? $pre.$tablename : $pre;//category_article
+        $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
+        $files = @array_map('basename',$files);
+        $templates = array();
+        $tem_style = RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.'config.php';
+        $templates_style  = is_file($tem_style) ? require($tem_style) : array();
+        $templates_style = $templates_style ? $templates_style[$style] : $templates_style;
+        if(is_array($files)){
+            foreach($files as $file){
+                $key = substr($file, 0, -5);
+                $templates[$key] = isset($templates_style[$key]) ? $templates_style[$key] : $file;
+            }
+        }
+        return $templates;
+    }
+
 
     private function get_category_url($domain, $catdir){
         $system_str = URL_MODEL ==3 ? '' : 'index.php?s=';
