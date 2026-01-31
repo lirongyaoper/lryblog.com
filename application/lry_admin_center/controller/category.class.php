@@ -377,11 +377,27 @@ class category extends common{
         $tablename = is_array($model) ? $model['alias'] : $model;//article
         $pre = $model ? $pre.$tablename : $pre;//category_article
         $files = glob(RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.$pre.'*.html');
+        //去掉路径只保留文件名,如/path/to/category_article.html → category_article.html
+        // array(
+        //     0 => 'category_article.html',
+        //     1 => 'category_article_list.html',
+        //     2 => 'category_article_default.html'
+        // )
         $files = @array_map('basename',$files);
         $templates = array();
         $tem_style = RYPHP_APP.'index'.DIRECTORY_SEPARATOR.'view'.DIRECTORY_SEPARATOR.$site_theme.DIRECTORY_SEPARATOR.'config.php';
         $templates_style  = is_file($tem_style) ? require($tem_style) : array();
         $templates_style = $templates_style ? $templates_style[$style] : $templates_style;
+        /**
+         * $templates_style=
+         * array (
+         *     'category_article' => '文章频道页模板',
+         *     'category_page' => '单页面模板', 
+         *     'category_article_list' => '列表页模板',
+         *     'category_article_default' => '默认页模板'
+         *  )
+         * 
+         */
         if(is_array($files)){
             foreach($files as $file){
                 $key = substr($file, 0, -5);
