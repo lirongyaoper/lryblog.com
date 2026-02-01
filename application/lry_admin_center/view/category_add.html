@@ -221,6 +221,11 @@ function lry_change_template(modelid){
 		url: '<?php echo U('public_category_template');?>?modelid='+modelid, 
 		dataType: "json", 
 		success: function (msg) {
+			if(msg.status == 0){
+				layer.msg(msg.message, {icon:2});
+				return false;
+			}
+
 			var category_template='',list_template='',show_template='';
 			var options = '<option value="">暂无模板</option>';
 			for(var info in msg.category_template) {
@@ -238,6 +243,25 @@ function lry_change_template(modelid){
 			$('.model_table').html(msg.tablename);
 		}
 	})
+
+			// 伪代码形式，等价于服务器返回 JSON 被解析后的结果
+			// msg = {
+			//   category_template: {
+			//     "category_article": "文章频道页模板",
+			//     "category_page": "单页面模板",
+			//     "category_article_list": "列表页模板",
+			//     "category_article_default": "默认页模板"
+			//   },
+			//   list_template: {
+			//     "list_article": "文章列表页模板",
+			//     "list_article_img": "图片列表页模板"
+			//   },
+			//   show_template: {
+			//     "show_article": "文章内容模板"
+			//   },
+			//   tablename: "article"
+			// };
+
 }
 
 function dosub(obj){
