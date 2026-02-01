@@ -133,21 +133,7 @@ class category extends common{
         include $this->admin_tpl('category_list');
     }
 
-    /**
-     * @author lirongyaoper
-     * document: order
-     * 
-     */
-    public function order(){
-        if(isset($_POST['catid']) && is_array($_POST['catid'])){
-            foreach($_POST['catid'] as $key => $val){
-                $this->db->update(array('listorder' => $_POST['listorder'][$key]),array('catid' => intval($val)));
-            }
-            $this->delcache();
 
-        }
-        showmsg(L('operation_success'),'',1);
-    }
 
     /**
      * 
@@ -291,6 +277,15 @@ class category extends common{
         }
     }
 
+
+    public function adds(){
+        $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : get_default_model('modelid');    
+    
+    
+    }
+
+
+
     /**
      * @author lirongyaoper
      * description: delete
@@ -416,6 +411,25 @@ class category extends common{
         }
         return SITE_PATH.$system_str.$catdir.'/';
     }
+
+    /**
+     * @author lirongyaoper
+     * document: order
+     *  @description: order category
+     * 
+     */
+    public function order(){
+        if(isset($_POST['catid']) && is_array($_POST['catid'])){
+            foreach($_POST['catid'] as $key => $val){
+                $this->db->update(array('listorder' => $_POST['listorder'][$key]),array('catid' => intval($val)));
+            }
+            $this->delcache();
+
+        }
+        showmsg(L('operation_success'),'',1);
+    }
+
+
     private function set_domain(){
         return_json(array('status' => 0, 'message' =>''));
     }
