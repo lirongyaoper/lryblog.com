@@ -279,8 +279,21 @@ class category extends common{
 
 
     public function adds(){
-        $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : get_default_model('modelid');    
-    
+        $modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : get_default_model('modelid');        
+        $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
+        if(isset($_POST['dosubmit'])) {
+            //如果有提交表单，就进行数据处理
+            $type = isset($_POST['cattype']) ? intval($_POST['cattype']) : 0;
+            $catnames = explode('\r\n',$_POST['catnames']);
+            if($_POST['parentid'] == '0'){
+                // 如果 parentid == '0'，说明这是一个顶级栏目。
+                $_POST['arrparentid'] = '0';
+            }
+
+        }else{
+            //如果没有提交表单，就进行页面显示
+        }
+
     
     }
 
