@@ -288,6 +288,18 @@ class category extends common{
             if($_POST['parentid'] == '0'){
                 // 如果 parentid == '0'，说明这是一个顶级栏目。
                 $_POST['arrparentid'] = '0';
+            }else{
+                $data = $this->db->field('arrparentid,arrchildid,domain')->where(array('catid' =>$_POST['parentid']))->find();
+                $_POST['arrparentid'] = $data["arrparentid"].','.$_POST['parentid'];
+            }
+            foreach($catnames as $key => $val){
+                if(!$val) continue;
+                if(strpos($val,'|')){
+                    list($_POST['catname'],$_POST['catidr']) = explode('|',$val);
+                }
+                $_POST['catname'] = trim($_POST['catname']);
+                $_POST['catidr'] = trim($_POST['catidr']);
+                
             }
 
         }else{
