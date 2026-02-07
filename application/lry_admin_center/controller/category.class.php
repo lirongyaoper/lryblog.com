@@ -360,7 +360,18 @@ class category extends common{
                 if(strpos($data['arrparentid'],$catid) !== false || $_POST['parentid']== $catid) return_json(array('status' => 0, 'message' => '不能将类别移动到自己或自己的子类别中！'));
                 $_POST['arrparentid'] =$data['arrparentid'].','.$_POST['parentid'];
             }
-
+            /**
+             * 在 栏目编辑（移动栏目）时，负责“批量更新所有子栏目的 arrparentid 路径” 的逻辑。
+             * 换句话说：当你在后台把一个栏目换了父栏目（把某个“栏目树枝”整体搬到别的父节点下面）时，
+             * 这几行代码会把 该栏目以及它所有子孙栏目的“父级路径字段 arrparentid” 修正成新的路径，
+             * 保证整棵栏目树的数据是连续、正确的。
+             * cpath：这个栏目 编辑前 的 arrparentid（旧的父级路径）
+             * arrparentid：根据你选择的新父栏目，代码重新算出来的 新的父级路径
+             * 当你把一个栏目从 “A → B → 当前栏目” 移动到 “X → Y → 当前栏目” 时：
+             * cpath = 原来的 0, A, B
+             * arrparentid = 新的 0, X, Y
+             * 
+             */
             if($_POST['arrparentid'] != $_POST['cpath']){
                 $_POST['cpath'] = safe_replace($_POST['cpath']);
                 $_POST['arrparentid'] = safe_replace($_POST['arrparentid']);
