@@ -299,17 +299,121 @@ class category extends common{
                 }
                 $_POST['catname'] = trim($_POST['catname']);
                 $_POST['catidr'] = trim($_POST['catidr']);
+                // 检查 catdir 是否已存在, 如果存在则跳过
+                $res = $this -> db -> field('catid') ->where(array('siteid' => self::$siteid, 'catdir' => $_POST['catdir'])) -> one();
+                if($res) continue;
+                $_POST['mobname'] = $_POST['catname'];
+                $_POST['siteid'] = self::$siteid;
+                $_POST['arrchildid'] = '';
+                $catid = $this->db->insert($_POST,true);
+
+                if($type == 1){
+                    $arr = array();
+                    $arr['catid'] = $catid;
+                    $arr['title'] = $_POST['catname'];
+                    $arr['updatetime'] = SYS_TIME;
+                    D('page')->insert($arr,false,false);
+                }
+
+                $domain = isset($data['domain']) ? $data['domain'] : '';
+                $_POST['pclink'] = $this->get_category_url($domain,$_POST['catdir']);
+                $this-> db ->update(array('arrchildid' => $catid, 'pclink'=> $_POST['pclink']),array('catid' => $catid));
+                if($_POST['parentid'] != '0') $this->repairs($_POST['arrparentid']);
                 
             }
+            $this->delcache();
+            return_json(array('status' => 1, 'message' =>L('operation_success')));
 
         }else{
             //如果没有提交表单，就进行页面显示
+            $modelinfo = get_site_modelinfo();
+            $default_model = get_default_model();
+            $category_temp = $this->select_template('category_temp','category_',$default_model);
+            $list_temp = $this->select_template('list_temp','list_',$default_model);
+            $show_temp = $this->select_template('show_temp','show_',$default_model);
+            $parent_temp = $this->db->field('category_template,list_template,show_template,pclink')->where(array('cateid'=>$catid))->find();
+            $parent_dir = $parent_temp ? str_replace(SITE_URL, '', $parent_temp['pclink']) : '';
+            $tablename = $default_model ? $default_model['alias'] : '模型别名';
+            include $this->admin_tpl('category_adds');
+
         }
 
     
     }
 
+    public function edit(){
+        if(isset($_POST['dosubmit'])) {
+            /**
+             * 如果有提交表单，就进行数据处理
+             */
 
+            if($_POST['domain']) $this-> set_domain();
+            $catid = isset($_POST['catid']) ? strval(intval($_POST['catid'])) : 0;
+            $_POST['catname'] = trim($_POST['catname']);
+            $_POST['catdir'] = trim($_POST['catdir'],'/');
+
+            if($_POST['parentid']== '0'){
+                $_POST['arrparentid'] = '0';
+
+            }else{
+                $data = $this->db->field('arrparentid,arrchildid,domain') -> where(array('catid' =>$_POST['parentid']))->find();
+                if(strpos($data['arrparentid'],$catid) !== false || $_POST['parentid']== $catid) return_json(array('status' => 0, 'message' => '不能将类别移动到自己或自己的子类别中！'));
+                $_POST['arrparentid'] =$data['arrparentid'].','.$_POST['parentid'];
+            }
+
+            if($_POST['arrparentid'] != $_POST['cpath']){
+                $_POST['cpath'] = safe_replace($_POST['cpath']);
+                $_POST['arrparentid'] = safe_replace($_POST['arrparentid']);
+                $cpath = $_POST['cpath'].','.$catid;
+                $this->db->query("UPDATE '{C('TABLE_PREFIX')}'category SET arrparentid = REPLACE(arrparentid, '{$_POST['cpath']}','{$_POST['arrparentid']}')  WHERE arrparentid LIKE '{$cpath}%' ");
+            }
+            //
+            if($_POST['cattype'] < 2){
+                $domain = isset($data['domain']) ? $data['domain'] : '';
+                $_POST['pclink'] = isset($_POST['domain']) && !empty($_POST['domain']) ? $_POST['domain'] : $this->get_category_url($domain, $_POST['catdir']);
+
+            }
+            if($this->db->update($_POST,array('catid' => $catid),true)){
+                if($_POST['arrparentid'] != $_POST['cpath']) $this->repairs($_POST['arrparentid'],$_POST['cpath']);
+                if($_POST['domain']) $this-> set_domain();
+                $this->delcache();
+                return_json(array('status' => 1, 'message' => L('operation_success')));
+            }else{
+                return_json(array('status' => 0, 'message' => L('operation_fail')));
+            }
+
+        }else{
+            /**
+             * 如果没有提交表单，就进行页面显示
+             */
+            $type = isset($_GET['cattype']) ? intval($_GET['cattype']) :0;
+            $catid = isset($_GET['catid']) ? intval($_GET['catid']) : 0;
+            $data = $this->db->where(array('catid' => $catid))->find();
+            if(!$data) showmsg('栏目不存在','stop');
+            
+            $modelinfo =get_site_modelinfo();
+            $parent_temp = $this->db->field('category_template,list_template,show_template,pclink')->where(array('catid'=>$data['parentid']))->find();
+            $parent_dir = $parent_temp ? str_replace(SITE_URL, '', $parent_temp['pclink']) : '';
+
+            if($type ==0){
+                $default_model = get_model($data['modelid'],false);
+				$category_temp = $this->select_template('category_temp', 'category_', $default_model);
+				$list_temp = $this->select_template('list_temp', 'list_', $default_model);
+				$show_temp = $this->select_template('show_temp', 'show_', $default_model);
+				$tablename = $default_model ? $default_model['alias'] : '模型别名';
+				include $this->admin_tpl('category_edit');               
+            }else if($type == 1){
+                $page_data = D('model')->field('modelid,alias') -> where(array('cattype' =>2)) ->order('modelid ASC')-> find();
+                $alias = $page_data ? $page_data['alias'] : 'page';
+                $category_temp = $this->select_template('category_temp','category_', $alias);
+                $tablename = $alias;
+                include $this->admin_tpl('category_page_edit');
+            }else{
+                include $this -> admin_tpl('category_link_edit');
+            }
+
+        }
+    }
 
     /**
      * @author lirongyaoper
@@ -367,6 +471,7 @@ class category extends common{
 
     private function get_arrchildid($catid){
         $arrchildid = $catid;
+        //只选出那些“以 $catid 为祖先”的所有子孙栏目
         $data = $this ->db ->field('catid')->where("FIND_IN_SET('$catid',arrparentid)")->order('catid ASC')->select();
         foreach($data as $val){
             $arrchildid .= ','.$val['catid'];
