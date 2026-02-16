@@ -348,6 +348,7 @@ class category extends common{
              */
 
             if($_POST['domain']) $this-> set_domain();
+            //$catid：当前正在编辑的栏目自己的 ID（上面第 351 行取的）
             $catid = isset($_POST['catid']) ? strval(intval($_POST['catid'])) : 0;
             $_POST['catname'] = trim($_POST['catname']);
             $_POST['catdir'] = trim($_POST['catdir'],'/');
