@@ -45,8 +45,10 @@ class category extends common{
          * 当$v=1时，表示分类为收起状态，子分类隐藏
          * 当$v=2时，表示分类为展开状态，子分类显示
          * 
+         * action值	     含义	       点击后执行的操作
+         *    1	     当前是折叠状态	   执行展开操作，改为2
+         *    2	     当前是展开状态	   执行收起操作，改为1
          */
-        //Palry($category_show_status);
         if($category_show_status) {
 
             foreach($category_show_status as $k => $v){
@@ -58,7 +60,6 @@ class category extends common{
                 }
             }
         }
-        //Palry($childid_hide);
         $arrchildid_arr = explode(',', $childid_hide);
 
         $tree = ryphp::load_sys_class('tree');
@@ -69,7 +70,6 @@ class category extends common{
             ->where(array('siteid' => self::$siteid))
             ->order('listorder ASC,catid ASC')
             ->select();
-        //Palry($data);
         $array = array();
         foreach($data as $val){
             if($val['cattype'] == "0"){
