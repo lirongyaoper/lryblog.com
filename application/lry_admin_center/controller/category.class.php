@@ -25,23 +25,26 @@ class category extends common{
      * 6. 渲染分类列表模板
      */
     public function init(){
+        //阶段一：获取所有模型信息并构建模型ID到名称的映射
         $modelinfo = get_site_modelinfo();
         $modelarr = array();
         foreach($modelinfo as $val){
             $modelarr[$val['modelid']] = $val['name'];
         }
-        
+        //阶段二：读取分类展开/收起状态
         $category_show_status = isset($_COOKIE['category_show_status_'.self::$siteid]) ? json_decode($_COOKIE['category_show_status_'.self::$siteid], true) : array();
         $tree_toggle = 0;
         $childid_hide = '';
 
         /**
-         * Array(3) [
-         *       1 => '2'
-         *       4 => '2'
-         *       5 => '2'
-
-         *   ]
+         * $category_show_status 是一个数组，用于记录每个分类的展开/收起状态。
+         * 示例：栏目1展开，栏目4收起，栏目5展开    
+         *[
+         *      1 => '2', // 表示栏目1展开
+         *      4 => '1', // 表示栏目4收起
+         *      5 => '2'
+         * ]
+         *    
          * 当$v=1时，表示分类为收起状态，子分类隐藏
          * 当$v=2时，表示分类为展开状态，子分类显示
          * 
@@ -49,8 +52,30 @@ class category extends common{
          *    1	     当前是折叠状态	   执行展开操作，改为2
          *    2	     当前是展开状态	   执行收起操作，改为1
          */
-        if($category_show_status) {
 
+
+
+        /**
+         * $tree_toggle 是一个全局状态标记，表示当前分类列表中是否存在被收起的栏目。
+         * 1	存在被收起的栏目	页面加载后，至少有一个顶级栏目处于折叠状态，其子栏目需要隐藏
+         * 0	所有栏目都展开	页面加载后，所有顶级栏目都处于展开状态，显示完整树
+         * 注意：这个变量在 init() 方法中只被赋值，未被读取。它是一个"残留逻辑"，可能用于后续扩展或调试。
+         * 
+         */
+
+
+
+
+        /**
+         * 
+         * $v == '1'	追加子栏目ID到 $childid_hide，设置 $tree_toggle = 1	该栏目被收起，需要隐藏其所有子栏目
+         * $v == '2'	不追加子栏目ID到 $childid_hide，设置 $tree_toggle = 0	该栏目已展开，不隐藏其子栏目
+         * 关键函数：get_category($k, 'arrchildid', true) 获取栏目 $k 的所有子孙栏目ID（包括自身）。
+         * 
+         * 
+         */
+        //阶段3：处理收起状态的栏目
+        if($category_show_status) {
             foreach($category_show_status as $k => $v){
                 if($v == '1'){
                     $childid_hide .= get_category($k, 'arrchildid', true).',';    //1,2,3,4,5,'
@@ -60,6 +85,7 @@ class category extends common{
                 }
             }
         }
+        //构建隐藏栏目数组
         $arrchildid_arr = explode(',', $childid_hide);
 
         $tree = ryphp::load_sys_class('tree');
@@ -82,18 +108,18 @@ class category extends common{
                 $val['catlink'] = $val['pclink']."' target='_blank";
             }
             
-            $icon = '&#xe653;';
-            $action = '2';
+            $icon = '&#xe653;'; //// 默认：展开图标（▼）
+            $action = '2'; //// 默认：展开操作（2），可执行收起操作
             
             if($category_show_status && isset($category_show_status[$val['id']]) && $category_show_status[$val['id']] == '1'){
-                $icon = '&#xe652;';
+                $icon = '&#xe652;';//// 收起图标（▶）
                 $action = '1';
             }
             
             $show_status = in_array($val['id'], $arrchildid_arr) ? ' tr_hide' : '';
             //如果$val['parentid'] =0, 表示该分类为顶级分类，否则为子分类
             $val['class'] = $val['parentid'] ? 'child'.$show_status : 'top';
-            
+            // 为顶级分类添加展开/收起图标。原理：当$val['parentid']不为0时，表示该分类为子分类，不添加图标。
             $val['parentoff'] = $val['parentid'] ? '' : '<i class="lry-iconfont parentid" catid="'.$val['id'].'" action="'.$action.'">'.$icon.'</i> ';
             
             $val['domain'] = $val['domain'] ? '<div title="绑定域名：'.$val['domain'].'" style="color:#0194ff;font-size:12px" class="lry-iconfont">&#xe64a; 域名</div>' : '';
