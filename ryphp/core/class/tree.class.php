@@ -48,16 +48,83 @@ class tree {
     /**
      * 构造函数，初始化类
      * @param array 二维数组，例如：
-     * array(
-     *      1 => array('id'=>'1','parentid'=>0,'name'=>'一级栏目一'),
-     *      2 => array('id'=>'2','parentid'=>0,'name'=>'一级栏目二'),
-     *      3 => array('id'=>'3','parentid'=>1,'name'=>'二级栏目一'),
-     *      4 => array('id'=>'4','parentid'=>1,'name'=>'二级栏目二'),
-     *      5 => array('id'=>'5','parentid'=>2,'name'=>'二级栏目三'),
-     *      6 => array('id'=>'6','parentid'=>3,'name'=>'三级栏目一'),
-     *      7 => array('id'=>'7','parentid'=>3,'name'=>'三级栏目二')
-     *      )
-     */
+
+    **/
+    // dianzi_category_array(
+    //     1 => array('id'=>'1','parentid'=>0,'name'=>'智能手机'),
+    //     2 => array('id'=>'2','parentid'=>0,'name'=>'品牌电脑'),
+    //     3 => array('id'=>'3','parentid'=>0,'name'=>'智能穿戴'),
+        
+    //     // 智能手机下级分类
+    //     4 => array('id'=>'4','parentid'=>1,'name'=>'苹果 iPhone'),
+    //     5 => array('id'=>'5','parentid'=>1,'name'=>'华为手机'),
+    //     6 => array('id'=>'6','parentid'=>1,'name'=>'小米手机'),
+    //     7 => array('id'=>'7','parentid'=>1,'name'=>'三星手机'),
+    //     8 => array('id'=>'8','parentid'=>1,'name'=>'vivo/iQOO'),
+    //     9 => array('id'=>'9','parentid'=>1,'name'=>'OPPO/一加'),
+        
+    //     // 品牌电脑下级分类
+    //     10 => array('id'=>'10','parentid'=>2,'name'=>'苹果 Mac'),
+    //     11 => array('id'=>'11','parentid'=>2,'name'=>'联想 Lenovo'),
+    //     12 => array('id'=>'12','parentid'=>2,'name'=>'华为 MateBook'),
+    //     13 => array('id'=>'13','parentid'=>2,'name'=>'华硕 ASUS'),
+    //     14 => array('id'=>'14','parentid'=>2,'name'=>'戴尔 Dell'),
+    //     15 => array('id'=>'15','parentid'=>2,'name'=>'惠普 HP'),
+    //     16 => array('id'=>'16','parentid'=>2,'name'=>'小米/Redmi'),
+        
+    //     // 智能穿戴下级分类
+    //     17 => array('id'=>'17','parentid'=>3,'name'=>'智能手表'),
+    //     18 => array('id'=>'18','parentid'=>3,'name'=>'智能手环'),
+    //     19 => array('id'=>'19','parentid'=>3,'name'=>'真无线耳机'),
+    //     20 => array('id'=>'20','parentid'=>3,'name'=>'智能眼镜'),
+        
+    //     // 智能手机三级分类
+    //     21 => array('id'=>'21','parentid'=>4,'name'=>'iPhone 16 系列'),
+    //     22 => array('id'=>'22','parentid'=>4,'name'=>'iPhone 15 系列'),
+    //     23 => array('id'=>'23','parentid'=>4,'name'=>'iPhone 14 系列'),
+    //     24 => array('id'=>'24','parentid'=>5,'name'=>'华为 Mate 系列'),
+    //     25 => array('id'=>'25','parentid'=>5,'name'=>'华为 Pura 系列'),
+    //     26 => array('id'=>'26','parentid'=>5,'name'=>'华为 nova 系列'),
+    //     27 => array('id'=>'27','parentid'=>6,'name'=>'小米数字系列'),
+    //     28 => array('id'=>'28','parentid'=>6,'name'=>'小米 MIX 系列'),
+    //     29 => array('id'=>'29','parentid'=>6,'name'=>'Redmi 系列'),
+    //     30 => array('id'=>'30','parentid'=>7,'name'=>'三星 Galaxy S 系列'),
+    //     31 => array('id'=>'31','parentid'=>7,'name'=>'三星 Galaxy Z 系列'),
+        
+    //     // 品牌电脑三级分类
+    //     32 => array('id'=>'32','parentid'=>10,'name'=>'MacBook Air'),
+    //     33 => array('id'=>'33','parentid'=>10,'name'=>'MacBook Pro'),
+    //     34 => array('id'=>'34','parentid'=>10,'name'=>'Mac mini'),
+    //     35 => array('id'=>'35','parentid'=>11,'name'=>'ThinkPad 系列'),
+    //     36 => array('id'=>'36','parentid'=>11,'name'=>'小新系列'),
+    //     37 => array('id'=>'37','parentid'=>11,'name'=>'拯救者系列'),
+    //     38 => array('id'=>'38','parentid'=>12,'name'=>'MateBook X 系列'),
+    //     39 => array('id'=>'39','parentid'=>12,'name'=>'MateBook D 系列'),
+    //     40 => array('id'=>'40','parentid'=>12,'name'=>'MateBook 数字系列'),
+    //     41 => array('id'=>'41','parentid'=>13,'name'=>'ROG 玩家国度'),
+    //     42 => array('id'=>'42','parentid'=>13,'name'=>'天选系列'),
+    //     43 => array('id'=>'43','parentid'=>13,'name'=>'无畏系列'),
+    //     44 => array('id'=>'44','parentid'=>16,'name'=>'小米笔记本'),
+    //     45 => array('id'=>'45','parentid'=>16,'name'=>'RedmiBook'),
+        
+    //     // 智能穿戴三级分类
+    //     46 => array('id'=>'46','parentid'=>17,'name'=>'苹果 Apple Watch'),
+    //     47 => array('id'=>'47','parentid'=>17,'name'=>'华为 Watch'),
+    //     48 => array('id'=>'48','parentid'=>17,'name'=>'小米手表'),
+    //     49 => array('id'=>'49','parentid'=>17,'name'=>'三星 Galaxy Watch'),
+    //     50 => array('id'=>'50','parentid'=>18,'name'=>'小米手环'),
+    //     51 => array('id'=>'51','parentid'=>18,'name'=>'华为手环'),
+    //     52 => array('id'=>'52','parentid'=>18,'name'=>'荣耀手环'),
+    //     53 => array('id'=>'53','parentid'=>19,'name'=>'苹果 AirPods'),
+    //     54 => array('id'=>'54','parentid'=>19,'name'=>'华为 FreeBuds'),
+    //     55 => array('id'=>'55','parentid'=>19,'name'=>'小米 Buds'),
+    //     56 => array('id'=>'56','parentid'=>19,'name'=>'三星 Galaxy Buds'),
+    //     57 => array('id'=>'57','parentid'=>19,'name'=>'索尼 WF 系列'),
+    //     58 => array('id'=>'58','parentid'=>20,'name'=>'华为智能眼镜'),
+    //     59 => array('id'=>'59','parentid'=>20,'name'=>'雷朋 Meta 智能眼镜')
+    // )
+
+
     public function init($arr=array()){
         $this->arr = $arr;
         $this->ret = '';
@@ -152,14 +219,14 @@ class tree {
         if(is_array($child)){
             $total = count($child);
             foreach($child as $id=>$value){
-                $j=$k='';
+                $j=$k='';// 初始化：$j=当前节点前缀符号，$k=向下传递的连接符
                 if($number==$total){
-                    $j .= $this->icon[2];
+                    $j .= $this->icon[2];  // 最后一个节点：使用 '└'（拐角符号）
                 }else{
-                    $j .= $this->icon[1];
-                    $k = $adds ? $this->icon[0] : '';
+                    $j .= $this->icon[1];   // 非最后一个节点：使用 '├'（分支符号）
+                    $k = $adds ? $this->icon[0] : '';// 如果不是最后一个，向下传递 '│'（竖线连接符）
                 }
-                $spacer = $adds ? $adds.$j : '';
+                $spacer = $adds ? $adds.$j : ''; // 完整缩进前缀 = 父级累积前缀 + 当前节点符号
 
                 $selected = '';
                 if(is_array($sid)){
