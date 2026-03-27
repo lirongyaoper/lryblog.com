@@ -147,12 +147,9 @@ class tree {
         $pid = $this->arr[$myid]['parentid'];
         // 获取祖父级ID
         $pid = $this->arr[$pid]['parentid'];
-        if(is_array($this->arr)){
-            foreach($this->arr as $id => $a){
-                //如果当前节点的父级id 等于祖父级ID,则将当前节点添加到新数组中
-                if($a['parentid'] == $pid) $newarr[$id] = $a;
-            }
-        }
+        $newarr = array_filter($this->arr,function($a) use($pid){
+            return $a['parentid'] == $pid;
+        });
         return $newarr;
     }
 
@@ -168,11 +165,9 @@ class tree {
         }
 
         $newarr = array();
-        if(is_array($this->arr)){
-            foreach($this->arr as $id => $a){
-                if($a['parentid'] == $myid) $newarr[$id] = $a;
-            }
-        }
+        $newarr = array_filter($this->arr,function($a) use($myid){
+            return $a['parentid'] == $myid;
+        });
 
         $result = $newarr ? $newarr : false;
 
