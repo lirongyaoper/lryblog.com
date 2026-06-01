@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{$seo_title}</title>
+<meta name="keywords" content="{$keywords}" />
+<meta name="description" content="{$description}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 关键CSS资源 -->
+<link href="{SITE_URL}application/index/view/{C('site_theme')}/css/main.min.css" rel="stylesheet">
+<!-- 预加载关键资源 -->
+<link rel="preload" href="{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.min.js" as="script">
+<link rel="preload" href="{SITE_URL}application/index/view/{C('site_theme')}/js/common.js" as="script">
+<!-- 关键JS资源 -->
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.min.js"></script>
+<script src="{SITE_URL}application/index/view/{C('site_theme')}/js/common.js"></script>
+<!-- 非关键资源延迟加载 -->
+<script>
+setTimeout(function() {
+    var scripts = [
+        '{SITE_URL}application/index/view/{C('site_theme')}/js/jquery.easyfader.min.js',
+        '{SITE_URL}application/index/view/{C('site_theme')}/js/scrollReveal.js'
+    ];
+    scripts.forEach(function(src) {
+        var script = document.createElement('script');
+        script.src = src;
+        document.head.appendChild(script);
+    });
+}, 1000);
+</script>
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+{if get_category($catid, 'catimg')}
+<style>
+.top_banner {
+    background: url({get_category($catid, 'catimg')}) no-repeat;
+    background-size: cover; 
+    background-position: top center; 
+    padding: 100px 0; 
+    text-align: center; 
+    width: 100%; 
+}
+</style>
+{/if}
+</head>
+<body>
+{m:include "index","header"} 
+<div class="pagebg top_banner"></div>
+<div class="container">
+  <h1 class="t_nav"><span>{get_category($catid, 'subtitle')}</span><a href="{SITE_URL}" class="n1">网站首页</a><a href="{get_category($catid, 'pclink')}" class="n2">{get_catname($catid)}</a></h1>
+  <div class="news_infos">
+  <ul>
+   <!-- 内容开始-->{$content}<!-- 内容结束-->
+   </ul>
+  </div>
+ {m:include "index","right_about"}
+</div>
+{m:include "index","footer"}
