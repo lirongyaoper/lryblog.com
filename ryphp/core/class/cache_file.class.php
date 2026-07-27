@@ -38,7 +38,7 @@ class cache_file{
         $cache['mtime'] = SYS_TIME;
 
         if(!is_dir($this ->config['cache_dir'])){
-            @mkdir($this->config['cache_dir'],0777,true);
+            @mkdir($this->config['cache_dir'],0775,true);
         }
 
         $file = $this-> _file($id);
@@ -101,7 +101,7 @@ class cache_file{
 
 
     protected function _fileputcontents($file, $contents){
-        if(!is_file($file)) touch($file) && @chmod($file, 0777);
+        if(!is_file($file)) touch($file) && @chmod($file, 0664);
         if($this ->config['mode'] ==1){
             $contents = "<?php  exit('NO.'); ?>\n".serialize($contents);
         }else{

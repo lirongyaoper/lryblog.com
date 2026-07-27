@@ -85,7 +85,7 @@ class upload {
 		}
 
 		if(!is_dir($this->filepath) || !is_writable($this->filepath)){
-			if(!@mkdir($this->filepath, 0755,true)){
+			if(!@mkdir($this->filepath, 0775,true)){
 				$this->setoption('errornum', -4);
 				return false;
 			}

@@ -179,7 +179,7 @@ class image {
 		$y = round($y);
 		$filename = $filename ? $filename : $image;
 		$filepath = rtrim(dirname($filename), '/').'/';
-		if(!is_dir($filepath) && !mkdir($filepath, 0755, true)) return false;
+		if(!is_dir($filepath) && !mkdir($filepath, 0775, true)) return false;
 		$info  = self::info($image);
         if($info === false) return false;
 		$pathinfo = pathinfo($image);
